@@ -143,7 +143,20 @@
     Higher Order Functions 
         A function which takes another function as an argument or returns a function 
         ex: map, filter, reduce etc
-
+    Callback functions Cons 
+        Callback Hell
+            in order to maintain order of callback functions, we pass callback inside callback so on
+            which makes code unreadable 
+        Invertion of Control 
+            we are trusting another callback function to call the next callback function afterwards
+            we are loosing control over the callback functions 
+    Promise
+        The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.
+        3 States 
+            pending: initial state, neither fulfilled nor rejected.
+            fulfilled: meaning that the operation was completed successfully.
+            rejected: meaning that the operation failed.
+        Promise objects are immutable
 */
 
 // 1.
@@ -222,10 +235,10 @@ let b4 = 10;
     // b4 shadowed b4 in global scope, both are in different scopes, as let is block scoped. same for const also
     console.log(b4);        // output: 4
 }
-console.log(b1);            // output: 1
+// console.log(b1);            // output: 1
 // console.log(b2);         // output: ReferenceError: b2 is not defined
 // console.log(b3);         // output: ReferenceError: b3 is not defined
-console.log(b4);            // output: 10
+// console.log(b4);            // output: 10
 
 // illegal shadowing
 // let c1 =  1;
@@ -246,7 +259,7 @@ var c3 = 1;
 function x(){
     let ax = 10;
     function y(){
-        console.log(ax)
+        // console.log(ax)
     }
     return y;
 }
@@ -262,7 +275,7 @@ function z(){
     setTimeout(function () {        
         console.log(m);
     }, 1000);
-    console.log("After setTimeout")
+    // console.log("After setTimeout")
 }
 // z();        
 /* output:
@@ -273,7 +286,7 @@ After setTimeout
 function p(){
     for(var i=1;i<=5;i++){
         setTimeout(() => {
-            console.log(i);
+            // console.log(i);
         }, i*1000);
     }
 }
@@ -289,7 +302,7 @@ function p(){
 function p1(){
     for(let i=1;i<=5;i++){
         setTimeout(() => {
-            console.log(i);
+            // console.log(i);
         }, i*1000);
     }
 }
@@ -306,13 +319,13 @@ function p2(){
     for(let i=1;i<=5;i++){
         function log(x){
             setTimeout(() => {
-                console.log(x);
+                // console.log(x);
             }, x*1000);            
         }
         log(i)        
     }
 }
-p2();
+// p2();
 /* output:
 1
 2
@@ -340,7 +353,7 @@ function f3(param1,param2){
     console.log("function")
 }
 // values which are passed are arguments
-f3(1,2)
+// f3(1,2)
 
 // map: to transform an array
 const arr = [1,2,3,4]
@@ -348,7 +361,7 @@ function double(n){
     return n*2;
 }
 const output = arr.map(double)
-console.log(output)
+// console.log(output)
 
 // filter: to filter an array 
 const nums = [1,2,3,5,4,6]
@@ -356,7 +369,7 @@ function isOdd(n){
     return n%2;
 }
 const odd_nums = nums.filter(isOdd);
-console.log(odd_nums);
+// console.log(odd_nums);
 
 // reduce 
 const numbers = [1,2,3,4,5]
@@ -366,4 +379,382 @@ function findSum(accumilator,current){
     return accumilator;
 }
 const sum = numbers.reduce(findSum,initialValue)
-console.log(sum);
+// console.log(sum);
+
+// Callback Hell and Invertion of Control
+// calling APIs through functions
+// passing callback functions to call after function completed to maintain sequence of execution
+// we are loosing control over passed callback functions since we don't whether it's gets executed or not.
+/*
+createOrder(cart,function (orderID){
+
+    proceedToPayment(orderID,function (paymentStatus){
+
+        confirmation(paymentStatus);
+    })
+})
+*/
+// Promise: with promise we attach the callback function, instead of passing 
+// this way we gain the control over callback functions
+// with Promise
+/*
+createOrder(cart)
+    .then(function (orderID){
+        return proceedToPayment(orderID);
+    })
+    .then(function (paymentStatus){
+        return confirmation(paymentStatus);
+    });
+// with Promise using Arrow Functions
+createOrder(cart)
+    .then((orderID) => proceedToPayment(orderID))
+    .then((paymentStatus)=> confirmation(paymentStatus));
+*/
+const GITHUB_USER_API = "https://api.github.com/users/Sunnymaharshi"
+const user = fetch(GITHUB_USER_API)
+
+// console.log(user)          // output: Promise {<pending>}
+user.then(function (data){
+    // console.log(data);
+})
+
+// Promise Chain and Promise creation
+// * We need to return data coming from 1 promise to pass it to next Promise in Promise Chain
+// * catch block only handles errors from above it, means putting catch at the end will handle all the errors
+// * we can add catch for each then blocks
+// * 'then's after the catch will run no matter errors above it comes or not
+const cart  = ["shirts","pants","dresses"]
+
+function createOrder(cart){
+    const pr = new Promise(function (resolve,reject){
+        if(!validateCart(cart)){
+            const err = new Error("Cart is not valid");
+            reject(err);
+        }
+        const orderID = "1234"
+        if(orderID){
+            setTimeout(function (){
+                
+                resolve(orderID)
+            },3000)
+        }
+    })
+
+    return pr;
+}
+function validateCart(cart){
+    return true;
+}
+function proceedToPayment(orderID){
+    return new Promise(
+        function (resolve,reject){
+            resolve("Payment Successfull")
+        }
+    )
+}
+
+createOrder(cart)
+    .then(function (orderID){
+        console.log(orderID)
+        return orderID;
+    })
+    .then(function (orderID){
+        return proceedToPayment(orderID);
+    })
+    .then(function (status){
+        console.log(status)
+    })
+    .catch(function (err){
+        console.log(err)
+    })
+    
+/*  Promise.all()
+        usages: Promise.all([p1,p2,p3])
+        output: [val1,val2,val3]
+        it will call all these APIs in parallel and wait until all are completed/settled
+        if any of these fail, it will throw an error immediately
+    Promise.allSettled()
+        usages: Promise.allSettled([p1,p2,p3])
+        output: [val1,err2,val3], it will be list of objects with status and value/reason in each
+        it will call all these APIs in parallel and wait until all are completed/settled
+        if any of these fail, in output array, error will be there for that promise 
+    Promise.race()
+        usages: Promise.race([p1,p2,p3])
+        output: val2/err2 if p2 is completed/settled first
+        it will return result of first completed/settled promise whether it's error or success
+    Promise.any()
+        usages: Promise.any([p1,p2,p3])
+        output: val3 if p3 is first completed/settled success promise
+        it will return result of first completed/settled promise which is a success
+        if all are failed, it will return AggregateError of all promises, err.errors will contain all the errors    
+*/
+const pr1 = new Promise((resolve, reject)=>{
+    setTimeout(() => resolve("pr1 success"),3000);
+})
+const pr2 = new Promise((resolve, reject)=>{
+    // setTimeout(() => resolve("pr2 success"),1000);
+    setTimeout(() => reject("pr2 fail"),1000);
+})
+const pr3 = new Promise((resolve, reject)=>{
+    setTimeout(() => resolve("pr3 success"),2000);
+})
+
+Promise.allSettled([pr1,pr2,pr3])
+    .then((res)=> {
+        console.log(res)
+    })
+    .catch((err)=>{
+        console.error(err)
+    })
+/* output:
+[{status: 'fulfilled', value: 'pr1 success'},
+{status: 'rejected', reason: 'pr2 fail'},
+{status: 'fulfilled', value: 'pr3 success'}]
+*/
+/*
+    Aync Functions
+        always returns a Promise
+        if we return any value which is not a Promise, it will wrap the value inside a Promise and then returns.
+        * async and await are modern way of handling promises, internally javascript will be using 'then' only
+        await can only be used inside an Async function
+        * Promises will start to resolve, from the moment they are created, not when await is added before them.
+*/
+const pr4 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("Promise value 3000");
+    },3000);
+})
+const pr5 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve("Promise value 5000");
+    },5000);
+})
+
+// normal way of resolving a Promise
+function handlePromise1(){
+
+    // JS Engine will not wait for promise to resolve 
+    pr4.then((res)=>{
+        console.log(res)
+    })
+    console.log("1. after promise")
+}
+// handlePromise1()
+/* output:
+1. after promise
+Promise value 3000
+*/
+
+// resolving promise using async and await
+async function handlePromise2(){
+    
+    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
+    const val1 = await pr4;
+    console.log("after await 1")
+    console.log(val1)
+    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr5 resolved
+    const val2 = await pr5;
+    console.log("after await 2")
+    console.log(val2)
+
+}
+// handlePromise2()
+/* output: 
+after await 1
+Promise value 3000
+after await 2
+Promise value 5000
+*/
+// here promise which takes 5sec is came first and promise we takes 3sec comes next
+// * Promises will start to resolve, from the moment they are created, not when await is added before them.
+async function handlePromise3(){
+    
+    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
+    const val1 = await pr5;
+    console.log("after await 1")
+    console.log(val1)
+    // pr5 has already been resolved
+    const val2 = await pr4;
+    console.log("after await 2")
+    console.log(val2)
+
+}
+// handlePromise3()
+/* output: 
+after await 1
+Promise value 5000
+after await 2
+Promise value 3000
+*/
+// fetch with async and await
+async function handleFetch(){
+    // fetch will returns a Promise
+    try {
+        const data = await fetch(GITHUB_USER_API);
+        // json() return a Promise
+        const jsonValue = await data.json();
+        console.log("user data json",jsonValue)
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+// handleFetch();
+
+/* 'this' keyword
+    * this works differently in non-strict mode and strict mode
+    this in Global Scope
+        points to Global object
+        in browser it is window object
+        in nodejs it is global
+    this substitution 
+        if this is undefined or null 
+            non strict mode 
+                this will be replaced with global object
+            strict mode 
+                it will be same
+    this value depends on how the function is called
+        strict mode 
+            func()
+                undefined
+            window.func()
+                window
+    this inside Arrow function
+        arrow functions don't provide their own this binding
+        it retains the this value of enclosing lexical context/Scope 
+    this in DOM elements 
+        Reference to that HTMLElement
+        usage: this.tagName etc
+    this in Callbacks 
+        Callbacks are typically called with a this value of undefined (calling it directly without attaching it to any object)
+        which means if the function is non–strict, the value of this is the global object 
+
+*/
+// this in Global Scope
+console.log(this);          
+// output: window:{...}
+
+// this in a function
+function func(){
+    console.log(this);
+}
+func()
+/*
+output in non strict mode:
+window:{...}
+output in strict mode:
+undefined
+*/
+window.func()
+/*
+output in strict mode:
+window:{...}
+*/
+
+// this inside object's method
+// whenever there is a function inside an object it is method
+const obj = {
+    a:1,
+    x: function () {
+        console.log(this)
+    }
+}
+obj.x()
+// output: obj
+
+// this inside Arrow function
+
+const obj2 = {
+    a:1,
+    x:  () => {
+        console.log(this)
+    }
+}
+obj2.x()
+// output: window:{...}
+
+// this inside nested arrow function
+// here enclosing lexical context is method x for which this is obj3
+const obj3 = {
+    a:1,
+    x: function () {
+        // enclosing lexical context
+
+        const fun = () => {
+            console.log(this)
+        }
+        fun()
+    } 
+}
+obj3.x()
+// output: obj3
+/*
+    function borrowing 
+    call, apply and bind
+        with these you can write a method that can be used on different objects.
+        these can refer this to any object.
+    call
+        first argument is value of this
+        next we pass function arguments separately
+    apply 
+        first argument is value of this
+        next we pass function arguments as an array 
+    bind 
+        it creates a new function and when it called, calls it with 'this' keyword set to the provided value
+        when a function is used as a callback, this is lost. so the bind() is used to prevent losing this.
+        first argument is value of this
+        next we pass function arguments separately
+*/
+function printFullName(homeTown){
+    console.log(this.firstName + " " + this.lastName + " from "+ homeTown)
+}
+let student1 = {
+    firstName:"Sunny",
+    lastName:"Reddy"
+}
+let student2 = {
+    firstName:"Maharshi",
+    lastName:"Reddy"
+}
+// call
+printFullName.call(student1,"Andhra")
+// apply
+printFullName.apply(student2,["Telangana"])
+// bind 
+let printMyFullName = printFullName.bind(student1,"Andhra");
+printMyFullName()
+
+const person = {
+    firstName:"John",
+    lastName: "Doe",
+    display: function () {
+      console.log(this.firstName + " " + this.lastName);
+    }
+}
+// when a function is used as a callback, this is lost.
+setTimeout(person.display, 3000);
+// output: undefined undefined
+let display = person.display.bind(person);
+setTimeout(display, 3000);
+// output: John Doe
+
+/*  Function Currying 
+        used to transform a function that takes multiple arguments into a sequence of functions that each takes a single argument.
+        can be done using bind or Closures        
+*/
+let multiply1 = function (x,y){
+    console.log(x*y);
+}
+// using bind
+let multiplyByTwo1 = multiply1.bind(this,2)
+multiplyByTwo1(2)
+// output: 4
+// using Closure - nested function have access to surrounding state (the lexical environment).
+function multiply2(x){
+    return function(y){
+        console.log(x * y);
+    }
+}
+let multiplyByTwo2 = multiply2(2)
+multiplyByTwo2(2)
+// output: 4
