@@ -1,4 +1,5 @@
-/*  JavaScript
+/*  
+    JavaScript
         javascript is Just-in-Time (JIT) compiler 
         it uses both compiler and interpreter
         Compiler 
@@ -17,7 +18,8 @@
             Transform those components into machine code during run time.
             Optimize the generated machine code.
             Hot swap the previous implementation of the code.
-            Just in time compiler is nothing but a combination of an interpreter and a compiler.           
+            Just in time compiler is nothing but a combination of an interpreter and a compiler.   
+
     Everything in Javascript happens inside an Execution Context
 
     Execution Context
@@ -27,14 +29,15 @@
         Code component
             aka Thread of Execution
             code is executed one line at a time 
+
     Javascript is synchronous single-threaded language
     When we run the code, A Global Execution Context is created in 2 phases 
-    1. Memory creation phase
-        allocates memory to variables and functions
-        stores undefined in variables
-        and function code for the functions
-    2. Code Execution phase 
-        runs the code 1 at a time 
+        1. Memory creation phase
+            allocates memory to variables and functions
+            stores undefined in variables
+            and function code for the functions
+        2. Code Execution phase 
+            runs the code 1 at a time 
     
     For every function invocation, new Execution Context is created for the function to run.
     this execution context is again created in 2 phases, same as above
@@ -59,61 +62,19 @@
     window
         window is a global object object which is created along with global execution context
         at global level 'this' points to window
-
-    Lexical environment
-        whenever execution context is created, Lexical environment is created.
-        it is local memory along with lexical environment of it's parent
-        for global execution context, parent lexical environment  points to null
-    Scope Chain
-        whenever we are using  variable 'b' in a function, b will be searched in local memory
-        if it's not found, b will be searched in parent lexical environment of the function.
-        this goes until b is found or we reach lexical environment is null which is global scope.
-    
-    let
-        these variables are hoisted in different memory space (ex:Script) instead of Global.
-        we can't access these until they are initialised.
-        if we try to access before initialisation we get Reference error: Cannot access before initialisation
-        can be re-initialised
-
-    Temporal Dead Zone 
-        A variable declared with let, const, or class is said to be in a "temporal dead zone" (TDZ) 
-        from the start of the block until code execution reaches the place where the variable is declared and initialized.
-        aka the block until let/const/class is initialised
-        aka block where a variable is inaccessible until the moment the computer completely initializes it with a value.
-        While inside the TDZ, the variable has not been initialized with a value, and any attempt to access it will result in a ReferenceError.
-        to avoid errors because of TDZ, move all ur declarations and initialisations to the top
-    
-    const 
-        same as let, with more strict rules
-        must be initialised at the time of declaration
-        cannot be re-initialised
-
-    Block
-        aka Compound statement
-        block is defined by {} 
-        it is used to combine multiple statements      
-        we use block to have multiple statements where javascript expects single statement (Ex: if block)
-    Block Scope
-        what all variables and functions we can access inside a Block
-        let and const are block scoped
-    Shadowing
-        when a variable declared within a certain scope has the same name as a variable in an outer scope. 
-        The inner variable "shadows" the outer one within its scope.
-        it happens not just inside blocks, also in functions.
-
-    Closure
-        function along with surrounding state (lexical environment) 
-        gives access to another function's scope from an inner function
     
     First Class functions
         using functions as values
         treating functions like any other variables
         programming language is said to have First-class functions when functions in that language are treated like any other variable.
+
     Callback function
         function passed into another function as an argument, which is then invoked inside the outer function to complete some kind of action.
+
     Event Listeners 
         when we create a event listener, callback function forms a Closure with outer scope
         this consumes a lot of memory, so we remove event listeners whenever possible
+
     Web APIs (not part of javascript, these are part of browser)
         setTimeout
         DOM APIs
@@ -122,6 +83,7 @@
         console
         location etc 
         we can access these through global object 'window', since it is global scope, we can access these without 'window.'
+
     Callback Queue
         aka Task Queue
         all callback functions(ex:setTimeout) are pushed to callback queue before coming to Call Stack.
@@ -135,14 +97,17 @@
         functions in Microtask queue is prioritized over functions in Callback queue
         event loop goes to callback queue once all the functions in Microtask queue are completed
         if function in callback queue won't get a chance to execute due to more Microtask queue function, it is called Starvation of callback queue
+
     setTimeout
         it does not always execute exactly after timeout given.
         if something is runing in call stack which takes more time than timeout of setTimeout
         event loop waits for call stack to empty, then only setTimeout callback function executes
         setTimeout(function,0) runs the function just after call Stack is empty
+
     Higher Order Functions 
         A function which takes another function as an argument or returns a function 
         ex: map, filter, reduce etc
+
     Callback functions Cons 
         Callback Hell
             in order to maintain order of callback functions, we pass callback inside callback so on
@@ -150,6 +115,7 @@
         Invertion of Control 
             we are trusting another callback function to call the next callback function afterwards
             we are loosing control over the callback functions 
+    
     Promise
         The Promise object represents the eventual completion (or failure) of an asynchronous operation and its resulting value.
         3 States 
@@ -160,35 +126,53 @@
 */
 
 // 1.
-
-getName()           // output: Javascript
-console.log(x)      // output: undefined
-
+// getName()           // output: Javascript
+// console.log(x)      // output: undefined
 var x1 = 7;
 
 function getName(){
+    console.log("Normal function");
+}
+
+
+
+
+
+// 2. Arrow function behaves like a variable
+
+// in memory allocation phase, getName1 is allocated with undefined
+// getName1()          // output: TypeError: getName1 is not a function
+
+var getName1 = () => {
+    console.log("Arrow function");
+}
+
+
+
+
+
+// 3. function in a variable also behaves like a variable
+// in memory allocation phase, getName2 is allocated with undefined
+// getName2()          // output: TypeError: getName2 is not a function
+var getName2 = function() {
     console.log("Javascript");
 }
 
-// 2. Arrow function behaves like a variable
-// in memory allocation phase, getName1 is allocated with undefined
-
-// getName1()          // output: TypeError: getName1 is not a function
-
-// var getName1 = () => {
-//     console.log("Javascript");
-// }
-
-// // 3. function in a variable also behaves like a variable
-// // in memory allocation phase, getName2 is allocated with undefined
-
-// getName2()          // output: TypeError: getName2 is not a function
-
-// var getName2 = function() {
-//     console.log("Javascript");
-// }
 
 
+
+
+/*  
+    Lexical environment
+        whenever execution context is created, Lexical environment is created.
+        it is local memory along with lexical environment of it's parent
+        for global execution context, parent lexical environment points to null
+
+    Scope Chain
+        whenever we are using  variable 'b' in a function, b will be searched in local memory
+        if it's not found, b will be searched in parent lexical environment of the function.
+        this goes until b is found or we reach lexical environment is null which is global scope.
+*/
 // Scope Chain 
 function a(){
     var b = 1;
@@ -197,10 +181,32 @@ function a(){
         console.log(b);
     }
 }
-a();                // output: 1
+// a();                // output: 1
 
 
+
+
+
+/*
+    let
+        these variables are hoisted in different memory space (ex:Script) instead of Global.
+        * we can't access these until they are initialised.
+        if we try to access before initialisation we get Reference error: Cannot access before initialisation
+        can be re-initialised
+    const 
+        same as let, with more strict rules
+        must be initialised at the time of declaration
+        cannot be re-initialised
+    Temporal Dead Zone 
+        A variable declared with let, const, or class is said to be in a "temporal dead zone" (TDZ) 
+        from the start of the block until code execution reaches the place where the variable is declared and initialized.
+        aka the block until let/const/class is initialised
+        aka block where a variable is inaccessible until the moment the computer completely initializes it with a value.
+        While inside the TDZ, the variable has not been initialized with a value, and any attempt to access it will result in a ReferenceError.
+        to avoid errors because of TDZ, move all ur declarations and initialisations to the top
+*/
 // TDZ starts at beginning of scope
+
 // console.log(l);     // output: "undefined"
 // console.log(k);     // output: ReferenceError: Cannot access 'k' before initialization
 
@@ -209,18 +215,32 @@ let k = 2; // End of TDZ (for k)
 
 // Cannot redeclare same let variable in same scope
 // let k = 10;           // output: SyntaxError: Identifier 'k' has already been declared
-
 // var k = 10;           // output: SyntaxError: Identifier 'k' has already been declared
 
-
 // const m;              // output: SyntaxError: Missing initializer in const declaration
-
 const t = 10;
 
 // t = 11;               // output: TypeError: Assignment to constant variable.
 
-// Block Scope and shadowing
 
+
+
+
+/*
+    Block
+        aka Compound statement
+        block is defined by {} 
+        it is used to combine multiple statements      
+        we use block to have multiple statements where javascript expects single statement (Ex: if block)
+    Block Scope
+        what all variables and functions we can access inside a Block
+        let and const are block scoped
+    Shadowing
+        when a variable declared within a certain scope has the same name as a variable in an outer scope. 
+        The inner variable "shadows" the outer one within its scope.
+        it happens not just inside blocks, also in functions.
+*/
+// Block Scope and shadowing
 var b1 = 100;
 let b4 = 10;
 {
@@ -229,12 +249,13 @@ let b4 = 10;
     const b3 = 3;
     let b4 = 4;
     // b1 shadowed b1 in global scope and it re-initialised b1, since both are pointing to Global Scope
-    console.log(b1);        // output: 1
-    console.log(b2);        // output: 2
-    console.log(b3);        // output: 3
+    // console.log(b1);        // output: 1
+    // console.log(b2);        // output: 2
+    // console.log(b3);        // output: 3
     // b4 shadowed b4 in global scope, both are in different scopes, as let is block scoped. same for const also
-    console.log(b4);        // output: 4
+    // console.log(b4);        // output: 4
 }
+
 // console.log(b1);            // output: 1
 // console.log(b2);         // output: ReferenceError: b2 is not defined
 // console.log(b3);         // output: ReferenceError: b3 is not defined
@@ -255,6 +276,15 @@ var c3 = 1;
     let c3 = 3;             // valid
 }
 
+
+
+
+
+/*
+    Closure
+        function along with surrounding state (lexical environment) 
+        gives access to another function's scope from an inner function
+*/
 // Closure
 function x(){
     let ax = 10;
@@ -263,10 +293,10 @@ function x(){
     }
     return y;
 }
+
 // after returning y function, y function still remembers it's lexical scope, means Closure is returned
 var oy = x();               // after this execution context of x() will be removed/deleted
-
-oy();                       // output: 10
+// oy();                       // output: 10
 
 function z(){
     let m = 3;
@@ -277,11 +307,13 @@ function z(){
     }, 1000);
     // console.log("After setTimeout")
 }
+
 // z();        
 /* output:
 After setTimeout
 3
 */
+
 // by the time function runs var i value will be 6, since it is global scope, all functions will take same i
 function p(){
     for(var i=1;i<=5;i++){
@@ -306,6 +338,7 @@ function p1(){
         }, i*1000);
     }
 }
+
 // p1();
 /* output:
 1
@@ -314,6 +347,7 @@ function p1(){
 4
 5
 */
+
 // using var and Closure, we created new Closure everytime loop runs
 function p2(){
     for(let i=1;i<=5;i++){
@@ -333,6 +367,10 @@ function p2(){
 4
 5
 */
+
+
+
+
 
 // function statement aka function declaration
 function f1(){
@@ -453,20 +491,20 @@ function proceedToPayment(orderID){
     )
 }
 
-createOrder(cart)
-    .then(function (orderID){
-        console.log(orderID)
-        return orderID;
-    })
-    .then(function (orderID){
-        return proceedToPayment(orderID);
-    })
-    .then(function (status){
-        console.log(status)
-    })
-    .catch(function (err){
-        console.log(err)
-    })
+// createOrder(cart)
+//     .then(function (orderID){
+//         console.log(orderID)
+//         return orderID;
+//     })
+//     .then(function (orderID){
+//         return proceedToPayment(orderID);
+//     })
+//     .then(function (status){
+//         console.log(status)
+//     })
+//     .catch(function (err){
+//         console.log(err)
+//     })
     
 /*  Promise.all()
         usages: Promise.all([p1,p2,p3])
@@ -488,35 +526,38 @@ createOrder(cart)
         it will return result of first completed/settled promise which is a success
         if all are failed, it will return AggregateError of all promises, err.errors will contain all the errors    
 */
-const pr1 = new Promise((resolve, reject)=>{
-    setTimeout(() => resolve("pr1 success"),3000);
-})
-const pr2 = new Promise((resolve, reject)=>{
-    // setTimeout(() => resolve("pr2 success"),1000);
-    setTimeout(() => reject("pr2 fail"),1000);
-})
-const pr3 = new Promise((resolve, reject)=>{
-    setTimeout(() => resolve("pr3 success"),2000);
-})
 
-Promise.allSettled([pr1,pr2,pr3])
-    .then((res)=> {
-        console.log(res)
-    })
-    .catch((err)=>{
-        console.error(err)
-    })
+// const pr1 = new Promise((resolve, reject)=>{
+//     setTimeout(() => resolve("pr1 success"),3000);
+// })
+// const pr2 = new Promise((resolve, reject)=>{
+//     // setTimeout(() => resolve("pr2 success"),1000);
+//     setTimeout(() => reject("pr2 fail"),1000);
+// })
+// const pr3 = new Promise((resolve, reject)=>{
+//     setTimeout(() => resolve("pr3 success"),2000);
+// })
+
+// Promise.allSettled([pr1,pr2,pr3])
+//     .then((res)=> {
+//         console.log(res)
+//     })
+//     .catch((err)=>{
+//         console.error(err)
+//     })
 /* output:
 [{status: 'fulfilled', value: 'pr1 success'},
 {status: 'rejected', reason: 'pr2 fail'},
 {status: 'fulfilled', value: 'pr3 success'}]
 */
 /*
-    Aync Functions
+    Async Functions
         always returns a Promise
         if we return any value which is not a Promise, it will wrap the value inside a Promise and then returns.
         * async and await are modern way of handling promises, internally javascript will be using 'then' only
-        await can only be used inside an Async function
+        await can only be used inside an Async function, Async and await must be used together
+        makes code more readable than using 'then' 
+        use try/catch or add catch to promise for error handling
         * Promises will start to resolve, from the moment they are created, not when await is added before them.
 */
 const pr4 = new Promise((resolve,reject)=>{
@@ -586,6 +627,7 @@ Promise value 5000
 after await 2
 Promise value 3000
 */
+
 // fetch with async and await
 async function handleFetch(){
     // fetch will returns a Promise
@@ -602,6 +644,8 @@ async function handleFetch(){
 // handleFetch();
 
 /* 'this' keyword
+    this keyword refers to the context where a piece of code is supposed to run
+    * value of this in JavaScript depends on how a function is invoked (runtime binding), not how it is defined. 
     * this works differently in non-strict mode and strict mode
     this in Global Scope
         points to Global object
@@ -619,33 +663,28 @@ async function handleFetch(){
                 undefined
             window.func()
                 window
-    this inside Arrow function
-        arrow functions don't provide their own this binding
-        it retains the this value of enclosing lexical context/Scope 
     this in DOM elements 
         Reference to that HTMLElement
         usage: this.tagName etc
-    this in Callbacks 
-        Callbacks are typically called with a this value of undefined (calling it directly without attaching it to any object)
-        which means if the function is non–strict, the value of this is the global object 
 
 */
 // this in Global Scope
-console.log(this);          
+
+// console.log(this);          
 // output: window:{...}
 
 // this in a function
 function func(){
     console.log(this);
 }
-func()
+// func()
 /*
 output in non strict mode:
 window:{...}
 output in strict mode:
 undefined
 */
-window.func()
+// window.func()
 /*
 output in strict mode:
 window:{...}
@@ -659,19 +698,48 @@ const obj = {
         console.log(this)
     }
 }
-obj.x()
+// obj.x()
 // output: obj
 
-// this inside Arrow function
+/*
+    this inside Arrow function
+        arrow function doesn't create it's own execution context, it just uses context where it is defined.
+        in other words, it retains the this value of enclosing lexical context/parent scope at the time they are defined.
+        in other words, arrow functions don't have their own this binding. Instead, this is looked up in scope just like a normal variable.
+        when invoking arrow functions using call(), bind(), or apply(), the thisArg parameter is ignored.  
+        this value cannot be set by bind(), apply() or call() methods, nor does it point to the current object in object methods.
+        Arrow functions doesn't have arguments variable inside it which stores arguments passed to it
+        you can't pass arguments without defining them in arrow function
+        Avoid arrow functions for 
+            methods in objects which uses 'this' 
+            normal callback functions which uses 'this' 
+            event listener callback functions which uses 'this'  
+            adding methods to prototype, since 'this' doesn't work          
 
+    obj{
+        x:()=>{
+            this
+        }
+    }
+    is same as 
+    obj {
+        x: this
+    }
+    that's why it took value of this in global scope
+*/
 const obj2 = {
     a:1,
     x:  () => {
         console.log(this)
+    },
+    y: function (){
+        console.log(this)
     }
 }
-obj2.x()
+// obj2.x()
 // output: window:{...}
+// obj2.y()
+// output: obj2
 
 // this inside nested arrow function
 // here enclosing lexical context is method x for which this is obj3
@@ -686,7 +754,7 @@ const obj3 = {
         fun()
     } 
 }
-obj3.x()
+// obj3.x()
 // output: obj3
 /*
     function borrowing 
@@ -717,13 +785,27 @@ let student2 = {
     lastName:"Reddy"
 }
 // call
-printFullName.call(student1,"Andhra")
+// printFullName.call(student1,"Andhra")
+// output: Sunny Reddy from Andhra
+
 // apply
-printFullName.apply(student2,["Telangana"])
+// printFullName.apply(student2,["Telangana"])
+// output: Maharshi Reddy from Telangana
+
 // bind 
 let printMyFullName = printFullName.bind(student1,"Andhra");
-printMyFullName()
+// printMyFullName()
+// output: Sunny Reddy from Andhra
 
+/*
+    this inside Callbacks 
+        callback functions run in entirely different context.
+        callbacks are typically called with a this value of undefined (calling it directly without attaching it to any object)
+        which means if the function is non–strict, the value of this is the global object 
+        to fix it, we can pass this value using bind which returns a new function with this passed as argument
+        or we can use Arrow functions, which takes this value of it's enclosing lexical context/parent scope.
+        or store this value in a variable and use it instead of this callback function
+*/
 const person = {
     firstName:"John",
     lastName: "Doe",
@@ -732,13 +814,134 @@ const person = {
     }
 }
 // when a function is used as a callback, this is lost.
-setTimeout(person.display, 3000);
+// setTimeout(person.display, 3000);
 // output: undefined undefined
+
+// 1. Using Bind
 let display = person.display.bind(person);
-setTimeout(display, 3000);
+// setTimeout(display, 3000);
 // output: John Doe
 
-/*  Function Currying 
+
+
+/*
+    Object Constructor Functions
+        Sometimes we need to create many objects of the same type.
+        To create an object type we use an object constructor function.
+        It is considered good practice to name constructor functions with an upper-case first letter.
+*/
+
+function Human(name,home){
+    this.name = name
+    this.home = home
+    this.talk = function (){
+        console.log(this.name, "talking")
+    }
+}
+const john = new Human("John","London")
+// console.log(john)
+/* output:
+{name: 'John', home: 'London', talk: ƒ}
+*/
+
+
+
+
+
+/*    Prototypal Inheritance 
+        Prototypes are the mechanism by which JavaScript objects inherit features(properties & methods) from one another. 
+        __proto__ 
+            it is property of every variable, which has all methods and properties that are inherited from it's parent constructor function or class
+        prototype
+            constructor functions and classes will have prototype property 
+            it has all properties and methods which are shared with instances
+            by using this you can add properties and methods to any object
+        whenever we are access any property/method
+            first loopup happens inside the instance if not found, then inside it's __proto__ and so on upto it goes to Object class
+            Object is parent of all variables/functions in JavaScript
+        date objects inherit from Date.prototype
+        array objects inherit from Array.prototype
+        normal objects, Date and Array inherit from Object.prototype
+        Object.prototype is on the top of the prototype inheritance chain
+            Object.__proto__ is null
+            since it is base for all and won't inherit from anything            
+*/
+
+function Person(){                          // constructor function
+    this.talk = function(){
+        console.log("Person talking")
+    }
+    this.age = 30;
+}
+
+const sunny = new Person()
+
+sunny.age = 20;                             // age in sunny is shadowing age in Person
+sunny.talk = function (){                   // talk in sunny is shadowing talk in Person
+    console.log("Sunny talking")
+}
+
+// console.log("Sunny age:",sunny.age)
+// output: 20
+
+// sunny.talk()
+// output: Sunny talking
+
+// console.log(sunny.__proto__ === Person.prototype)
+// output: true
+
+
+// adding custom method to all functions
+// same can be done to any object
+Function.prototype.printMyFullName = function (){
+    console.log("Maharshi Reddy")
+}
+
+function xyz (){
+
+}
+
+// xyz.printMyFullName()
+// output: Maharshi Reddy
+
+
+
+
+
+/*  polyfill
+        piece of code (usually JavaScript on the Web) used to provide modern functionality on older browsers that do not natively support it.
+    polyfill for bind 
+        every function have access to bind method, so we use prototype property to give our own bind method to any function
+        bind method returns a function
+        normally we call bind like func.bind(), to get access of function we can use 'this'
+        we can pass arguments while using bind, and also new function created with bind can have arguments
+*/
+let student = {
+    firstName:"sunny",
+    lastName:"reddy"    
+}
+function printStudent(homeTown, state){
+    console.log(this.firstName,this.lastName,homeTown,state)
+}
+Function.prototype.mybind = function(...args){
+
+    let fun = this; 
+    let new_obj = args[0];
+    let other_args = args.slice(1);
+    return function(...new_args){
+        fun.call(new_obj,...other_args,...new_args);
+    }
+}
+const printStudent2 = printStudent.mybind(student,"atp")
+// printStudent2("AP");
+// output: sunny reddy atp AP
+
+
+
+
+
+/*  
+    Function Currying 
         used to transform a function that takes multiple arguments into a sequence of functions that each takes a single argument.
         can be done using bind or Closures        
 */
@@ -747,8 +950,9 @@ let multiply1 = function (x,y){
 }
 // using bind
 let multiplyByTwo1 = multiply1.bind(this,2)
-multiplyByTwo1(2)
+// multiplyByTwo1(2)
 // output: 4
+
 // using Closure - nested function have access to surrounding state (the lexical environment).
 function multiply2(x){
     return function(y){
@@ -756,5 +960,322 @@ function multiply2(x){
     }
 }
 let multiplyByTwo2 = multiply2(2)
-multiplyByTwo2(2)
+// multiplyByTwo2(2)
 // output: 4
+
+/*
+    Pure Functions
+        functions that produce the same output for a particular input every time they are called
+        they have no side effects and do not rely on external state or mutable data.
+        side effects 
+            Mutating your input
+            console.log
+            HTTP calls (AJAX/fetch)
+            Changing the filesystem (fs)
+            Querying the DOM
+*/
+
+
+/*
+    Event Propagation 
+        order in which elements receive the event.
+        * when an element receives an event, that event will propogate to it's ancestors not to it's children
+        Propagation order can be controlled by changing 3rd argument(useCapture) to true/false in addEventListener
+    Event Bubbling 
+        default behaviour of event propagation, default 3rd argument(useCapture)' is false
+        bubbling up to parent elements
+        when an element receives an event, it runs on itself, then it's parent and so on upto top ancestor element.            
+    Event Capturing/Trickling
+        can be enabled by passing true as a 3rd argument(useCapture) to the addEventListener
+        Captured down to child element
+        when an element receives an event
+            first it's top ancestor event runs, then it's child and so on upto element that received the event.  
+    Stop Propagation
+        we can stop the propagation by using e.stopPropagation().
+        order of propagation will depends on useCapture value, 
+        propagation will stop at the element which has e.stopPropagation()   
+*/
+
+// Event Bubbling: default (useCapture=false)
+
+// document.querySelector("#grand-parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Grand Parent Clicked")
+//     })
+// document.querySelector("#parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Parent Clicked")
+//     })
+// document.querySelector("#child")
+//     .addEventListener("click", ()=>{
+//         console.log("Child Clicked")
+//     })
+/*
+output:
+clicked on child 
+    child click event
+    parent click event
+    grand parent click event
+clicked on parent
+    parent click event
+    grand parent click event
+clicked on grand parent
+    grand parent click event
+*/
+
+
+// Event Capturing/Trickling (useCapture=true), comment above click events
+
+// document.querySelector("#grand-parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Grand Parent Clicked")
+//     }, true)
+// document.querySelector("#parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Parent Clicked")
+//     },true)
+// document.querySelector("#child")
+//     .addEventListener("click", ()=>{
+//         console.log("Child Clicked")
+//     },true)
+/*
+output:
+clicked on child 
+    grand parent click event
+    parent click event
+    child click event
+clicked on parent
+    grand parent click event
+    parent click event
+clicked on grand parent
+    grand parent click event
+*/
+
+/*
+    * Capturing cycle will run first, after Bubbling cycle will run if there is 
+        if an element receives an event and if propogable elements have both Bubbling & Capturing
+        first, all Capturing events (from top ancestor to element that received event) will run 
+        after, all Bubbling events (from element that received event to top ancestor) will run  
+*/
+
+// Event Bubbling and Capturing/Trickling, comment above click events
+
+// document.querySelector("#grand-parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Grand Parent Clicked")
+//     },true)
+// document.querySelector("#parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Parent Clicked")
+//     },false)
+// document.querySelector("#child")
+//     .addEventListener("click", ()=>{
+//         console.log("Child Clicked")
+//     },true)
+/*
+output:
+clicked on child 
+    grand parent click event
+    child click event
+    parent click event
+clicked on parent
+    grand parent click event
+    parent click event
+clicked on grand parent
+    grand parent click event
+*/
+
+
+// comment above click events
+
+// document.querySelector("#grand-parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Grand Parent Clicked")
+//     },false)
+// document.querySelector("#parent")
+//     .addEventListener("click", ()=>{
+//         console.log("Parent Clicked")
+//     },true)
+// document.querySelector("#child")
+//     .addEventListener("click", ()=>{
+//         console.log("Child Clicked")
+//     },false)
+/*
+output:
+clicked on child 
+    parent click event
+    child click event
+    grand parent click event
+clicked on parent
+    parent click event
+    grand parent click event
+clicked on grand parent
+    grand parent click event
+*/
+
+
+// stopPropagation
+
+document.querySelector("#grand-parent")
+    .addEventListener("click", ()=>{
+        console.log("Grand Parent Clicked")
+    },true)
+document.querySelector("#parent")
+    .addEventListener("click", (e)=>{
+        console.log("Parent Clicked")
+        e.stopPropagation();
+    },true)
+document.querySelector("#child")
+    .addEventListener("click", ()=>{
+        console.log("Child Clicked")
+    },true)
+/*
+output:
+clicked on child 
+    grand parent click event
+    parent click event
+clicked on parent
+    grand parent click event
+    parent click event
+clicked on grand parent
+    grand parent click event
+*/
+
+
+
+/*
+    Event Delegation
+        adding event listeners to each and every elements will decrease the performance of website
+        we can reduce the event listeners by adding single event listener to parent and handling it's children events in that.
+        This is possible because of Event Bubbling, where children events propagate to parent
+        Pros 
+            saves memory because we are using 1 listener for all children
+            less code
+            less DOM manipulation
+                in infinite scrolling, elements will keep on adding and event listeners will be added for each 
+                this can be avoided with Event Delegation
+        Cons
+            not all events are bubbled up, ex: blur
+            if stopPropagation is used in any children, event won't bubbled up
+*/
+
+document.getElementById("category").addEventListener('click',(e)=>{
+    console.log(e.target.id,"button clicked")
+})
+document.getElementById("form").addEventListener('keyup',(e)=>{
+    if(e.target.dataset.uppercase != undefined){
+        e.target.value = e.target.value.toUpperCase()
+    }    
+})
+
+
+/*  
+    Debouncing & Throttling 
+        Throttling is used to rate limit the function call
+        Search bar usecase 
+            if we call API everytime key pressed, it will cause performance issues
+            Debouncing
+                only call API if time difference between keypress events is > 300ms
+            Throttling
+                only call API after 300ms from last call.
+            Debouncing is usefull and widely used in this case
+        Track how many times user resizes the browser window
+            when user is resizing, there will be thousands of events(like event for each px change)
+            Debouncing
+                only call API if time difference between two events is > 100ms
+            Throttling
+                only call API after 100ms from last call.
+                it will ignore all the events in that 100ms
+            Throttling is usefull and widely used in this case
+        Gun Fire button
+            when user is clicking fire button continuously
+            rule: can fire only after 300ms
+            Debouncing
+                only fire if time difference between two events is > 300ms
+            Throttling
+                only fire after 300ms from last fire event.
+                it will ignore all the events in that 300ms
+            Throttling is usefull and widely used in this case
+*/
+
+// Debouncing on search bar 
+getSearchData = ()=>{
+    console.log("calling search data");
+}
+// this function will return debounced function
+const debounce = function (func, delay){
+    let timer;          
+    return function (){                      // this function forms a Closure with debounce function lexical environment
+        let context = this,args = arguments;        // store context and arguments
+        clearTimeout(timer);            // clears timer if another event comes before delay, first time timer is undefined
+
+        timer = setTimeout(()=>{                    // creates timer on every event
+            getSearchData.call(context,...args)       // if no event comes before 300ms, this will run
+        },delay)
+    }
+
+}
+const debounceSearchData = debounce(getSearchData,300);
+
+
+// Throttling on fire button, can only fired after the time limit
+const Fire = ()=>{
+    console.log("Shotgun Fired");
+}
+const throttle = function (func,limit){
+
+    let enabled = true;   
+    return function (){                     // this function forms a Closure with debounce function lexical environment
+        let context = this,args = arguments;        // store context and arguments              
+        if(enabled){                                // call the function if enabled
+            func.call(context,...args);
+            enabled = false;                        // disable the function
+            setTimeout(()=>{
+                enabled = true                      // enable it after the time limit
+            },limit);
+        }
+    }
+}
+
+const throttleFire = throttle(Fire,1000);
+
+
+
+
+// add(1)(2)(3)(4)...() return sum of all 
+// return a function and check if next call have number or not
+const add = function (a){
+
+    return function (b){        // return the function 
+
+        if(b){                  // if there is 2nd call with number return add with add both and pass to a
+            return add(a+b);
+        }
+        return a;               // 2nd call without number, end of calls, a will be having sum of all
+    }
+}
+// console.log(add(1)(2)(3)(4)())
+
+// output: 10
+
+
+
+
+/*
+    default, async and defer 
+        default
+            if browser encounters a script tag, it will stop the parsing of html and fetch script src and runs it
+            after script run, it will resume the parsing of html
+        async
+            while browser parsing html, any of scripts with async will fetch the src asynchronously(parallelly)
+            as soon as script is downloaded, html parsing stops and script is executed,
+            which is not necessarily in the order in which they appear in the document.
+            so it doesn't gaurantee the order of scripts execution
+            if some scripts are dependent on other, avoid async
+            usage 
+                we can use async for analystics scripts which are independent of each other 
+        defer
+            while browser parsing html, any of scripts with async will fetch the src asynchronously(parallelly)
+            script will be executed after html parsing
+            it will run scripts in order in which they appear in the document
+*/

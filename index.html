@@ -2,9 +2,57 @@
 <html>
 <head>
     <title>Javascript Notes</title>
+    <style>
+        #grand-parent, #grand-parent div {
+            min-width: 100px;
+            min-height: 100px;
+            padding: 30px;
+            border: 1px solid black;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Javascript Notes</h1>
+    <!-- Event Bubbling and Event Capturing/Trickling -->
+    <h3>Event Bubbling and Event Capturing/Trickling</h3>
+    <div id="grand-parent">
+        Grand Parent
+        <div id="parent">
+            Parent
+            <div id="child">Child</div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+
+    <!-- Event Delegation -->
+    <h3>Event Delegation</h3>
+    <div id="category">
+        <button id="laptop">Laptop</button>
+        <button id="phone">Phone</button>
+        <button id="tab">Tab</button>
+    </div>
+    <br>
+    <form id="form">
+        <label>First name</label>
+        <input type="text" data-uppercase/>
+        <br>
+        <label>Last name</label>
+        <input type="text" data-uppercase/>
+    </form>
+    <br>
+    <br>
+    <br>
+    <!-- Debouncing -->
+    <h3>Debouncing</h3>
+    <input type="text" placeholder="Search here" onkeyup="debounceSearchData()"/>
+    <br>
+    <br>
+    <!-- Throttling -->
+    <h3>Throttling</h3>
+    <button onclick="throttleFire()">Shotgun Fire</button>
     <script src="index.js"></script>
 </body>
 </html>
