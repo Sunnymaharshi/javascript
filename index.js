@@ -1176,6 +1176,8 @@ document.getElementById("form").addEventListener('keyup',(e)=>{
             if we call API everytime key pressed, it will cause performance issues
             Debouncing
                 only call API if time difference between keypress events is > 300ms
+                skip or avoid API calls if difference between keypress is << 300ms 
+                removes unneccesary calls to api when keypress events come very fast.
             Throttling
                 only call API after 300ms from last call.
             Debouncing is usefull and widely used in this case
@@ -1217,6 +1219,17 @@ const debounce = function (func, delay){
 }
 const debounceSearchData = debounce(getSearchData,300);
 
+/*
+//Debouncing in React,we create useState for search input value 
+useEffect(()=>{
+    const timer = setTimeout(()=>getSearchData(),300);
+    // while typing, this component rerenders and useEffect is called
+    // while component is unmounting, we remove the timer
+    return {
+        clearTimeout(timer)
+    }
+},[searchText])
+*/
 
 // Throttling on fire button, can only fired after the time limit
 const Fire = ()=>{
