@@ -1279,6 +1279,7 @@ const add = function (a){
         default
             if browser encounters a script tag, it will stop the parsing of html and fetch script src and runs it
             after script run, it will resume the parsing of html
+            DOMContentLoad event waits for all scripts to execute
         async
             while browser parsing html, any of scripts with async will fetch the src asynchronously(parallelly)
             as soon as script is downloaded, html parsing stops and script is executed,
@@ -1286,9 +1287,192 @@ const add = function (a){
             so it doesn't gaurantee the order of scripts execution
             if some scripts are dependent on other, avoid async
             usage 
-                we can use async for analystics scripts which are independent of each other 
+                we can use async for analystics scripts which are independent of each other
+            DOMContentLoad event does not waits for async scripts to execute             
         defer
             while browser parsing html, any of scripts with async will fetch the src asynchronously(parallelly)
             script will be executed after html parsing
             it will run scripts in order in which they appear in the document
+            DOMContentLoad event fires after defer scripts are executed
+*/
+
+/* --- The modern JavaScript course for everyone! Master JavaScript with projects, challenges and theory. Many courses in one! --- */
+
+/*  Type Conversion vs Type Coercion 
+        Type Conversion
+            when we manually convert the type of a value 
+        Type Coercion 
+            when JavaScript automatically converts the type of a value
+            + operator
+                converts number to string
+            -,*,/ operators
+                converts string to number
+
+
+*/
+/* 
+const year = '2000';
+// Type Coercion 
+console.log(year + 1);                  // JS converts 1 to string
+// output:'20001'
+console.log(year - 1);                  // JS converts '2000' to number
+// output:1999
+console.log('20' - '10' - 7);           // JS converts '20' and '10' to number
+// output:3
+console.log('3'*'10');           // JS converts '3' and '10' to number
+// output:30
+// Type Conversion 
+console.log(Number(year) + 1);
+// output:2001
+console.log(Number('Hi'))               // returns Not a Number (NaN) which type is number
+// output:NaN
+console.log(String(10));
+// output:'10' 
+*/
+
+/*  Truthy and Falsy values
+        Falsy 
+            0, '', undefined, null, NaN
+            when converted to boolean, they become false
+        Truthy
+            all other values are Truthy values 
+            when converted to boolean, they become true
+*/
+/* 
+console.log(Boolean(0));            // output:false        
+console.log(Boolean(undefined));    // output:false
+console.log(Boolean(NaN));          // output:false
+console.log(Boolean(null));         // output:false
+console.log(Boolean(''));           // output:false
+console.log(Boolean({}));           // output:true
+*/
+
+/*  DOM Traversing
+        closest 
+            it find closest parent which matches given query selector 
+*/
+//  Slider Component 
+const slider_data = [{text:"slide 1", color:"blue"},{text:"slide 2", color:"orange"},{text:"slide 3", color:"cyan"},{text:"slide 4", color:"green"}]
+function slider(data){
+    const slides_len = data.length;
+    let curr_slide = 0;
+    const slider = document.querySelector('.slider');
+    const btnLeft = document.querySelector('.slider_btn--left');
+    const btnRight = document.querySelector('.slider_btn--right');
+    const dotContainer = document.querySelector('.dots');
+    const createDots = function () {
+        data.forEach(function (_, i) {
+          dotContainer.insertAdjacentHTML(
+            'beforeend',
+            `<button class="dots_dot" data-slide="${i}"></button>`
+          );
+        });
+    };
+    const createSlides = ()=>{
+        data.forEach(function (s,i) {
+            slider.insertAdjacentHTML('beforeend',`<div class="slide" style="background-color:${s.color};">${s.text}</div>`)
+        })
+    }
+    createSlides();
+    const slides = document.querySelectorAll('.slide');
+    const activateDot = function (slide) {
+        document
+          .querySelectorAll('.dots_dot')
+          .forEach(dot => dot.classList.remove('dots_dot--active'));
+    
+        document
+          .querySelector(`.dots_dot[data-slide="${slide}"]`)
+          .classList.add('dots_dot--active');
+    };
+    const goToSlide = function (slide) {
+        // make translateX 0% for the slide, left slides have -% and right slides +% in 100's
+        slides.forEach(
+          (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+        );
+    };
+    const nextSlide = function () {
+        if (curr_slide === slides_len - 1) {
+          curr_slide = 0;
+        } else {
+          curr_slide++;
+        }
+    
+        goToSlide(curr_slide);
+        activateDot(curr_slide);
+    };
+    const prevSlide = function () {
+        if (curr_slide === 0) {
+          curr_slide = slides_len - 1;
+        } else {
+          curr_slide--;
+        }
+        goToSlide(curr_slide);
+        activateDot(curr_slide);
+    };
+    const init = function () {
+        goToSlide(0);
+        createDots();    
+        activateDot(0);
+    };
+    init();
+    btnRight.addEventListener('click', nextSlide);
+    btnLeft.addEventListener('click', prevSlide);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') prevSlide();
+        e.key === 'ArrowRight' && nextSlide();
+    });
+
+    dotContainer.addEventListener('click', function (e) {
+        if (e.target.classList.contains('dots_dot')) {
+          const { slide } = e.target.dataset;
+          goToSlide(slide);
+          activateDot(slide);
+        }
+    });
+
+}
+slider(slider_data);
+/*  Intersection Observer API 
+        asynchronously observe changes in the intersection of a target element 
+        with an ancestor element or with a top-level document's viewport(screen).
+        root
+            The element that is used as the viewport for checking visibility of the target. 
+            Must be the ancestor of the target. Defaults to the browser viewport if not specified or if null.
+            container in which we observe target element visibility
+        rootMargin
+            Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" 
+            used to increase/decrease the size of the root(container)
+        threshold
+            Either a single number or an array of numbers which indicate at what percentage of the target's visibility 
+            the observer's callback should be executed.
+        use cases
+            revealing sections as we scroll 
+            infinite scrolling 
+            lazy loading images etc 
+*/
+/* 
+const intersect_ele = document.querySelector(".intersect");
+const observer_callback = function(entries,observer){
+    // Each entry describes an intersection change for each element u r observing
+    // currently we are only observing for single element (intersect_ele)
+    // observer argument is used to unobserver target element
+    // single entry because we only observing 1 element
+    if(entries[0].isIntersecting){
+        console.log("Element is visible on the screen")
+    }else{
+        console.log("Element is not visible on the screen")
+    }
+    // observer.unobserve(entries[0].target);
+}
+const observer_options = {
+    // null for checking intersection with viewport(screen)
+    root:null,
+    // min percentage the element should intersect(visible) inside root
+    // callback will called for each threshold in the array
+    // 0 means, as soon as element visible inside root even a single pixel
+    threshold:[0,0.5]
+}
+const observer = new IntersectionObserver(observer_callback,observer_options);
+observer.observe(intersect_ele) 
 */
