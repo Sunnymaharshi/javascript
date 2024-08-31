@@ -829,6 +829,9 @@ let display = person.display.bind(person);
         Sometimes we need to create many objects of the same type.
         To create an object type we use an object constructor function.
         It is considered good practice to name constructor functions with an upper-case first letter.
+        methods in constructor function are copied in all the instances that are created 
+        instead use Prototype for adding methods
+        ES6 class is synthetic sugar of constructor function
 */
 
 function Human(name,home){
@@ -1476,3 +1479,34 @@ const observer_options = {
 const observer = new IntersectionObserver(observer_callback,observer_options);
 observer.observe(intersect_ele) 
 */
+
+/*  ES6 class 
+        class is synthetic sugar coating on constructor function
+        methods in class are added to prototype
+        classes are not hoisted
+    Static methods 
+        methods that are attached to constructor function or class, not prototype
+        we can only access through class/constructor function, not in instances
+        created with dot(.) on class or with 'static' keyword before method
+        ex:Number.parseFloat()
+*/
+/* class Student {
+    constructor(name,marks){
+        this.name = name;
+        this.marks = marks;
+    }
+    isPassed(){
+        return this.marks>=50;
+    }
+    static bye(){
+        console.log("Bye!");        
+    }
+}
+const mahesh= new Student('mahesh',66);
+console.log(mahesh.isPassed());
+// Static methods
+Student.hey = function (){
+    console.log("hey there!")
+}
+Student.hey()
+Student.bye() */
