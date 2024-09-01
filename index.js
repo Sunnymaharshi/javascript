@@ -559,6 +559,10 @@ function proceedToPayment(orderID){
         makes code more readable than using 'then' 
         use try/catch or add catch to promise for error handling
         * Promises will start to resolve, from the moment they are created, not when await is added before them.
+        from ES2022
+            await can be used outside of async function, but only in modules
+            it is called top-level await
+
 */
 const pr4 = new Promise((resolve,reject)=>{
     setTimeout(()=>{
@@ -1510,3 +1514,19 @@ Student.hey = function (){
 }
 Student.hey()
 Student.bye() */
+
+/*  ES6 Module vs Script
+        module 
+            top-level variables are scoped to module 
+            executes in strict mode
+            top level 'this' is undefined
+            can import/export 
+            type="module" in script tag
+            file downloads in Async
+            imports happens synchronously
+        script
+            top-level variables are global scoped
+            executes in sloppy mode
+            top level 'this' is window
+            cannot do import/export
+*/
