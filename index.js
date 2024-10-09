@@ -984,6 +984,16 @@ let multiplyByTwo2 = multiply2(2)
 
 
 /*
+    Event Flow in DOM 
+        events are processed in 3 phases 
+        1.Capturing Phase 
+            by default, it won't happen
+            1st phase
+            pass true as 3rd argument to addEventListener to enable it
+            if it is enabled, event handlers are triggered in the capturing phase.
+        2.Target Phase 
+            target element is the element where the event originally occurred
+        3.Bubbling Phase
     Event Propagation 
         order in which elements receive the event.
         * when an element receives an event, that event will propogate to it's ancestors not to it's children
