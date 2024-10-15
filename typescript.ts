@@ -101,6 +101,30 @@
             used for a function which never returns anything
             ex: function which throws an error never returns anything
             as function execution stop at throw statement
+        
+        class in typescript (different than class in JS)
+            these keywords are added in typescript, not there in JavaScript
+            private and public keywords
+                to make properties or methods private or public
+            readonly keyword
+                to make a property readonly
+                ex: private readonly name; inside class
+        
+        Interface (not there in JavaScript)
+            it is purely development purpose, it won't appear in compiled JS
+            Interfaces are similar to type aliases, 
+            except they only apply to object types.
+            can't store union types
+            Usually objects structures are defined in Interfaces
+            classes can implement the Interfaces means class that
+            implements a interface must define properties and methods in the interface
+            can have 'readonly' properties (but not public, private etc)
+            interface can extend other interface
+            can used create a function type
+            optional properties or methods
+                add ? after name of property or methods to make them optional
+                can do same in classes also
+
 */
 /*
     Adding type to function arguments
@@ -161,4 +185,31 @@ let addition :(a:number,b:number)=>number;
 function generateError(msg:string):never{
     throw {error:msg,code:500}
 }
-generateError("error")
+// generateError("error")
+
+// Interface
+
+interface Student {
+    name:string;
+    age:number;
+    greet(phrase:string):void;
+    surname?:string;
+}
+
+let akash:Student;
+
+akash = {
+    name:"akash",
+    age:14,
+    greet(phrase:string){
+        console.log(phrase + ' ' + this.name)
+    }
+}
+
+// akash.greet("Hi there! I'm")
+// Output:Hi there! I'm akash
+
+// Interface for function type
+interface AddFn {
+    (n1:number,n2:number):number;
+}
