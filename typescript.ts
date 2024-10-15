@@ -18,6 +18,7 @@
             Rich Configuration Options
         Core Types 
             core primitive types in TypeScript are all lowercase.
+            below types are available in JavaScript also
             number 
                 all numbers and floats 
                 ex:1,-5,1.3
@@ -42,10 +43,63 @@
                 ex: let nums: number[];
                 array that contains any type
                 ex: let list: any[];
+            Types that are added in TypeScript:
+            Tuple
+                fixed length and type array 
+                we can specify multiple primitive types in the array
+                ex: [string,number]
+                here array will always be of length 2 and first element holds 
+                always string and 2nd element will always holds a number
+                push() operation is exception in Tuple, is allowed
+            Enum
+                Automatically enumerated global constant identifiers 
+                by default, incremental value start with 0
+                ex: enum {ADMIN,READ_ONLY}
+                here ADMIN is 0, READ_ONLY is 1
+                if u want to starting number as someother number 
+                assign that number to first enum variable
+                like enum {ADMIN=3,READ_ONLY}
+            any
+                means any type 
+                typescript does not check type for this type
+            Union
+                used to specify more than 1 type 
+                when u want to accept multiple type for a variable
+                add pipe(|) to add multiple types
+                ex: inputVar : string | number
+            Literal Types 
+                we specify values that are acceptable to a variable
+                ex: let a:"right" | 2;
+                now a can have either right or 2 as values
+            Type Aliases / Custom Types 
+                used to create our own custom types
+                ex: type Input = number | string;
+            'Function' type
+                we can give Function as a type for variable
+                let addition: Function;
+            'unknown' type 
+                more strict than any 
+                if u want to assign a var to this type of variable
+                u need to check it's type after that assign that
                 
         Type Inference feature
             if type is not specified, TypeScript automatically adds type to variables
             for both primitive and object according to assigned value
+        
+        function return type 
+            we can add type for function return value
+            ex: function add():number{...}
+            void return type
+                if function does not return anything
+        function as a type 
+            we can give function with arguments and return type as a type 
+            this is more specific than 'Function' type
+            ex: let addition: (a:number,b:number)=>number;
+            here argument names need not be same as actual arguments
+        'never' type
+            used for a function which never returns anything
+            ex: function which throws an error never returns anything
+            as function execution stop at throw statement
 */
 /*
     Adding type to function arguments
@@ -61,8 +115,49 @@ let n:number = 1;
 // here typescript automatically assigns type to variable
 let firstName = "Joe";
 
-firstName = 1;
+// firstName = 1;
 // Compile Error: Type 'number' is not assignable to type 'string'.
 
 // when value is not assigned immediately u can specify type 
 let days:number;
+
+// Tuple 
+const admin : {
+    name:string;
+    role:[number,string]
+} = {
+    name:"John",
+    role: [2,"admin"]
+}
+
+// ***Allowed***
+admin.role.push("hi")
+
+// ***Not allowed***
+// admin.role[1] = 3;
+// admin.role = []
+// admin.role = [3,"dev","software"]
+
+// Enum 
+enum Role {ADMIN,READ_ONLY,AUTHOR}
+console.log(Role.ADMIN,Role.READ_ONLY,Role.AUTHOR)
+// Output: 0,  1,  2 
+
+// Literal Types 
+let a : 1 | "Hi";
+
+// a= 10;
+// Compile Error: Type '10' is not assignable to type '1 | "Hi"'
+
+// Type Alias / Custom type
+type Input = number | string;
+type User = { name: string; age: number };
+
+// function as a type 
+let addition :(a:number,b:number)=>number;
+
+// never type - function never returns anything
+function generateError(msg:string):never{
+    throw {error:msg,code:500}
+}
+generateError("error")
