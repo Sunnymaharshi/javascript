@@ -277,7 +277,39 @@ var c3 = 1;
 }
 
 
+/*
+    Spread operator (...variable)
+        used to spread all values inside an array or object
+    Rest operator (...variable)
+        merge all the values into array
+        also used in array destructuring to take remaining values into a array        
+*/
+// Spread operator 
+const Person = {
+    name:"John",
+    age:30
+}
 
+const copiedPerson = {
+    ...Person,
+    height:6
+}
+// console.log(copiedPerson)
+// Output: {name: 'John', age: 30, height: 6}
+
+
+// Rest operator
+function addAll(...args){
+    // console.log(args)
+}
+addAll(1,2,3,6)
+// Output: [1, 2, 3, 6]
+
+// Rest operator in array destructuring
+const list = [1,2,3,4,5];
+const [first,second,...remaining] = list;
+console.log(first,second,remaining)
+// Output: 1 2 [3, 4, 5]
 
 
 /*

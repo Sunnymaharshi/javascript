@@ -10,6 +10,7 @@
         Typescript type system only helps you during development (i.e before code gets compiled)
         Typescript compiles .ts file and outputs .js file  contains just normal JavaScript 
         output .js file contains just normal JavaScript without any Typescript code like types etc
+        TypeScript can also transpiles modern JavaScript into older JavaScript if configured.
         Typescript adds 
             Types 
             Next-gen JavaScript features (compiled to regular JS for older browsers)
