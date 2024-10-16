@@ -273,3 +273,12 @@ function merge<T extends object,U extends object>(obj1: T, obj2: U){
 }
 
 const mergerdObj = merge({name:"xyz"},{age:20})
+
+/*
+    3rd party libraries (built in Vanila JavaScript)
+        when we use these inside ts file, typescript will show errors 
+        but compiles correctly 
+        to remove these errors because types are not there (in Vanila JS)
+        we can install "types library" for that 3rd party library
+        ex: @types/lodash for lodash library
+*/
