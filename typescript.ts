@@ -213,3 +213,63 @@ akash = {
 interface AddFn {
     (n1:number,n2:number):number;
 }
+
+/*
+    Advanced Types 
+        Intersection types 
+            to create a new type by intersecting two type aliases or Interfaces
+            combiles all properties and common properties only appear once in resulting type
+            ex: type ElevatedEmploye = Admin & Employee
+            for union types 
+                it will only take types that are common in both
+        Type cast HTML elements
+            added HTMLElement type explicitly
+            ! at end specifies that value will never be null
+            type is added in <> before expression
+            or add type after 'as' at end of expression (usefull React)
+        Index properties
+            if u don't know all the properties 
+            u can add the type of properties and values
+    Generic Types 
+        Type which is connected with other types and expects to provide a type 
+        that will be used 
+        ex: const arr:Array<string> = ["1","2"]
+        extends is used to contraint the types that are allowed
+        can extend interface also which tells all properties must be there in incoming type
+        keyof constraint
+            tells that input arg is must be a key of certain object
+            ex: U extends keyof T 
+        similar to Generic functions we create Generic classes
+        Partial 
+            is used to make all of type properties optional
+            ex: Partial<Person>
+    Decorators
+        it is function u apply to something ex: class
+        it will run before class is executed (not instantiating)
+        can add decorator to property
+        
+*/
+
+// Type casting
+const input1 = <HTMLInputElement>document.getElementById("input1")!
+const input2 = document.getElementById("input2")! as HTMLInputElement;
+// console.log(input.value)
+
+// Index properties
+interface ErrorTemplate {
+    [prop:string]: string;
+}
+const obj: ErrorTemplate = {
+    msg: "err",
+    time: "5:00AM",
+    //code: 500,
+}
+
+// Generic functions
+
+function merge<T extends object,U extends object>(obj1: T, obj2: U){
+    // merges both objects
+    return Object.assign(obj1,obj2);
+}
+
+const mergerdObj = merge({name:"xyz"},{age:20})
