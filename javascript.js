@@ -308,7 +308,7 @@ addAll(1,2,3,6)
 // Rest operator in array destructuring
 const list = [1,2,3,4,5];
 const [first,second,...remaining] = list;
-console.log(first,second,remaining)
+// console.log(first,second,remaining)
 // Output: 1 2 [3, 4, 5]
 
 
@@ -906,17 +906,17 @@ const john = new Human("John","London")
             since it is base for all and won't inherit from anything            
 */
 
-function Person(){                          // constructor function
+function Person1(){                          // constructor function
     this.talk = function(){
-        console.log("Person talking")
+        console.log("Person1 talking")
     }
     this.age = 30;
 }
 
-const sunny = new Person()
+const sunny = new Person1()
 
-sunny.age = 20;                             // age in sunny is shadowing age in Person
-sunny.talk = function (){                   // talk in sunny is shadowing talk in Person
+sunny.age = 20;                             // age in sunny is shadowing age in Person1
+sunny.talk = function (){                   // talk in sunny is shadowing talk in Person1
     console.log("Sunny talking")
 }
 
@@ -926,7 +926,7 @@ sunny.talk = function (){                   // talk in sunny is shadowing talk i
 // sunny.talk()
 // output: Sunny talking
 
-// console.log(sunny.__proto__ === Person.prototype)
+// console.log(sunny.__proto__ === Person1.prototype)
 // output: true
 
 
