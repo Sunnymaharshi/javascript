@@ -1557,7 +1557,11 @@ Student.hey = function (){
 Student.hey()
 Student.bye() */
 
-/*  ES6 Module vs Script
+/*  
+    Object.assign() 
+        method copies properties from one or more source objects to a target object.
+        ex: Object.assign(target, source(s))
+    ES6 Module vs Script
         module 
             top-level variables are scoped to module 
             executes in strict mode
@@ -1571,4 +1575,26 @@ Student.bye() */
             executes in sloppy mode
             top level 'this' is window
             cannot do import/export
+    CommonJS module system
+        each JS file is treated as a separate module
+        Node.js uses CommonJS module system
+            require(), exports or module.exports
+        exporting 
+            for single variable 
+                module.exports = something;
+                can you any name for importing
+                ex:const anything = require('module-name')
+            for multiple variables
+                exports.something1 = 1;
+                exports.something2 = 2;
+                when imported, all these returned in object
+                ex: const {something1,something2} = require('module-name')
+        require()
+            imports module in a js file 
+            returns exports of the module 
+            i.e. module.exports object in the module
+            ./ points to root folder 
+            not the folder in which file presents
+            ex: require('path')
+    
 */

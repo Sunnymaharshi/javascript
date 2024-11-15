@@ -104,5 +104,33 @@
     
     ES module system
         it is used in browsers
-        import module; export something;        
+        import module; export something;  
+    Environment variables
+        can define env variables in config.env 
+        dotenv package
+            to set env variables on node 
+            ex:dotenv.config({
+                path: './config.env',
+            });
+    REST Architecture
+        Representational State Transfer
+        architectural style for providing standards between computer systems 
+        on the web, making it easier for systems to communicate with each other.
+        1.Separate API into logical resources
+        2.Expose structured, resource-based URLs 
+            ex: /users, /posts etc
+        3.use HTTP methods to perform actions on resource
+            Create 
+                POST 
+            Read 
+                GET 
+            Update
+                PUT,PATCH 
+            Delete
+                DELETE            
+        4.Send data as JSON (usually)
+        5.Be stateless
+            all state is handled at client side 
+            each request must contain all the info required to process it 
+            server should never remember previous requests      
 */
