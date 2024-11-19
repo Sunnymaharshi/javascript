@@ -18,6 +18,8 @@ ExpressJS
         ex: app.route("path_").get(handler).post(handler)
     post()
         HTTP POST method
+    all()
+        for all HTTP methods
     res.status()
         set status code
     res.send()
@@ -47,6 +49,9 @@ ExpressJS
                 // middleware code 
                 next()
             })
+        next()
+            whatever we pass into next() express assume it as an error
+
     express.Router()
         creates a router
         can create sub routes on it
@@ -64,5 +69,27 @@ ExpressJS
         don't add dir name in path
         ex: app.use(express.static(`${__dirname}/public`));
             /favicon.ico
-            
+    Global error handling middleware
+        express uses this middleware for all the errors in app
+        ex: app.use((err, req, res, next) => {});
+        when we pass anything to next() 
+            it will skip all other middlewares 
+            and goes to error handler middleware
+        
+    Model View Controller (MVC) Architecture
+        Model
+            App data & Business logic 
+        Controller
+            Application logic
+        View
+            Presentation logic
+        Application logic 
+            code that only concerns about app's implimentation logic 
+            like managing request and response 
+            bridge btw model and view layers
+        Business logic 
+            code that actually solves the business problem we set out to solve 
+            directly related to business rules, business works and business needs 
+            ex: creating new tours in db, validating user passwords etc 
+
 */

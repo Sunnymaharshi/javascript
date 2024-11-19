@@ -59,6 +59,9 @@
             reads file Synchronously
         readFile
             reads file Asynchronously
+        relative path always takes folder in which file is running at root folder 
+        not the folder in which file is running
+        __dirname is usefull for giving relative path
     http module
         createServer
             to create a server 
@@ -133,4 +136,19 @@
             all state is handled at client side 
             each request must contain all the info required to process it 
             server should never remember previous requests      
+    ndb package
+        debugger for node.js
+        opens node.js code in new chrome window with devtools 
+        features
+            break points 
+    handling unhandled promise rejections globally
+        process.on('unhandledRejection', (err) => {
+            console.log(err.name, err.message);
+        });
+    handling uncaught exceptions globally
+        process.on('uncaughtException', (err) => {
+            console.log(err.name, err.message);
+            console.log('Uncaught Exception! Shuting down...');
+        
+        });
 */
