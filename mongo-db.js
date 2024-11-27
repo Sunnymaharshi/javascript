@@ -48,6 +48,15 @@ MongoDB
                 validate property 
                 takes a callback function 
                 (can't be arrow function because of 'this')
+            Instance method 
+                available to all it's documents
+                ex:userSchema.methods.myMethod = ()=>{}
+            static methods 
+                ex: reviewSchema.statics.somefunction = ()=>{}
+            indexes 
+                while querying index fields, mongo searches indexes instead of all documents
+                create indexes for a model
+                ex:tourSchema.index({ price: 1 })
         Mongoose model  
             a wrapper for schema
             providing an interface to the database for CRUD operations        
@@ -65,6 +74,8 @@ MongoDB
                 get document and update 
             findByIdAndDelete()
                 delete document
+            
+
         Aggregation pipeline
             defines pipeline to process data
             $match
@@ -84,12 +95,53 @@ MongoDB
             schema.pre('aggregate')
                 runs before aggregate
 
+    MongoDB Data Modeling
+        In MongoDB, a Document can have upto 16mb only
+        Referencing / Normalized
+            storing ID of document in another collection
+            ex: friends: [ObjecId(123),ObjecId(124)]
+            Pros 
+                can query each document on its own
+            Cons 
+                Need to do multiple queries to get all the data
+            Types 
+                child referencing 
+                    reference to id of document in different collection
+                    ex: {logs:[ObjecId(123),ObjecId(124)...]}
+                    not good if we have lot of children
+                parent referencing
+                    we keep reference of parent in child document
+                    here app is parent document
+                    ex: log{"_id":ObjecId(123),app:ObjecId(1),text:"something"}
+                    best for lot of children (1:TONS relation)
+                two-way referencing
+                    parent keep reference to children and child keep reference to parent
+                    ex: movie{actors:[ObjecId(123),ObjecId(124)...]}
+                        actor{movies:[ObjecId(23),ObjecId(24)...]}
+                    best for MANY:MANY relation
+            ex: guides: [{
+                type: mongoose.Schema.ObjectId,
+                ref: 'User',
+            }],
+            populate function 
+                embeds the documents of references in query result
+                ex: query.populate('guides')
+            virtual populate
+                adding data to a document without persisting on database
+                ex: tourSchema.virtual('reviews', {
+                    ref: 'Review',
+                    foreignField: 'tour',
+                    localField: '_id',
+                });
 
 
-            
-            
-            
-            
+        Embedded / Denormilized
+            storing total document
+            ex: friends:[{name:"John"},{name:"Ron"}]
+            Pros 
+                all data in query
+            Cons 
+                Not possible to query embeded document on its own 
+
         
-
 */

@@ -70,6 +70,9 @@
     url module
         parse
             parse query string in url
+    util module 
+        promisify
+            makes asynchronous function return promise
     npm 
         software/package registry
         node package manager 
@@ -151,4 +154,55 @@
             console.log('Uncaught Exception! Shuting down...');
         
         });
+    JSON WEB TOKEN (JWT) Authentication
+        after login 
+            server
+                unique JWT token (secret string) is created 
+                and sends to client
+                it is not stored in server
+            client
+                JWT token is stored in local storage
+        accessing protected route 
+            client
+                sends JWT token to server along with request
+            server
+                1.verifying token
+                    created test signature using header,payload 
+                    & secret(saved in server)
+                    compares test signature and signature in token
+                    if both are same 
+                        payload or data is not modified 
+                        Authenticates users 
+                    else 
+                        Not Authenticated
+                2. check if user exist
+                    user might have deleted his account 
+                3. check if user have changed password
+                    if token issue time < password changed time 
+                    throw error to login
+                without secret(saved in server), no one can manipulate
+                JWT data as they can't create valid signature
+
+        JWT Web Token (secret string)
+            it has 3 parts separated with '.'
+            header 
+                not encrypted
+                info about token
+                like algorithm, type
+            payload
+                not encrypted 
+                data
+            signature 
+                encrypted
+                created using header,payload and 'secret' saved in server
+          
+    Client side rendering (CSR)
+        website building is done on client(browsers)
+        like geting data and creating html etc 
+    Server side rendering (SSR)
+        website building is done on server
+        inject data into html templates 
+        
+
+            
 */

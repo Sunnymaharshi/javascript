@@ -26,6 +26,8 @@ ExpressJS
         send text message
     res.json()
         send javascript object as JSON
+    res.render()
+        renders the template
     app.use(express.json())
         middleware
         modifies incoming data
@@ -59,7 +61,12 @@ ExpressJS
         ex: const router = express.Router();
             router.route('/').get(getAllTours).post(createTour);
             app.use('/api/v1/users', userRouter);
-    
+    Nested routes 
+        add/mount router for url path
+        ex:router.use('/:tourId/reviews', reviewRouter);
+    merge params 
+        merge params, can access parent url params also
+        express.Router({ mergeParams: true });
     Param Middleware
         for params in url path 
     Chaining Middlewares
@@ -75,7 +82,21 @@ ExpressJS
         when we pass anything to next() 
             it will skip all other middlewares 
             and goes to error handler middleware
-        
+    
+    express-rate-limit package
+        used to limit the no of requests 
+    helmet package
+        sets security HTTP headers
+    express-mongo-sanitize package
+        prevents NoSQL injection 
+    xss-clean package
+        prevents html/js injection
+    hpp package
+        prevents http url parameter polution
+        duplicates in query string 
+    template engine 
+        used to inject data into templates 
+        or to create html templates
     Model View Controller (MVC) Architecture
         Model
             App data & Business logic 
