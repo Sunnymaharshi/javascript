@@ -1,2 +1,4 @@
 node_modules
 fetch-client
+*.env
+.parcel-cache
