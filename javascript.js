@@ -29,7 +29,13 @@
         Code component
             aka Thread of Execution
             code is executed one line at a time 
-
+    Garbage collection 
+        Garbage collection is automatic in JS 
+        it tries to release the memory if the location is not reachable
+        Mark and Sweep Algorithm used for garbage collection
+        Mark and Sweep Algorithm
+            starts from root object, marks referenced values
+            if it finds unreadable locations, those will be removed
     Javascript is synchronous single-threaded language
     When we run the code, A Global Execution Context is created in 2 phases 
         1. Memory creation phase
@@ -276,6 +282,94 @@ var c3 = 1;
     let c3 = 3;             // valid
 }
 
+/*
+    Array traverse
+        for__in
+            Loops the properties of an object
+            for array, it loops indexes
+            not recomended if index order is important
+        for__of
+            Loops the values of any iterable
+        forEach
+            takes callback function
+            can't use break
+    Array methods 
+        push()
+            adds 1 or more elements at the end
+            returns new length of array 
+        unshift()
+            adds 1 or more elements at the beginning
+            returns new length of array 
+        pop()
+            removes last element
+            returns removed element
+        shift()
+            removes first element
+            returns removed element
+        splice()
+            add,insert,replace and remove 1 or more elements
+            splice(start,[deleteCount[,val1,val2...]])
+            by default it deletes all from the start index
+            returns removed elements
+    Array searching
+        indexOf()
+            returns the index of the first occurrence of a value in a string.
+            returns -1 if the value is not found.
+            string.indexOf(searchvalue, [start])
+        lastIndexOf()
+            returns the index of the last occurrence of a value in a string.
+        includes()
+            returns true if an array contains a specified value else false
+            includes(element, [start])
+        find()
+            takes callback 
+            returns the value of the first element that passes a test.
+            returns undefined if no elements are found.
+            array.find(function(currentValue, [index], [arr]),[thisValue])
+        findLast()
+            returns the value of the last element that passes a test.
+        findIndex()
+            returns the index of the first element that passes a test.
+        findLastIndex()
+            returns the index of the last element that passes a test.
+
+        filter()
+            returns new array with elements that pass a test provided by a function.
+            array.filter(function(currentValue, index, arr), thisValue)
+        map()
+            returns new array from calling a function for every array element.
+            array.map(function(currentValue, index, arr), thisValue)
+        reduce()
+            A function to be run for each element in the array.
+            array.reduce(function(total, currentValue, [currentIndex, arr]), initialValue)
+            array element 0 is used as initial value, and the iteration starts from index 1
+            If an initial value is supplied, this is used, and the iteration starts from index 0.
+        reduceRight()
+            start from last to 0th index 
+        
+        sort()
+            sorts the original array and returns it 
+            compare function
+                to define an alternative sort order.
+                function(a, b){return a - b}
+                a is right element, b is left element
+                should return a negative, zero, or positive value
+                negative
+                    a is sorted before b.
+                positive
+                    b is sorted before a.
+                0
+                    no changes are done
+        toSorted() 
+            sorts an array without altering the original array.
+        reverse() 
+            reverses the elements in original array and returns it 
+        toReversed() 
+            reverses an array without altering the original array.
+
+        
+
+*/
 
 /*
     Spread operator (...variable)
@@ -311,7 +405,66 @@ const [first,second,...remaining] = list;
 // console.log(first,second,remaining)
 // Output: 1 2 [3, 4, 5]
 
-
+/*
+    Iterators 
+        ES6 
+        new mechanism to iterate or traverse through data structures
+        can use for__of loop
+        arrays,strings,maps,sets etc are iterable
+    iterable
+        used to make data structure iterable which is not
+        it should have method to Symbol.iterator key which returns object with next method
+*/
+let range = {
+    start:10,
+    end:15,
+    [Symbol.iterator] : function (){
+        return {
+            next(){
+                if(this.start<=this.end){
+                    return {value:this.start++,done:false}
+                }
+                return {done:true}
+            }
+        }
+        
+    }
+}
+// for (i of range){
+//     console.log(i)
+// }
+// prints 10 to 15
+/*
+    Generators 
+        function* keyword used to define 
+        yeild operator passes the generator function
+        returns generator object
+        next()
+            starts execution till the yeild operator
+        can use for__of loop or spread operator instead  of next()
+        return()
+            used to exit from the generator
+*/
+const genFunction = function* (){
+    console.log(1)
+    yield 1;
+    console.log(2)
+    yield 2;
+    console.log(3)
+}
+const gObj = genFunction();
+// gObj.next()          // {value:1, done:false}
+let rangeGen = {
+    start:10,
+    end:15,
+    [Symbol.iterator] : function* (){
+        for(let i=this.start;i<=this.end;i++){
+            yield i;
+        }
+        
+    }
+}
+console.log([...rangeGen])
 /*
     Closure
         function along with surrounding state (lexical environment) 
@@ -450,6 +603,11 @@ function findSum(accumilator,current){
 }
 const sum = numbers.reduce(findSum,initialValue)
 // console.log(sum);
+
+// flatten multi-d array with reduce
+const d2_arr = [[1,2],[3,4]]
+const flaten = d2_arr.reduce((total,cur)=> total.concat(cur),[])
+console.log(flaten) // [ 1, 2, 3, 4 ]
 
 // Callback Hell and Invertion of Control
 // calling APIs through functions
@@ -981,16 +1139,20 @@ const printStudent2 = printStudent.mybind(student,"atp")
 
 /*  
     Function Currying 
-        used to transform a function that takes multiple arguments into a sequence of functions that each takes a single argument.
-        can be done using bind or Closures        
+        functional programming technique that involves breaking down a function that takes
+        multiple arguments into a series of functions that take one argument each.
+        used for passing partial parameters and avoid unwanted repetitions
+              
 */
-let multiply1 = function (x,y){
-    console.log(x*y);
+const add_C = function (a){
+    return function(b){
+        return a+b;
+    }
 }
-// using bind
-let multiplyByTwo1 = multiply1.bind(this,2)
-// multiplyByTwo1(2)
-// output: 4
+
+console.log(add_C(1)(2))      // 3
+const addTo5 = add_C(5)
+console.log(addTo5(1))        // 6
 
 // using Closure - nested function have access to surrounding state (the lexical environment).
 function multiply2(x){
