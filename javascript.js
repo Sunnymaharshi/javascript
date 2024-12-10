@@ -283,6 +283,15 @@ var c3 = 1;
 }
 
 /*
+    Shallow comparison
+        works for primitive data types like numbers and strings 
+        won't work for arrays and objects 
+    Deep comparison
+        compares every single value in array or object
+        compares nested objects and arrays also(recursion)
+        can use libraries like lodash
+*/
+/*
     Array traverse
         for__in
             Loops the properties of an object
@@ -367,9 +376,76 @@ var c3 = 1;
         toReversed() 
             reverses an array without altering the original array.
 
+    string 
+        indexOf()
+            returns the position of the first occurrence of a value in a string.
+            returns -1 if the value is not found.
+            indexOf(searchString, [startIndex])
+        lastIndexOf()
+            returns the index (position) of the last occurrence of a specified value in a string.
+            returns -1 if the value is not found.
+        search()
+            returns the index (position) of the first match.
+            returns -1 if no match is found.
+            can take regular expression
+            search(searchString)
+        slice()
+            returns a part of a string.
+            does not change the original string.
+            slice(startIndex, [endIndex])
+        substring()
+            returns a part of a string.
+            does not change the original string.
+            Start or end values less than 0, are treated as 0.
+            slice(startIndex, [endIndex])
+        substr()
+            returns a part of a string.
+            begins at a specified position, and returns a specified number of characters.
+            does not change the original string.
+            substr(start, [lengthOfChars])
+        charAt()
+            returns the character at a specified index in a string.
+            Invalid index converts to 0
+            charAt(index)
+        charCodeAt(0)
+            returns the Unicode of the character at a specified index in a string.
+            charCodeAt(index)
         
+*/
+/*
+    Object 
+        aka Object literal 
+        key-value pair data structure
+        Dynamic key value 
+            to calculate key dynamically
+            like getting key from a variable or some js expression
+            {
+                [user_name]:{...}
+            } 
+            here value of user_name will be taken as key
+        Object.assign()
+            copies properties from one or more source objects to a target object.
+            can be used to clone the object
+            Object.assign(target, source(s))
+        Accessors (Getters and Setters)
+            allows equal syntax for properties and methods
+            get and set keywords are used to create methods which acts as properties
+            useful for doing things behind-the-scenes
+            can be used in classes also
 
 */
+const languageObj = {
+    language: "en",
+    get lang() {
+      return this.language;
+    },
+    set lang(lang) {
+      this.language = lang;
+    }
+};
+console.log(person.lang)    // en
+person.lang = "te"
+console.log(person.lang)    // te
 
 /*
     Spread operator (...variable)
@@ -838,6 +914,7 @@ async function handleFetch(){
 // handleFetch();
 
 /* 'this' keyword
+    You cannot change the value of this
     this keyword refers to the context where a piece of code is supposed to run
     * value of this in JavaScript depends on how a function is invoked (runtime binding), not how it is defined. 
     * this works differently in non-strict mode and strict mode
@@ -951,21 +1028,32 @@ const obj3 = {
 // obj3.x()
 // output: obj3
 /*
-    function borrowing 
+    function borrowing or Method Reuse or Explicit Function Binding
     call, apply and bind
+        used to call an object method with another object as argument.
         with these you can write a method that can be used on different objects.
         these can refer this to any object.
     call
-        first argument is value of this
-        next we pass function arguments separately
+        invokes function with given this & optional args
+        takes arguments separately.
+        when you want to invoke the function immediately with thisArg
+        call(thisArg,arg1,arg2,...)
     apply 
-        first argument is value of this
-        next we pass function arguments as an array 
+        invokes function with given this & optional args
+        takes arguments as an array 
+        when you want to invoke the function immediately with thisArg
+        apply(thisArg,[arg1,arg2,...])
     bind 
-        it creates a new function and when it called, calls it with 'this' keyword set to the provided value
-        when a function is used as a callback, this is lost. so the bind() is used to prevent losing this.
-        first argument is value of this
-        next we pass function arguments separately
+        does not invokes the function
+        returns new function with 'this' keyword as given this.
+        when you want that function to later be called with a certain context
+        useful in events, setTimeout etc where u want to pass callback fn with thisArg
+        bind(thisArg, arg1, arg2)
+    This Precedence
+        1-bind()
+        2-apply() and call()
+        3-Object method
+        4-Global scope
 */
 function printFullName(homeTown){
     console.log(this.firstName + " " + this.lastName + " from "+ homeTown)
@@ -1720,9 +1808,6 @@ Student.hey()
 Student.bye() */
 
 /*  
-    Object.assign() 
-        method copies properties from one or more source objects to a target object.
-        ex: Object.assign(target, source(s))
     ES6 Module vs Script
         module 
             top-level variables are scoped to module 
