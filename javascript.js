@@ -410,7 +410,36 @@ var c3 = 1;
         charCodeAt(0)
             returns the Unicode of the character at a specified index in a string.
             charCodeAt(index)
-        
+    Map 
+        key-value pairs where the keys can be any datatype.
+        remembers the original insertion order of the keys.
+        able to use objects as keys
+        fruits = new Map([["apples", 500],["bananas", 300],["oranges", 200]])
+        set()
+            add elements to a Map
+            fruits.set("apples", 500);
+        get()
+            gets the value of a key
+            fruits.get("apples");
+        size property
+            returns count of keys
+        Directly iterable
+    WeakMap
+        hold keys weakly
+        keys must be objects, not primitive like number or string
+        if keys are garbage collected so do the values
+        obj = {...}
+        m.set(obj,1);
+        if obj = null after garbage collection
+        then obj inside m also will be null
+    Set 
+        collection of unique values.
+        values can be of any type, primitive values or objects.
+        add()
+            to add elements to set
+    WeakSet 
+        hold elements weakly like WeakMap
+    
 */
 /*
     Object 
