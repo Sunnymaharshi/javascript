@@ -283,6 +283,31 @@ var c3 = 1;
 }
 
 /*
+    IIFE - Immediately Invoked Function Expression
+        is a JavaScript function that runs as soon as it is defined. 
+        can have named or anonymous IIFE's
+        Immediate Execution
+        Avoid polluting the global namespace
+            avoiding conflicts with other parts of your code.
+        Execute an async function
+        The module pattern - Data Privacy
+            allows you to create closures
+            to create private and public variables and methods
+
+*/
+// normal IIFE function
+(function () {
+    // …
+})();
+// arrow IIFE function
+(() => {
+// …
+})();
+// async IIFE function
+(async () => {
+// …
+})();
+/*
     Shallow comparison
         works for primitive data types like numbers and strings 
         won't work for arrays and objects 
