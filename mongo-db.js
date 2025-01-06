@@ -1,7 +1,7 @@
 /* 
 MongoDB
     NoSQL
-
+    built using javascript language
     Collections
         like tables
     Documents

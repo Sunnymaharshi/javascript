@@ -194,6 +194,10 @@ function a(){
 
 
 /*
+    var 
+        all variables declared with var after implicitly declared at the top
+        those bubble up to the top, in both normal & strict mode
+        *avoid using var for declaring variables
     let
         these variables are hoisted in different memory space (ex:Script) instead of Global.
         * we can't access these until they are initialised.
