@@ -1324,8 +1324,9 @@ let multiplyByTwo2 = multiply2(2)
 
 
 /*
-    Event Flow in DOM 
+    Event Flow or Event Propagation in DOM 
         events are processed in 3 phases 
+        trickling/capturing down => on element => bubble up
         1.Capturing Phase 
             by default, it won't happen
             1st phase
@@ -1334,6 +1335,7 @@ let multiplyByTwo2 = multiply2(2)
         2.Target Phase 
             target element is the element where the event originally occurred
         3.Bubbling Phase
+            event goes to it's parent and so on upto top ancestor element (window).
     Event Propagation 
         order in which elements receive the event.
         * when an element receives an event, that event will propogate to it's ancestors not to it's children
@@ -1341,16 +1343,24 @@ let multiplyByTwo2 = multiply2(2)
     Event Bubbling 
         default behaviour of event propagation, default 3rd argument(useCapture)' is false
         bubbling up to parent elements
-        when an element receives an event, it runs on itself, then it's parent and so on upto top ancestor element.            
+        when an element receives an event, it runs on itself, then it's parent and so on upto top ancestor element (window).       
     Event Capturing/Trickling
         can be enabled by passing true as a 3rd argument(useCapture) to the addEventListener
         Captured down to child element
         when an element receives an event
-            first it's top ancestor event runs, then it's child and so on upto element that received the event.  
+            first it's top ancestor (window) event runs, then it's child and so on upto element that received the event.  
     Stop Propagation
         we can stop the propagation by using e.stopPropagation().
         order of propagation will depends on useCapture value, 
         propagation will stop at the element which has e.stopPropagation()   
+    event.target 
+        element that triggered the event
+    event.currentTarget
+        element that the event listener is attached to
+    some events don't propagate like focus event
+
+    Event object 
+        parent object of all event objects like click event object
 */
 
 // Event Bubbling: default (useCapture=false)
@@ -1704,9 +1714,49 @@ console.log(Boolean(''));           // output:false
 console.log(Boolean({}));           // output:true
 */
 
-/*  DOM Traversing
+/*  
+    DOM (document object model)
+        gives u interface (document object) which is available in js 
+        used to access and manipulate html 
+    DOM Tree 
+        representation of DOM which has parent and child relationship 
+    DOM Traversing
         closest 
             it find closest parent which matches given query selector 
+    document vs window object 
+        window
+            represents window/tab in browser
+            global object, we can access it's properties directly like document
+            setTimeout, setInterval are methods of window(browser related)
+            innerHeight, innerWidth are some properties of window object
+        document
+            property of window object
+            not global object, we can't access it's properties directly without calling document
+            points to document loaded in that window
+    BOM (browser object model)
+        window object, which gives following objects related to browser
+        screen, location, history, XMLHttpRequest
+        location object
+            host, hostname, href, origin, path, protocol etc 
+
+    Node Types 
+        element node 
+            like h1, div etc 
+        text node 
+            actual text of element
+        comment node 
+            <!-- some comment -->
+        document node 
+            Represents the entire document
+        document type node 
+            interface represents a Node containing a doctype.
+*/
+/*
+    Web Components
+        reusable custom HTML elements
+        provides strong encapsulation
+        created using just javascript
+
 */
 //  Slider Component 
 const slider_data = [{text:"slide 1", color:"blue"},{text:"slide 2", color:"orange"},{text:"slide 3", color:"cyan"},{text:"slide 4", color:"green"}]
