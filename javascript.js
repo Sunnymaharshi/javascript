@@ -1755,7 +1755,7 @@ console.log(Boolean({}));           // output:true
             points to document loaded in that window
     BOM (browser object model)
         window object, which gives following objects related to browser
-        screen, location, history, XMLHttpRequest
+        screen, location, history, XMLHttpRequest(XHR)
         location object
             host, hostname, href, origin, path, protocol etc 
 
@@ -1773,7 +1773,7 @@ console.log(Boolean({}));           // output:true
 */
 /*
     AJAX - Asynchronous JavaScript & XML 
-        XML refers to XMLHttpRequest class
+        XML refers to XMLHttpRequest(XHR) class
         XMLHttpRequest class 
             used to fetch API 
             open()
