@@ -1552,15 +1552,21 @@ document.getElementById("form").addEventListener('keyup',(e)=>{
 
 /*  
     Debouncing & Throttling 
+        these are approches to handle events to improve performance.
         Throttling is used to rate limit the function call
         Search bar usecase 
             if we call API everytime key pressed, it will cause performance issues
             Debouncing
+                delays the execution of a function until a certain amount of time has passed 
+                since the last event's occurrence.
                 only call API if time difference between keypress events is > 300ms
                 skip or avoid API calls if difference between keypress is << 300ms 
                 removes unneccesary calls to api when keypress events come very fast.
+                ex: typing, resizing events
             Throttling
+                limits the number of times a function is executed over a certain time period.
                 only call API after 300ms from last call.
+                ex: scrolling, mouse events
             Debouncing is usefull and widely used in this case
         Track how many times user resizes the browser window
             when user is resizing, there will be thousands of events(like event for each px change)
@@ -2038,6 +2044,7 @@ Student.bye() */
             type="module" in script tag
             file downloads in Async
             imports happens synchronously
+            to use import/export locally u need to have a server
         script
             top-level variables are global scoped
             executes in sloppy mode
