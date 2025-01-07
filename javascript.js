@@ -1761,6 +1761,32 @@ console.log(Boolean({}));           // output:true
             interface represents a Node containing a doctype.
 */
 /*
+    AJAX - Asynchronous JavaScript & XML 
+        XML refers to XMLHttpRequest class
+        XMLHttpRequest class 
+            used to fetch API 
+            open()
+                takes HTTP method, URL
+            send()
+                to initiate request
+            onload property
+                invokes callback after request is completed
+            abort()
+                to cancel the request
+*/
+// const request = new XMLHttpRequest();
+// request.open('GET','https://jsonplaceholder.typicode.com/users')
+// request.send()
+// request.onload = function(){
+//     console.log(request.response);
+// }
+/*
+    fetch() API 
+        url & optional object with various properties
+        default it takes HTTP GET method
+
+*/
+/*
     Web Components
         HTML, CSS and JavaScript combination which u can encapsulate inside a container 
         which can function independently
