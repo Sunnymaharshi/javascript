@@ -756,9 +756,16 @@ createOrder(cart,function (orderID){
     })
 })
 */
-// Promise: with promise we attach the callback function, instead of passing 
-// this way we gain the control over callback functions
-// with Promise
+/*  Promise
+        with promise we attach the callback function, instead of passing 
+        this way we gain the control over callback functions
+        then 
+            runs after resolve
+        catch 
+            runs after error 
+        finally
+            runs at the end
+*/
 /*
 createOrder(cart)
     .then(function (orderID){
@@ -780,11 +787,13 @@ user.then(function (data){
     // console.log(data);
 })
 
-// Promise Chain and Promise creation
-// * We need to return data coming from 1 promise to pass it to next Promise in Promise Chain
-// * catch block only handles errors from above it, means putting catch at the end will handle all the errors
-// * we can add catch for each then blocks
-// * 'then's after the catch will run no matter errors above it comes or not
+/*  Promise Chain and Promise creation
+        We need to return data coming from 1 promise to pass it to next Promise in Promise Chain
+        catch block only handles errors from above it, means putting catch at the end will handle all the errors
+        we can add catch for each then blocks
+        then blocks after the catch will run no matter errors above it comes or not
+        finally block will run at end no matter what.
+*/
 const cart  = ["shirts","pants","dresses"]
 
 function createOrder(cart){
