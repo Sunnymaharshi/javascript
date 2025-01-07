@@ -1562,7 +1562,7 @@ document.getElementById("form").addEventListener('keyup',(e)=>{
                 only call API if time difference between keypress events is > 300ms
                 skip or avoid API calls if difference between keypress is << 300ms 
                 removes unneccesary calls to api when keypress events come very fast.
-                ex: typing, resizing events
+                ex: typing, search and autocomplete
             Throttling
                 limits the number of times a function is executed over a certain time period.
                 only call API after 300ms from last call.
