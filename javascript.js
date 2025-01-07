@@ -1753,11 +1753,84 @@ console.log(Boolean({}));           // output:true
 */
 /*
     Web Components
+        HTML, CSS and JavaScript combination which u can encapsulate inside a container 
+        which can function independently
         reusable custom HTML elements
         provides strong encapsulation
-        created using just javascript
+        web component creation 
+            create class that extends HTMLElement class 
+                will instantiated everytime we use the custom element tag
+            define required html in constructor
+            define custom html element using window.customElements.define
+        if we have styles in our html, it will apply outside of component also 
+        to solve this we have shadow DOM 
+        shadow DOM 
+            provides encapsulation to Web Components
+            gives separate scope to the web component
+            it is components own DOM 
+            'open' mode 
+                current page can access shadow DOM via JS 
+                element.shadowRoot() return shadow DOM 
+            'closed' mode 
+                current page can't access shadow DOM via JS 
+                element.shadowRoot() return null
+        light DOM 
+            when shadow DOM is there, we refer actual DOM as light DOM 
+            to avoid confusion
+        template tag 
+            hold some html that will be hidden when the page loads
+            JavaScript is used to clone and display it
+        Dynamic data with custom attributes
+            we can pass attributes to custom html element to use them in template
+        connectedCallback()
+            invoked after component is added to DOM
+            we can change custom element attributes here to modify the component after an event occurs
+        static get observedAttributes() 
+            returns array of attributes to u want to keep watch on
+        attributeChangedCallback()
+            invoked when any observed attributes are modified
+            here we update shadow DOM with new attributes data 
+        this.remove()
+            used to remove component from DOM 
+        disconnectedCallback()
+            invoked after component is removed from DOM 
+            here we can remove event listeners
+        slot element
+            used to dynamically add html content inside component from custom element
 
 */
+const template = document.createElement('template')
+template.innerHTML = `
+<style>
+    h1 {
+        color: red;
+    }
+</style>
+Product Card Template
+`
+class ProductCard extends HTMLElement {
+    constructor(){
+        super()
+        const h1 = document.createElement("h1")
+        h1.innerHTML = `
+        <style>
+            h1 {
+                color: red;
+            }
+        </style>
+        Product Card
+        `
+        this.attachShadow({mode:'open'});
+        // this.shadowRoot.appendChild(h1)
+        this.shadowRoot.appendChild(template.content.cloneNode(true))
+        
+    }
+}
+// defining custom element name
+window.customElements.define("product-card",ProductCard)
+
+
+
 //  Slider Component 
 const slider_data = [{text:"slide 1", color:"blue"},{text:"slide 2", color:"orange"},{text:"slide 3", color:"cyan"},{text:"slide 4", color:"green"}]
 function slider(data){
