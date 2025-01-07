@@ -548,6 +548,9 @@ const [first,second,...remaining] = list;
     iterable
         used to make data structure iterable which is not
         it should have method to Symbol.iterator key which returns object with next method
+    Async Iterators
+        for asynchronous operations
+        Symbol.asyncIterator
 */
 let range = {
     start:10,
@@ -578,6 +581,8 @@ let range = {
         can use for__of loop or spread operator instead  of next()
         return()
             used to exit from the generator
+    Async Generators
+        for asynchronous operations
 */
 const genFunction = function* (){
     console.log(1)
