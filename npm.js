@@ -23,7 +23,21 @@
                 ~1.13.'23'
         dev dependency package
             --save-dev or -D 
-        
+        package-lock.json 
+            contains exact package versions of dependencies and their dependencies so on 
+        scripts 
+            builtin scripts
+                start 
+                stop
+                restart
+                prestart
+                    runs before start script
+                poststart
+                    runs after start script
+                test
+            custom scripts
+                syntax: npm run custom_script
+
 
 
 */
