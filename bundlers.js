@@ -1,0 +1,156 @@
+/*  
+    Webpack 
+        static module bundler for modern JavaScript applications. 
+        When webpack processes your application, it internally builds a dependency graph.
+    webpack.config.js
+        contains webpack configurations
+        must use CommonJS module system
+        must use path library for file path 
+        module.exports = {}
+    entry
+        starts from this file 
+        ex: ./src/index.js
+    output
+        config path for webpack output
+        {   
+            filename: 'bundle.js',
+            path: path.resolve(__dirname,'dist')
+        }
+        publicPath
+            allows you to specify the base path for all the assets
+            it can be folder or cdn domain
+        clean 
+            to remove file before build 
+            alternative to Clean Webpack Plugin
+    mode 
+        none 
+            no builtin optimizations 
+        development
+            uses source maps by default
+            create webpack.dev.config.js 
+        production 
+            default mode
+            adds multiple plugins
+            create webpack.production.config.js 
+        usage in package.json
+            "build": "webpack --config webpack.production.config.js"
+            "build:dev": "webpack --config webpack.dev.config.js"
+    webpack dev server
+        devServer: {
+            port:9000,
+            static: {
+                directory:path.resolve(__dirname, './dist')
+            },
+            devMiddleware:{
+                index:"index.html",
+                writeToDisk: true
+            }
+            
+        } 
+        usage in package.json 
+            "dev": "webpack serve --config webpack.dev.config.js --hot"
+    Asset Modules 
+        use asset files in JavaScript application
+        files: images, videos, fonts, txt etc
+        4 types of asset modules 
+        asset/resource
+            puts resource in output dir & exports URL 
+            used for large images or large fonts 
+        asset/inline
+            inlines file into bundle as data Uri
+            used for small files like svg 
+        asset 
+            combination of resource and inline
+            webpack decides which one to use automatically based on size 
+            we can provide our own size 
+        asset/source
+            used for importing txt file content into js string etc
+            inserts it into bundle
+        ex: module: {
+            rules: [ {
+                test: /\.(png|jpg)$/,
+                type: 'asset/resource'
+            }]
+        }
+        webpack check these rules everytime it try to import a file
+    Loaders 
+        import all other kinds of files that u can't handle with asset modules
+        we provide loader to 'use' property in rule
+        need to install loaders
+        webpack uses loaders from right to left
+        {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+        }
+        can be used to convert SCSS/SASS to CSS 
+        babel loader
+            to transpile modern JS code to regular JS code 
+    Plugins
+        additional JS libraries that do everything that loaders can't 
+        can also modify bundles.
+        ex: uglifyJSPlugin takes bundle.js and minimizes contents to decrease bundle size 
+        usage: plugins: [ new TerserPlugin()]
+        Terser 
+            reduce bundle size
+        MiniCssExtract
+            extracts css into separate file 
+    Browser caching 
+        browser caches site files
+        if we change anything in the file, users can't load new bundle immediately
+        *so we change the file name, so browser gets latest file everytime we change something
+        webpack can automatically change file name content is modified
+            output: { filename: 'bundle.[contenthash].js'}
+        this creates lot of files in dist/ everytime we change the content
+        Clean Webpack Plugin
+            cleans dist/ folder before new build files are generated
+        HTML Webpack Plugin
+            since filenames are changes everytime we change something
+            we need to update html file with new filename
+            this plugins does this automatically
+    Multiple Page App / Code splitting 
+        entry: {
+            'page1': './src/page1.js',
+            'page2': './src/page2.js'
+        }
+        output: {
+            filename: '[name].[contenthash].js'
+        }
+        generated multiple html files for pages 
+            add another HtmlWebpackPlugin
+            add bundles to each html
+                in html webpack plugins
+                    add entry in chunk for respective plugin
+                    chunk: ['page1']
+        extract common dependencies 
+            take common libraries into separate bundle
+            automatically includes in all html files which have dependency
+            all libraries with minSize will be separated in to separate bundle
+            optimization: {
+                splitChunks:{
+                    chunks: 'all',
+                    minSize: 3000
+                }
+            }
+    
+    Module Federation
+        allows developers to share code between multiple projects in a decentralized way, 
+        making it easier to manage complex applications.
+        dynamically load code from another application.
+        Architecture Blocks
+            Exposed Module (Remote)
+            Consumption Module (Host)
+            Shared Module/Dependency
+        ModuleFederation Plugin 
+            we can expose or consume code 
+            it fetches code from remote location where exposed code is hosted 
+    Micro frontends 
+        web development architectural pattern that breaks down large front-end codebases into smaller,
+        more manageable pieces
+        each can be developed, tested, and deployed independently
+        like each page as a different application
+
+
+
+    
+
+*/

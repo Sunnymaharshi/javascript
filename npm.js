@@ -3,6 +3,8 @@
 
         npm init 
             initializes project and creates package.json file
+        npm init -y
+            executes the command with yes to all the prompts
         package versions
             version format: major.minor.patch
             ex: 8.9.23
