@@ -36,6 +36,7 @@
             "build": "webpack --config webpack.production.config.js"
             "build:dev": "webpack --config webpack.dev.config.js"
     webpack dev server
+        automatic builds & hot module replacement
         devServer: {
             port:9000,
             static: {
@@ -73,6 +74,13 @@
             }]
         }
         webpack check these rules everytime it try to import a file
+        Image Optimization
+            image webpack loader 
+                can specify quality to compress images
+            ImageMinimizerWebpackPlugin
+                uses imagemin library internally
+
+
     Loaders 
         import all other kinds of files that u can't handle with asset modules
         we provide loader to 'use' property in rule
@@ -83,8 +91,22 @@
             use: ['style-loader', 'css-loader']
         }
         can be used to convert SCSS/SASS to CSS 
+        CSS modules 
+            can configure custom names generated for CSS modules 
         babel loader
             to transpile modern JS code to regular JS code 
+        CSS-in-JS 
+            no class name collision
+            business logic and styles can be together
+            styles depend on JS variables 
+            cons 
+                bundle size
+                can't cache JS and CSS separately
+                performance is less 
+            JSS 
+                library which allows to use JS to describe the styles
+                one of many CSS-in-JS libraries
+            
     Plugins
         additional JS libraries that do everything that loaders can't 
         can also modify bundles.

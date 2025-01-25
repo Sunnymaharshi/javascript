@@ -25,6 +25,15 @@
                 hide element to screen readers 
                 <label>Your Name<span aria-hidden="true">*</span></label>
                 here screen reader won't read * after Your Name
+            aria-live 
+                tells screen reader to read new content inside the tag
+                for toast messages or tags whose content updated live 
+                off 
+                    like there's no aria-live attribute
+                assertive
+                    immediately notify user
+                polite
+                    notify user when screen reader completed it's reading 
         role
             used to make any element behave like different element
             ex: <a role="button"></a> 
@@ -52,5 +61,9 @@
             so it can highlight focused element
             must remove outline when clicked on element
         inputs 
-            add label element for input element
+            label tag
+                for attribute takes id of input 
+                when clicked on label, focus goes to the input
+            aria-label
+                name for the input          
 */
