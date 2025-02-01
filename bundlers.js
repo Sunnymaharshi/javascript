@@ -116,6 +116,9 @@
             reduce bundle size
         MiniCssExtract
             extracts css into separate file 
+        Webpack Bundle Analyzer
+            analyze webpack output files size
+            can visualize output file in html, json etc formats
     Browser caching 
         browser caches site files
         if we change anything in the file, users can't load new bundle immediately
@@ -143,17 +146,82 @@
                 in html webpack plugins
                     add entry in chunk for respective plugin
                     chunk: ['page1']
-        extract common dependencies 
-            take common libraries into separate bundle
-            automatically includes in all html files which have dependency
-            all libraries with minSize will be separated in to separate bundle
+        chunks value
+            initial 
+                entry chunks of the application.
+                modules that are loaded at starting of the app
+            async 
+                dynamically imported (asynchronous) chunks.
+                ex: modules that are imported after app load asynchronously
+            all
+                both
+        1. split specify libraries
+            cacheGroups 
+                can separate specific libraries into separate bundle
+                optimization: {
+                splitChunks:{
+                    cacheGroups: {
+                        jquery:{
+                            test: /[\\/]nodemodules[\\/]jquery[\\/]/,
+                            chunks: 'initial'
+                        }
+                    }
+                } }  
+        2. specific criteria for code spliting
             optimization: {
                 splitChunks:{
                     chunks: 'all',
-                    minSize: 3000
+                    minSize: 3000,
+                    maxSize: 15000,
+                    name(module,chunks,cacheGroupKey) {
+                        const filePathArray = module
+                                    .identifier()
+                                    .split('/')
+                        return filePathArray[filePathArray.length - 1]
+                    }
                 }
             }
-    
+        3. putting node_modules in separate bundle
+            splitChunks:{
+                chunks: 'initial',
+                maxSize: Infinity,
+                minSize: 0,
+                cacheGroups: {                    
+                    node_modules:{                        
+                        test: /[\\/]nodemodules[\\/]/,
+                        name: 'node_modules'
+                    }
+                }
+            }
+        4. each dependency into it's own bundle 
+            splitChunks: {
+                chunks: 'all',
+                maxSize: Infinity,
+                minSize: 0,
+                cacheGroups: {
+                    node_modules: {
+                        test: /[\\/]nodemodules[\\/]/,
+                        name(module){
+                            const package_name = module.context.match(/[\\/]nodemodules[\\/](.*?)([\\/]|$)/)[1]
+                            retrun package_name
+                        }
+                    }
+                }
+            }
+        5. can define our own strategy
+    Lazy loading 
+        dynamically import modules only when needed 
+        usage: can import a module only for certain condition or userflow 
+        can import multiple modules using Promise.all as 
+        dynamic imports returns a promise
+    Tree Shaking 
+        dead code elimination
+    Compress production code 
+        Compression Webpack Plugin
+            creates compressed files along with original files in build
+            support Gzip and Brotli compression algorithms 
+
+
     Module Federation
         allows developers to share code between multiple projects in a decentralized way, 
         making it easier to manage complex applications.
