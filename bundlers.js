@@ -238,9 +238,21 @@
         more manageable pieces
         each can be developed, tested, and deployed independently
         like each page as a different application
-
-
-
-    
+    Parcel Bundler 
+        zero configuration bundler 
+        plugins 
+            parcel-plugin-clean-dist 
+                clears dist folder before build 
+            parcel-plugin-imagemin 
+                minify images
+                need config file
+            parcel-plugin-purgecss 
+                remove unused css 
+                need config file
+            parcel-plugin-compress 
+                gzip or brotli compression
+        Tree shaking 
+            dead code elimination
+            add flag --experimental-scope-hoisting 
 
 */
