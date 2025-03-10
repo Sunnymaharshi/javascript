@@ -1,4 +1,11 @@
 /*  
+    Vite 
+        Vite is a blazing fast frontend build tool powering the next generation of web applications.
+        lightweight & faster for development
+        relies on native ES Modules for serving 
+        most modern browsers supports ES Modules 
+        vite.config.js
+        uses Rollup for bundling
     Webpack 
         static module bundler for modern JavaScript applications. 
         When webpack processes your application, it internally builds a dependency graph.
