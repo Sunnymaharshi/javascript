@@ -136,13 +136,9 @@
 // console.log(x)      // output: undefined
 var x1 = 7;
 
-function getName(){
-    console.log("Normal function");
+function getName() {
+  console.log("Normal function");
 }
-
-
-
-
 
 // 2. Arrow function behaves like a variable
 
@@ -150,23 +146,15 @@ function getName(){
 // getName1()          // output: TypeError: getName1 is not a function
 
 var getName1 = () => {
-    console.log("Arrow function");
-}
-
-
-
-
+  console.log("Arrow function");
+};
 
 // 3. function in a variable also behaves like a variable
 // in memory allocation phase, getName2 is allocated with undefined
 // getName2()          // output: TypeError: getName2 is not a function
-var getName2 = function() {
-    console.log("Javascript");
-}
-
-
-
-
+var getName2 = function () {
+  console.log("Javascript");
+};
 
 /*  
     Lexical environment
@@ -179,19 +167,15 @@ var getName2 = function() {
         if it's not found, b will be searched in parent lexical environment of the function.
         this goes until b is found or we reach lexical environment is null which is global scope.
 */
-// Scope Chain 
-function a(){
-    var b = 1;
-    c();
-    function c(){
-        console.log(b);
-    }
+// Scope Chain
+function a() {
+  var b = 1;
+  c();
+  function c() {
+    console.log(b);
+  }
 }
 // a();                // output: 1
-
-
-
-
 
 /*
     var 
@@ -232,10 +216,6 @@ const t = 10;
 
 // t = 11;               // output: TypeError: Assignment to constant variable.
 
-
-
-
-
 /*
     Block
         aka Compound statement
@@ -254,16 +234,16 @@ const t = 10;
 var b1 = 100;
 let b4 = 10;
 {
-    var b1 = 1;
-    let b2 = 2;
-    const b3 = 3;
-    let b4 = 4;
-    // b1 shadowed b1 in global scope and it re-initialised b1, since both are pointing to Global Scope
-    // console.log(b1);        // output: 1
-    // console.log(b2);        // output: 2
-    // console.log(b3);        // output: 3
-    // b4 shadowed b4 in global scope, both are in different scopes, as let is block scoped. same for const also
-    // console.log(b4);        // output: 4
+  var b1 = 1;
+  let b2 = 2;
+  const b3 = 3;
+  let b4 = 4;
+  // b1 shadowed b1 in global scope and it re-initialised b1, since both are pointing to Global Scope
+  // console.log(b1);        // output: 1
+  // console.log(b2);        // output: 2
+  // console.log(b3);        // output: 3
+  // b4 shadowed b4 in global scope, both are in different scopes, as let is block scoped. same for const also
+  // console.log(b4);        // output: 4
 }
 
 // console.log(b1);            // output: 1
@@ -277,13 +257,13 @@ let b4 = 10;
 //     // since c1 is declared in global scope and var is not block scoped and is trying to re-declare let c1 in global scope
 //     var c1 = 2;             // SyntaxError: Identifier 'c1' has already been declared
 // }
-let c2 =  1;
+let c2 = 1;
 {
-    let c2 = 2;             // valid
+  let c2 = 2; // valid
 }
 var c3 = 1;
 {
-    let c3 = 3;             // valid
+  let c3 = 3; // valid
 }
 
 /*
@@ -301,15 +281,15 @@ var c3 = 1;
 */
 // normal IIFE function
 (function () {
-    // …
+  // …
 })();
 // arrow IIFE function
 (() => {
-// …
+  // …
 })();
 // async IIFE function
 (async () => {
-// …
+  // …
 })();
 /*
     Shallow comparison
@@ -468,12 +448,33 @@ var c3 = 1;
             to add elements to set
     WeakSet 
         hold elements weakly like WeakMap
+    BigInt()
+        use to work with Large numbers 
+        like calculations
+        ex: BigInt("12899689846983642") or 12899689846983642n
+    Not a Number (NaN)
+        math errors like 0/0, 1/"to"
+        imaginary numbers like Math.sqrt(-1)
+        Number("hi")
+        all NaN values are unique, NaN === NaN // false 
+        isNaN()
+            return true if it is NaN or cannot be coerced to number 
+            ex: isNaN(0/0) //true isNaN("hi") // true 
+        Number.NaN()
+            return true if it is NaN, everything else is false
+            ex: isNaN(0/0) //true isNaN("hi") // false 
     
 */
 /*
     Object 
         aka Object literal 
         key-value pair data structure
+        creation 
+            const obj = {} or 
+            const obj = new Object();
+        All keys are stringified 
+            obj[1] = "one"
+            here 1 will be converted to "1"
         Dynamic key value 
             to calculate key dynamically
             like getting key from a variable or some js expression
@@ -487,23 +488,24 @@ var c3 = 1;
             Object.assign(target, source(s))
         Accessors (Getters and Setters)
             allows equal syntax for properties and methods
+            function name and property name must be different
             get and set keywords are used to create methods which acts as properties
             useful for doing things behind-the-scenes
             can be used in classes also
 
 */
 const languageObj = {
-    language: "en",
-    get lang() {
-      return this.language;
-    },
-    set lang(lang) {
-      this.language = lang;
-    }
+  language: "en",
+  get lang() {
+    return this.language;
+  },
+  set lang(lang) {
+    this.language = lang;
+  },
 };
-console.log(person.lang)    // en
-person.lang = "te"
-console.log(person.lang)    // te
+console.log(person.lang); // en
+person.lang = "te";
+console.log(person.lang); // te
 
 /*
     Spread operator (...variable)
@@ -512,30 +514,29 @@ console.log(person.lang)    // te
         merge all the values into array
         also used in array destructuring to take remaining values into a array        
 */
-// Spread operator 
+// Spread operator
 const Person = {
-    name:"John",
-    age:30
-}
+  name: "John",
+  age: 30,
+};
 
 const copiedPerson = {
-    ...Person,
-    height:6
-}
+  ...Person,
+  height: 6,
+};
 // console.log(copiedPerson)
 // Output: {name: 'John', age: 30, height: 6}
 
-
 // Rest operator
-function addAll(...args){
-    // console.log(args)
+function addAll(...args) {
+  // console.log(args)
 }
-addAll(1,2,3,6)
+addAll(1, 2, 3, 6);
 // Output: [1, 2, 3, 6]
 
 // Rest operator in array destructuring
-const list = [1,2,3,4,5];
-const [first,second,...remaining] = list;
+const list = [1, 2, 3, 4, 5];
+const [first, second, ...remaining] = list;
 // console.log(first,second,remaining)
 // Output: 1 2 [3, 4, 5]
 
@@ -553,20 +554,19 @@ const [first,second,...remaining] = list;
         Symbol.asyncIterator
 */
 let range = {
-    start:10,
-    end:15,
-    [Symbol.iterator] : function (){
-        return {
-            next(){
-                if(this.start<=this.end){
-                    return {value:this.start++,done:false}
-                }
-                return {done:true}
-            }
+  start: 10,
+  end: 15,
+  [Symbol.iterator]: function () {
+    return {
+      next() {
+        if (this.start <= this.end) {
+          return { value: this.start++, done: false };
         }
-        
-    }
-}
+        return { done: true };
+      },
+    };
+  },
+};
 // for (i of range){
 //     console.log(i)
 // }
@@ -584,67 +584,66 @@ let range = {
     Async Generators
         for asynchronous operations
 */
-const genFunction = function* (){
-    console.log(1)
-    yield 1;
-    console.log(2)
-    yield 2;
-    console.log(3)
-}
+const genFunction = function* () {
+  console.log(1);
+  yield 1;
+  console.log(2);
+  yield 2;
+  console.log(3);
+};
 const gObj = genFunction();
 // gObj.next()          // {value:1, done:false}
 let rangeGen = {
-    start:10,
-    end:15,
-    [Symbol.iterator] : function* (){
-        for(let i=this.start;i<=this.end;i++){
-            yield i;
-        }
-        
+  start: 10,
+  end: 15,
+  [Symbol.iterator]: function* () {
+    for (let i = this.start; i <= this.end; i++) {
+      yield i;
     }
-}
-console.log([...rangeGen])
+  },
+};
+console.log([...rangeGen]);
 /*
     Closure
         function along with surrounding state (lexical environment) 
         gives access to another function's scope from an inner function
 */
 // Closure
-function x(){
-    let ax = 10;
-    function y(){
-        // console.log(ax)
-    }
-    return y;
+function x() {
+  let ax = 10;
+  function y() {
+    // console.log(ax)
+  }
+  return y;
 }
 
 // after returning y function, y function still remembers it's lexical scope, means Closure is returned
-var oy = x();               // after this execution context of x() will be removed/deleted
+var oy = x(); // after this execution context of x() will be removed/deleted
 // oy();                       // output: 10
 
-function z(){
-    let m = 3;
-    // execution won't pause here for 1000ms, setTimeout will stores this callback function (Closure) and attaches a timer
-    // function will run after timer ends
-    setTimeout(function () {        
-        console.log(m);
-    }, 1000);
-    // console.log("After setTimeout")
+function z() {
+  let m = 3;
+  // execution won't pause here for 1000ms, setTimeout will stores this callback function (Closure) and attaches a timer
+  // function will run after timer ends
+  setTimeout(function () {
+    console.log(m);
+  }, 1000);
+  // console.log("After setTimeout")
 }
 
-// z();        
+// z();
 /* output:
 After setTimeout
 3
 */
 
 // by the time function runs var i value will be 6, since it is global scope, all functions will take same i
-function p(){
-    for(var i=1;i<=5;i++){
-        setTimeout(() => {
-            // console.log(i);
-        }, i*1000);
-    }
+function p() {
+  for (var i = 1; i <= 5; i++) {
+    setTimeout(() => {
+      // console.log(i);
+    }, i * 1000);
+  }
 }
 // p();
 /* output:
@@ -655,12 +654,12 @@ function p(){
 6
 */
 // every time loop runs, i is a new variable and function forms a Closure with it since i is block scoped
-function p1(){
-    for(let i=1;i<=5;i++){
-        setTimeout(() => {
-            // console.log(i);
-        }, i*1000);
-    }
+function p1() {
+  for (let i = 1; i <= 5; i++) {
+    setTimeout(() => {
+      // console.log(i);
+    }, i * 1000);
+  }
 }
 
 // p1();
@@ -673,15 +672,15 @@ function p1(){
 */
 
 // using var and Closure, we created new Closure everytime loop runs
-function p2(){
-    for(let i=1;i<=5;i++){
-        function log(x){
-            setTimeout(() => {
-                // console.log(x);
-            }, x*1000);            
-        }
-        log(i)        
+function p2() {
+  for (let i = 1; i <= 5; i++) {
+    function log(x) {
+      setTimeout(() => {
+        // console.log(x);
+      }, x * 1000);
     }
+    log(i);
+  }
 }
 // p2();
 /* output:
@@ -692,18 +691,14 @@ function p2(){
 5
 */
 
-
-
-
-
 // function statement aka function declaration
-function f1(){
-    console.log("function")
+function f1() {
+  console.log("function");
 }
 // function expression
-var f2 = function (){
-    console.log("function")
-}
+var f2 = function () {
+  console.log("function");
+};
 // anonymous function, used when functions are used as values
 // can't create functions without name, can be passed without name
 /*function (){
@@ -711,42 +706,45 @@ var f2 = function (){
 }
 */
 // parameters vs arguments
-function f3(param1,param2){
-    console.log("function")
+function f3(param1, param2) {
+  console.log("function");
 }
 // values which are passed are arguments
 // f3(1,2)
 
 // map: to transform an array
-const arr = [1,2,3,4]
-function double(n){
-    return n*2;
+const arr = [1, 2, 3, 4];
+function double(n) {
+  return n * 2;
 }
-const output = arr.map(double)
+const output = arr.map(double);
 // console.log(output)
 
-// filter: to filter an array 
-const nums = [1,2,3,5,4,6]
-function isOdd(n){
-    return n%2;
+// filter: to filter an array
+const nums = [1, 2, 3, 5, 4, 6];
+function isOdd(n) {
+  return n % 2;
 }
 const odd_nums = nums.filter(isOdd);
 // console.log(odd_nums);
 
-// reduce 
-const numbers = [1,2,3,4,5]
+// reduce
+const numbers = [1, 2, 3, 4, 5];
 const initialValue = 0;
-function findSum(accumilator,current){
-    accumilator = accumilator + current;
-    return accumilator;
+function findSum(accumilator, current) {
+  accumilator = accumilator + current;
+  return accumilator;
 }
-const sum = numbers.reduce(findSum,initialValue)
+const sum = numbers.reduce(findSum, initialValue);
 // console.log(sum);
 
 // flatten multi-d array with reduce
-const d2_arr = [[1,2],[3,4]]
-const flaten = d2_arr.reduce((total,cur)=> total.concat(cur),[])
-console.log(flaten) // [ 1, 2, 3, 4 ]
+const d2_arr = [
+  [1, 2],
+  [3, 4],
+];
+const flaten = d2_arr.reduce((total, cur) => total.concat(cur), []);
+console.log(flaten); // [ 1, 2, 3, 4 ]
 
 // Callback Hell and Invertion of Control
 // calling APIs through functions
@@ -784,13 +782,13 @@ createOrder(cart)
     .then((orderID) => proceedToPayment(orderID))
     .then((paymentStatus)=> confirmation(paymentStatus));
 */
-const GITHUB_USER_API = "https://api.github.com/users/Sunnymaharshi"
-const user = fetch(GITHUB_USER_API)
+const GITHUB_USER_API = "https://api.github.com/users/Sunnymaharshi";
+const user = fetch(GITHUB_USER_API);
 
 // console.log(user)          // output: Promise {<pending>}
-user.then(function (data){
-    // console.log(data);
-})
+user.then(function (data) {
+  // console.log(data);
+});
 
 /*  Promise Chain and Promise creation
         We need to return data coming from 1 promise to pass it to next Promise in Promise Chain
@@ -799,34 +797,31 @@ user.then(function (data){
         then blocks after the catch will run no matter errors above it comes or not
         finally block will run at end no matter what.
 */
-const cart  = ["shirts","pants","dresses"]
+const cart = ["shirts", "pants", "dresses"];
 
-function createOrder(cart){
-    const pr = new Promise(function (resolve,reject){
-        if(!validateCart(cart)){
-            const err = new Error("Cart is not valid");
-            reject(err);
-        }
-        const orderID = "1234"
-        if(orderID){
-            setTimeout(function (){
-                
-                resolve(orderID)
-            },3000)
-        }
-    })
+function createOrder(cart) {
+  const pr = new Promise(function (resolve, reject) {
+    if (!validateCart(cart)) {
+      const err = new Error("Cart is not valid");
+      reject(err);
+    }
+    const orderID = "1234";
+    if (orderID) {
+      setTimeout(function () {
+        resolve(orderID);
+      }, 3000);
+    }
+  });
 
-    return pr;
+  return pr;
 }
-function validateCart(cart){
-    return true;
+function validateCart(cart) {
+  return true;
 }
-function proceedToPayment(orderID){
-    return new Promise(
-        function (resolve,reject){
-            resolve("Payment Successfull")
-        }
-    )
+function proceedToPayment(orderID) {
+  return new Promise(function (resolve, reject) {
+    resolve("Payment Successfull");
+  });
 }
 
 // createOrder(cart)
@@ -843,7 +838,7 @@ function proceedToPayment(orderID){
 //     .catch(function (err){
 //         console.log(err)
 //     })
-    
+
 /*  Promise.all()
         usages: Promise.all([p1,p2,p3])
         output: [val1,val2,val3]
@@ -902,25 +897,24 @@ function proceedToPayment(orderID){
             it is called top-level await
 
 */
-const pr4 = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-        resolve("Promise value 3000");
-    },3000);
-})
-const pr5 = new Promise((resolve,reject)=>{
-    setTimeout(()=>{
-        resolve("Promise value 5000");
-    },5000);
-})
+const pr4 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Promise value 3000");
+  }, 3000);
+});
+const pr5 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Promise value 5000");
+  }, 5000);
+});
 
 // normal way of resolving a Promise
-function handlePromise1(){
-
-    // JS Engine will not wait for promise to resolve 
-    pr4.then((res)=>{
-        console.log(res)
-    })
-    console.log("1. after promise")
+function handlePromise1() {
+  // JS Engine will not wait for promise to resolve
+  pr4.then((res) => {
+    console.log(res);
+  });
+  console.log("1. after promise");
 }
 // handlePromise1()
 /* output:
@@ -929,17 +923,15 @@ Promise value 3000
 */
 
 // resolving promise using async and await
-async function handlePromise2(){
-    
-    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
-    const val1 = await pr4;
-    console.log("after await 1")
-    console.log(val1)
-    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr5 resolved
-    const val2 = await pr5;
-    console.log("after await 2")
-    console.log(val2)
-
+async function handlePromise2() {
+  // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
+  const val1 = await pr4;
+  console.log("after await 1");
+  console.log(val1);
+  // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr5 resolved
+  const val2 = await pr5;
+  console.log("after await 2");
+  console.log(val2);
 }
 // handlePromise2()
 /* output: 
@@ -950,17 +942,15 @@ Promise value 5000
 */
 // here promise which takes 5sec is came first and promise we takes 3sec comes next
 // * Promises will start to resolve, from the moment they are created, not when await is added before them.
-async function handlePromise3(){
-    
-    // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
-    const val1 = await pr5;
-    console.log("after await 1")
-    console.log(val1)
-    // pr5 has already been resolved
-    const val2 = await pr4;
-    console.log("after await 2")
-    console.log(val2)
-
+async function handlePromise3() {
+  // JS Engine will suspend handlePromise2(removed from Call Stack), and start from where it left after pr4 resolved
+  const val1 = await pr5;
+  console.log("after await 1");
+  console.log(val1);
+  // pr5 has already been resolved
+  const val2 = await pr4;
+  console.log("after await 2");
+  console.log(val2);
 }
 // handlePromise3()
 /* output: 
@@ -971,24 +961,27 @@ Promise value 3000
 */
 
 // fetch with async and await
-async function handleFetch(){
-    // fetch will returns a Promise
-    try {
-        const data = await fetch(GITHUB_USER_API);
-        // json() return a Promise
-        const jsonValue = await data.json();
-        console.log("user data json",jsonValue)
-    }
-    catch(err){
-        console.log(err)
-    }
+async function handleFetch() {
+  // fetch will returns a Promise
+  try {
+    const data = await fetch(GITHUB_USER_API);
+    // json() return a Promise
+    const jsonValue = await data.json();
+    console.log("user data json", jsonValue);
+  } catch (err) {
+    console.log(err);
+  }
 }
 // handleFetch();
 
 /* 'this' keyword
     You cannot change the value of this
+    value is determined only at the time of execution
     this keyword refers to the context where a piece of code is supposed to run
     * value of this in JavaScript depends on how a function is invoked (runtime binding), not how it is defined. 
+    Left of Dot rule 
+        generally this value is whatever left of dot
+        calling func() in global scope is same as window.func()
     * this works differently in non-strict mode and strict mode
     this in Global Scope
         points to Global object
@@ -1006,19 +999,18 @@ async function handleFetch(){
                 undefined
             window.func()
                 window
-    this in DOM elements 
-        Reference to that HTMLElement
-        usage: this.tagName etc
+    this in DOM elements or event listeners
+        points to that HTMLElement
 
 */
 // this in Global Scope
 
-// console.log(this);          
+// console.log(this);
 // output: window:{...}
 
 // this in a function
-function func(){
-    console.log(this);
+function func() {
+  console.log(this);
 }
 // func()
 /*
@@ -1036,17 +1028,18 @@ window:{...}
 // this inside object's method
 // whenever there is a function inside an object it is method
 const obj = {
-    a:1,
-    x: function () {
-        console.log(this)
-    }
-}
+  a: 1,
+  x: function () {
+    console.log(this);
+  },
+};
 // obj.x()
 // output: obj
 
 /*
     this inside Arrow function
         arrow function doesn't create it's own execution context, it just uses context where it is defined.
+        most cases we don't need to bind when we use arrow functions 
         in other words, it retains the this value of enclosing lexical context/parent scope at the time they are defined.
         in other words, arrow functions don't have their own this binding. Instead, this is looked up in scope just like a normal variable.
         when invoking arrow functions using call(), bind(), or apply(), the thisArg parameter is ignored.  
@@ -1071,14 +1064,14 @@ const obj = {
     that's why it took value of this in global scope
 */
 const obj2 = {
-    a:1,
-    x:  () => {
-        console.log(this)
-    },
-    y: function (){
-        console.log(this)
-    }
-}
+  a: 1,
+  x: () => {
+    console.log(this);
+  },
+  y: function () {
+    console.log(this);
+  },
+};
 // obj2.x()
 // output: window:{...}
 // obj2.y()
@@ -1087,16 +1080,16 @@ const obj2 = {
 // this inside nested arrow function
 // here enclosing lexical context is method x for which this is obj3
 const obj3 = {
-    a:1,
-    x: function () {
-        // enclosing lexical context
+  a: 1,
+  x: function () {
+    // enclosing lexical context
 
-        const fun = () => {
-            console.log(this)
-        }
-        fun()
-    } 
-}
+    const fun = () => {
+      console.log(this);
+    };
+    fun();
+  },
+};
 // obj3.x()
 // output: obj3
 /*
@@ -1113,6 +1106,7 @@ const obj3 = {
     apply 
         invokes function with given this & optional args
         takes arguments as an array 
+        usefull when we want to use arguments variable in function
         when you want to invoke the function immediately with thisArg
         apply(thisArg,[arg1,arg2,...])
     bind 
@@ -1127,17 +1121,17 @@ const obj3 = {
         3-Object method
         4-Global scope
 */
-function printFullName(homeTown){
-    console.log(this.firstName + " " + this.lastName + " from "+ homeTown)
+function printFullName(homeTown) {
+  console.log(this.firstName + " " + this.lastName + " from " + homeTown);
 }
 let student1 = {
-    firstName:"Sunny",
-    lastName:"Reddy"
-}
+  firstName: "Sunny",
+  lastName: "Reddy",
+};
 let student2 = {
-    firstName:"Maharshi",
-    lastName:"Reddy"
-}
+  firstName: "Maharshi",
+  lastName: "Reddy",
+};
 // call
 // printFullName.call(student1,"Andhra")
 // output: Sunny Reddy from Andhra
@@ -1146,8 +1140,8 @@ let student2 = {
 // printFullName.apply(student2,["Telangana"])
 // output: Maharshi Reddy from Telangana
 
-// bind 
-let printMyFullName = printFullName.bind(student1,"Andhra");
+// bind
+let printMyFullName = printFullName.bind(student1, "Andhra");
 // printMyFullName()
 // output: Sunny Reddy from Andhra
 
@@ -1161,12 +1155,12 @@ let printMyFullName = printFullName.bind(student1,"Andhra");
         or store this value in a variable and use it instead of this callback function
 */
 const person = {
-    firstName:"John",
-    lastName: "Doe",
-    display: function () {
-      console.log(this.firstName + " " + this.lastName);
-    }
-}
+  firstName: "John",
+  lastName: "Doe",
+  display: function () {
+    console.log(this.firstName + " " + this.lastName);
+  },
+};
 // when a function is used as a callback, this is lost.
 // setTimeout(person.display, 3000);
 // output: undefined undefined
@@ -1176,37 +1170,42 @@ let display = person.display.bind(person);
 // setTimeout(display, 3000);
 // output: John Doe
 
-
-
 /*
     Object Constructor Functions
         Sometimes we need to create many objects of the same type.
         To create an object type we use an object constructor function.
         It is considered good practice to name constructor functions with an upper-case first letter.
         methods in constructor function are copied in all the instances that are created 
-        instead use Prototype for adding methods
+        instead use Prototype for adding methods, Human.prototype.talk = function (){}
         ES6 class is synthetic sugar of constructor function
+    new keyword
+        1.creates empty object
+        2.sets this keyword to be that object 
+        then our code inside constructor function runs
+        3.returns the object (this)
+        4.creates a link to the object's prototype
+    
 */
 
-function Human(name,home){
-    this.name = name
-    this.home = home
-    this.talk = function (){
-        console.log(this.name, "talking")
-    }
+function Human(name, home) {
+  this.name = name;
+  this.home = home;
+  this.talk = function () {
+    console.log(this.name, "talking");
+  };
 }
-const john = new Human("John","London")
+const john = new Human("John", "London");
 // console.log(john)
 /* output:
 {name: 'John', home: 'London', talk: ƒ}
 */
 
-
-
-
-
 /*    Prototypal Inheritance 
         Prototypes are the mechanism by which JavaScript objects inherit features(properties & methods) from one another. 
+        prototype chaining 
+            when we run obj.doSomething(), first js checks if it is defined locally 
+            if not, js checks __proto__, if not found js checks parent __proto__ so on 
+            class inheritance is an example of chain of Prototypes        
         __proto__ 
             it is property of every variable, which has all methods and properties that are inherited from it's parent constructor function or class
         prototype
@@ -1222,21 +1221,32 @@ const john = new Human("John","London")
         Object.prototype is on the top of the prototype inheritance chain
             Object.__proto__ is null
             since it is base for all and won't inherit from anything            
+        Object.create()
+            returns new object with prototype as given object 
+        Object.getPrototypeOf()
+            returns prototype of the passed object 
+        Object.setPrototypeOf()
+            takes obj, and new prototype for the obj 
+            returns passed object with new given prototype
+        myproobj.isPrototypeOf()
+            returns true if myproobj is prototype of passed object 
 */
 
-function Person1(){                          // constructor function
-    this.talk = function(){
-        console.log("Person1 talking")
-    }
-    this.age = 30;
+function Person1() {
+  // constructor function
+  this.talk = function () {
+    console.log("Person1 talking");
+  };
+  this.age = 30;
 }
 
-const sunny = new Person1()
+const sunny = new Person1();
 
-sunny.age = 20;                             // age in sunny is shadowing age in Person1
-sunny.talk = function (){                   // talk in sunny is shadowing talk in Person1
-    console.log("Sunny talking")
-}
+sunny.age = 20; // age in sunny is shadowing age in Person1
+sunny.talk = function () {
+  // talk in sunny is shadowing talk in Person1
+  console.log("Sunny talking");
+};
 
 // console.log("Sunny age:",sunny.age)
 // output: 20
@@ -1247,23 +1257,16 @@ sunny.talk = function (){                   // talk in sunny is shadowing talk i
 // console.log(sunny.__proto__ === Person1.prototype)
 // output: true
 
-
 // adding custom method to all functions
 // same can be done to any object
-Function.prototype.printMyFullName = function (){
-    console.log("Maharshi Reddy")
-}
+Function.prototype.printMyFullName = function () {
+  console.log("Maharshi Reddy");
+};
 
-function xyz (){
-
-}
+function xyz() {}
 
 // xyz.printMyFullName()
 // output: Maharshi Reddy
-
-
-
-
 
 /*  polyfill
         piece of code (usually JavaScript on the Web) used to provide modern functionality on older browsers that do not natively support it.
@@ -1274,28 +1277,23 @@ function xyz (){
         we can pass arguments while using bind, and also new function created with bind can have arguments
 */
 let student = {
-    firstName:"sunny",
-    lastName:"reddy"    
+  firstName: "sunny",
+  lastName: "reddy",
+};
+function printStudent(homeTown, state) {
+  console.log(this.firstName, this.lastName, homeTown, state);
 }
-function printStudent(homeTown, state){
-    console.log(this.firstName,this.lastName,homeTown,state)
-}
-Function.prototype.mybind = function(...args){
-
-    let fun = this; 
-    let new_obj = args[0];
-    let other_args = args.slice(1);
-    return function(...new_args){
-        fun.call(new_obj,...other_args,...new_args);
-    }
-}
-const printStudent2 = printStudent.mybind(student,"atp")
+Function.prototype.mybind = function (...args) {
+  let fun = this;
+  let new_obj = args[0];
+  let other_args = args.slice(1);
+  return function (...new_args) {
+    fun.call(new_obj, ...other_args, ...new_args);
+  };
+};
+const printStudent2 = printStudent.mybind(student, "atp");
 // printStudent2("AP");
 // output: sunny reddy atp AP
-
-
-
-
 
 /*  
     Function Currying 
@@ -1304,23 +1302,23 @@ const printStudent2 = printStudent.mybind(student,"atp")
         used for passing partial parameters and avoid unwanted repetitions
               
 */
-const add_C = function (a){
-    return function(b){
-        return a+b;
-    }
-}
+const add_C = function (a) {
+  return function (b) {
+    return a + b;
+  };
+};
 
-console.log(add_C(1)(2))      // 3
-const addTo5 = add_C(5)
-console.log(addTo5(1))        // 6
+console.log(add_C(1)(2)); // 3
+const addTo5 = add_C(5);
+console.log(addTo5(1)); // 6
 
 // using Closure - nested function have access to surrounding state (the lexical environment).
-function multiply2(x){
-    return function(y){
-        console.log(x * y);
-    }
+function multiply2(x) {
+  return function (y) {
+    console.log(x * y);
+  };
 }
-let multiplyByTwo2 = multiply2(2)
+let multiplyByTwo2 = multiply2(2);
 // multiplyByTwo2(2)
 // output: 4
 
@@ -1335,7 +1333,6 @@ let multiplyByTwo2 = multiply2(2)
             Changing the filesystem (fs)
             Querying the DOM
 */
-
 
 /*
     Event Flow or Event Propagation in DOM 
@@ -1404,7 +1401,6 @@ clicked on grand parent
     grand parent click event
 */
 
-
 // Event Capturing/Trickling (useCapture=true), comment above click events
 
 // document.querySelector("#grand-parent")
@@ -1466,7 +1462,6 @@ clicked on grand parent
     grand parent click event
 */
 
-
 // comment above click events
 
 // document.querySelector("#grand-parent")
@@ -1494,22 +1489,30 @@ clicked on grand parent
     grand parent click event
 */
 
-
 // stopPropagation
 
-document.querySelector("#grand-parent")
-    .addEventListener("click", ()=>{
-        console.log("Grand Parent Clicked")
-    },true)
-document.querySelector("#parent")
-    .addEventListener("click", (e)=>{
-        console.log("Parent Clicked")
-        e.stopPropagation();
-    },true)
-document.querySelector("#child")
-    .addEventListener("click", ()=>{
-        console.log("Child Clicked")
-    },true)
+document.querySelector("#grand-parent").addEventListener(
+  "click",
+  () => {
+    console.log("Grand Parent Clicked");
+  },
+  true
+);
+document.querySelector("#parent").addEventListener(
+  "click",
+  (e) => {
+    console.log("Parent Clicked");
+    e.stopPropagation();
+  },
+  true
+);
+document.querySelector("#child").addEventListener(
+  "click",
+  () => {
+    console.log("Child Clicked");
+  },
+  true
+);
 /*
 output:
 clicked on child 
@@ -1521,8 +1524,6 @@ clicked on parent
 clicked on grand parent
     grand parent click event
 */
-
-
 
 /*
     Event Delegation
@@ -1540,15 +1541,14 @@ clicked on grand parent
             if stopPropagation is used in any children, event won't bubbled up
 */
 
-document.getElementById("category").addEventListener('click',(e)=>{
-    console.log(e.target.id,"button clicked")
-})
-document.getElementById("form").addEventListener('keyup',(e)=>{
-    if(e.target.dataset.uppercase != undefined){
-        e.target.value = e.target.value.toUpperCase()
-    }    
-})
-
+document.getElementById("category").addEventListener("click", (e) => {
+  console.log(e.target.id, "button clicked");
+});
+document.getElementById("form").addEventListener("keyup", (e) => {
+  if (e.target.dataset.uppercase != undefined) {
+    e.target.value = e.target.value.toUpperCase();
+  }
+});
 
 /*  
     Debouncing & Throttling 
@@ -1587,24 +1587,26 @@ document.getElementById("form").addEventListener('keyup',(e)=>{
             Throttling is usefull and widely used in this case
 */
 
-// Debouncing on search bar 
-getSearchData = ()=>{
-    console.log("calling search data");
-}
+// Debouncing on search bar
+getSearchData = () => {
+  console.log("calling search data");
+};
 // this function will return debounced function
-const debounce = function (func, delay){
-    let timer;          
-    return function (){                      // this function forms a Closure with debounce function lexical environment
-        let context = this,args = arguments;        // store context and arguments
-        clearTimeout(timer);            // clears timer if another event comes before delay, first time timer is undefined
+const debounce = function (func, delay) {
+  let timer;
+  return function () {
+    // this function forms a Closure with debounce function lexical environment
+    let context = this,
+      args = arguments; // store context and arguments
+    clearTimeout(timer); // clears timer if another event comes before delay, first time timer is undefined
 
-        timer = setTimeout(()=>{                    // creates timer on every event
-            getSearchData.call(context,...args)       // if no event comes before 300ms, this will run
-        },delay)
-    }
-
-}
-const debounceSearchData = debounce(getSearchData,300);
+    timer = setTimeout(() => {
+      // creates timer on every event
+      getSearchData.call(context, ...args); // if no event comes before 300ms, this will run
+    }, delay);
+  };
+};
+const debounceSearchData = debounce(getSearchData, 300);
 
 /*
 //Debouncing in React,we create useState for search input value 
@@ -1619,47 +1621,44 @@ useEffect(()=>{
 */
 
 // Throttling on fire button, can only fired after the time limit
-const Fire = ()=>{
-    console.log("Shotgun Fired");
-}
-const throttle = function (func,limit){
-
-    let enabled = true;   
-    return function (){                     // this function forms a Closure with debounce function lexical environment
-        let context = this,args = arguments;        // store context and arguments              
-        if(enabled){                                // call the function if enabled
-            func.call(context,...args);
-            enabled = false;                        // disable the function
-            setTimeout(()=>{
-                enabled = true                      // enable it after the time limit
-            },limit);
-        }
+const Fire = () => {
+  console.log("Shotgun Fired");
+};
+const throttle = function (func, limit) {
+  let enabled = true;
+  return function () {
+    // this function forms a Closure with debounce function lexical environment
+    let context = this,
+      args = arguments; // store context and arguments
+    if (enabled) {
+      // call the function if enabled
+      func.call(context, ...args);
+      enabled = false; // disable the function
+      setTimeout(() => {
+        enabled = true; // enable it after the time limit
+      }, limit);
     }
-}
+  };
+};
 
-const throttleFire = throttle(Fire,1000);
+const throttleFire = throttle(Fire, 1000);
 
-
-
-
-// add(1)(2)(3)(4)...() return sum of all 
+// add(1)(2)(3)(4)...() return sum of all
 // return a function and check if next call have number or not
-const add = function (a){
+const add = function (a) {
+  return function (b) {
+    // return the function
 
-    return function (b){        // return the function 
-
-        if(b){                  // if there is 2nd call with number return add with add both and pass to a
-            return add(a+b);
-        }
-        return a;               // 2nd call without number, end of calls, a will be having sum of all
+    if (b) {
+      // if there is 2nd call with number return add with add both and pass to a
+      return add(a + b);
     }
-}
+    return a; // 2nd call without number, end of calls, a will be having sum of all
+  };
+};
 // console.log(add(1)(2)(3)(4)())
 
 // output: 10
-
-
-
 
 /*
     default, async and defer 
@@ -1845,7 +1844,7 @@ console.log(Boolean({}));           // output:true
             used to dynamically add html content inside component from custom element
 
 */
-const template = document.createElement('template')
+const template = document.createElement("template");
 template.innerHTML = `
 <style>
     h1 {
@@ -1853,110 +1852,114 @@ template.innerHTML = `
     }
 </style>
 Product Card Template
-`
+`;
 class ProductCard extends HTMLElement {
-    constructor(){
-        super()
-        const h1 = document.createElement("h1")
-        h1.innerHTML = `
+  constructor() {
+    super();
+    const h1 = document.createElement("h1");
+    h1.innerHTML = `
         <style>
             h1 {
                 color: red;
             }
         </style>
         Product Card
-        `
-        this.attachShadow({mode:'open'});
-        // this.shadowRoot.appendChild(h1)
-        this.shadowRoot.appendChild(template.content.cloneNode(true))
-        
-    }
+        `;
+    this.attachShadow({ mode: "open" });
+    // this.shadowRoot.appendChild(h1)
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
 }
 // defining custom element name
-window.customElements.define("product-card",ProductCard)
+window.customElements.define("product-card", ProductCard);
 
+//  Slider Component
+const slider_data = [
+  { text: "slide 1", color: "blue" },
+  { text: "slide 2", color: "orange" },
+  { text: "slide 3", color: "cyan" },
+  { text: "slide 4", color: "green" },
+];
+function slider(data) {
+  const slides_len = data.length;
+  let curr_slide = 0;
+  const slider = document.querySelector(".slider");
+  const btnLeft = document.querySelector(".slider_btn--left");
+  const btnRight = document.querySelector(".slider_btn--right");
+  const dotContainer = document.querySelector(".dots");
+  const createDots = function () {
+    data.forEach(function (_, i) {
+      dotContainer.insertAdjacentHTML(
+        "beforeend",
+        `<button class="dots_dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+  const createSlides = () => {
+    data.forEach(function (s, i) {
+      slider.insertAdjacentHTML(
+        "beforeend",
+        `<div class="slide" style="background-color:${s.color};">${s.text}</div>`
+      );
+    });
+  };
+  createSlides();
+  const slides = document.querySelectorAll(".slide");
+  const activateDot = function (slide) {
+    document
+      .querySelectorAll(".dots_dot")
+      .forEach((dot) => dot.classList.remove("dots_dot--active"));
 
-
-//  Slider Component 
-const slider_data = [{text:"slide 1", color:"blue"},{text:"slide 2", color:"orange"},{text:"slide 3", color:"cyan"},{text:"slide 4", color:"green"}]
-function slider(data){
-    const slides_len = data.length;
-    let curr_slide = 0;
-    const slider = document.querySelector('.slider');
-    const btnLeft = document.querySelector('.slider_btn--left');
-    const btnRight = document.querySelector('.slider_btn--right');
-    const dotContainer = document.querySelector('.dots');
-    const createDots = function () {
-        data.forEach(function (_, i) {
-          dotContainer.insertAdjacentHTML(
-            'beforeend',
-            `<button class="dots_dot" data-slide="${i}"></button>`
-          );
-        });
-    };
-    const createSlides = ()=>{
-        data.forEach(function (s,i) {
-            slider.insertAdjacentHTML('beforeend',`<div class="slide" style="background-color:${s.color};">${s.text}</div>`)
-        })
+    document
+      .querySelector(`.dots_dot[data-slide="${slide}"]`)
+      .classList.add("dots_dot--active");
+  };
+  const goToSlide = function (slide) {
+    // make translateX 0% for the slide, left slides have -% and right slides +% in 100's
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+  };
+  const nextSlide = function () {
+    if (curr_slide === slides_len - 1) {
+      curr_slide = 0;
+    } else {
+      curr_slide++;
     }
-    createSlides();
-    const slides = document.querySelectorAll('.slide');
-    const activateDot = function (slide) {
-        document
-          .querySelectorAll('.dots_dot')
-          .forEach(dot => dot.classList.remove('dots_dot--active'));
-    
-        document
-          .querySelector(`.dots_dot[data-slide="${slide}"]`)
-          .classList.add('dots_dot--active');
-    };
-    const goToSlide = function (slide) {
-        // make translateX 0% for the slide, left slides have -% and right slides +% in 100's
-        slides.forEach(
-          (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
-        );
-    };
-    const nextSlide = function () {
-        if (curr_slide === slides_len - 1) {
-          curr_slide = 0;
-        } else {
-          curr_slide++;
-        }
-    
-        goToSlide(curr_slide);
-        activateDot(curr_slide);
-    };
-    const prevSlide = function () {
-        if (curr_slide === 0) {
-          curr_slide = slides_len - 1;
-        } else {
-          curr_slide--;
-        }
-        goToSlide(curr_slide);
-        activateDot(curr_slide);
-    };
-    const init = function () {
-        goToSlide(0);
-        createDots();    
-        activateDot(0);
-    };
-    init();
-    btnRight.addEventListener('click', nextSlide);
-    btnLeft.addEventListener('click', prevSlide);
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft') prevSlide();
-        e.key === 'ArrowRight' && nextSlide();
-    });
+    goToSlide(curr_slide);
+    activateDot(curr_slide);
+  };
+  const prevSlide = function () {
+    if (curr_slide === 0) {
+      curr_slide = slides_len - 1;
+    } else {
+      curr_slide--;
+    }
+    goToSlide(curr_slide);
+    activateDot(curr_slide);
+  };
+  const init = function () {
+    goToSlide(0);
+    createDots();
+    activateDot(0);
+  };
+  init();
+  btnRight.addEventListener("click", nextSlide);
+  btnLeft.addEventListener("click", prevSlide);
 
-    dotContainer.addEventListener('click', function (e) {
-        if (e.target.classList.contains('dots_dot')) {
-          const { slide } = e.target.dataset;
-          goToSlide(slide);
-          activateDot(slide);
-        }
-    });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") prevSlide();
+    e.key === "ArrowRight" && nextSlide();
+  });
 
+  dotContainer.addEventListener("click", function (e) {
+    if (e.target.classList.contains("dots_dot")) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+      activateDot(slide);
+    }
+  });
 }
 slider(slider_data);
 /*  Intersection Observer API 
@@ -2004,14 +2007,54 @@ observer.observe(intersect_ele)
 */
 
 /*  ES6 class 
+        class is added in javascript 2015 version
         class is synthetic sugar coating on constructor function
         methods in class are added to prototype
         classes are not hoisted
+    Static properties
+        properties that are assigned to class, not the instance 
+        ex: static count =  1; or Account.count = 1;
     Static methods 
         methods that are attached to constructor function or class, not prototype
         we can only access through class/constructor function, not in instances
-        created with dot(.) on class or with 'static' keyword before method
-        ex:Number.parseFloat()
+        ex: static getCount(){} or Account.getCount(){} 
+        this inside static method
+            this points to Class itself, not instance 
+        use cases 
+            to ground related functions together 
+            ex: Math.abs(), Math.round() etc 
+    instanceof keyword
+        ex: car instanceof Car; // true 
+    Inheritance 
+        ex: class Child extends Parent
+        super()
+            calls parent constructor
+            if a constructor is defined in child class 
+            we must call super with parent argument inside child constructor
+            before initializing child arguments
+    public fields in class 
+        normal properties
+        can also declare them above constructor
+        Class Acc{
+            count = 0;
+            name;  // name = undefined 
+        }
+    private fields in class 
+        can't access outside the class 
+        must declare it above constructor first 
+        property name starts with # 
+        ex: #amt = 213
+    private methods in class 
+        can't access outside the class  
+        function name starts with # 
+        ex: #calculateAmt(){}
+    ES2022 static initialization blocks 
+        runs block of code only once when class is loaded
+        ex: class Acc {
+            static {
+                console.log("Acc loaded")
+            }
+        }
 */
 /* class Student {
     constructor(name,marks){
@@ -2071,5 +2114,27 @@ Student.bye() */
             ./ points to root folder 
             not the folder in which file presents
             ex: require('path')
-    
+    ES6+ Features 
+        Optional Chaining  (?.) 
+            If the object accessed or function called using this operator is 'undefined' or 'null',
+            the expression short circuits and evaluates to 'undefined' instead of throwing an error.
+            ex: adventurer.dog?.name 
+            ex: adventurer.someNonExistentMethod?.()
+        Nullish coalesing (??)
+            returns right hand operand when left hand operand is null or undefined
+            only for null or undefined, not for false, 0 etc 
+            usefull when we want to check only for null or undefined and other values are valid 
+            in which (||) is not useful
+            0 ?? "unknown" // 0 
+            0 || "unknown" // unknown
+        Numeric separators (_)
+            numbers can be readable with (_)
+            ex: 1_000_000
+        Array.prototype.at()
+            pass index to get value, supports negative index 
+            [1,2,3].at(-1) // 3
+
+        
+
+
 */
