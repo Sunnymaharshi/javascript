@@ -179,10 +179,15 @@ function a() {
 
 /*
     var 
+        var is functional scoped 
         all variables declared with var after implicitly declared at the top
         those bubble up to the top, in both normal & strict mode
         *avoid using var for declaring variables
+    Hoisting 
+        var variable declarations are pulled to the top of their function or scope 
+        so varibale is undefined until it is initialised
     let
+        let and const are block scoped
         these variables are hoisted in different memory space (ex:Script) instead of Global.
         * we can't access these until they are initialised.
         if we try to access before initialisation we get Reference error: Cannot access before initialisation
@@ -193,6 +198,8 @@ function a() {
         cannot be re-initialised
     Temporal Dead Zone 
         A variable declared with let, const, or class is said to be in a "temporal dead zone" (TDZ) 
+        javascript hoist these variables but in temporal dead zone, so that we can't
+        access them before initialisation
         from the start of the block until code execution reaches the place where the variable is declared and initialized.
         aka the block until let/const/class is initialised
         aka block where a variable is inaccessible until the moment the computer completely initializes it with a value.
@@ -272,7 +279,7 @@ var c3 = 1;
         can have named or anonymous IIFE's
         Immediate Execution
         Avoid polluting the global namespace
-            avoiding conflicts with other parts of your code.
+            avoiding name conflicts with other parts of your code.
         Execute an async function
         The module pattern - Data Privacy
             allows you to create closures
@@ -350,6 +357,12 @@ var c3 = 1;
             returns the index of the first element that passes a test.
         findLastIndex()
             returns the index of the last element that passes a test.
+        Array.from()
+            takes any type and returns array 
+            ex: Array.from("hi") // ['h','i']
+            can give mapping function to run on each element
+            ex: Array.from("hi", (e)=>e.toUpperCase()) // ['H','I']
+            Array.from({length:2}) // [undefined,undefined]
 
         filter()
             returns new array with elements that pass a test provided by a function.
@@ -486,6 +499,8 @@ var c3 = 1;
             copies properties from one or more source objects to a target object.
             can be used to clone the object
             Object.assign(target, source(s))
+        Object.freeze()
+            takes an object, and makes it immutable
         Accessors (Getters and Setters)
             allows equal syntax for properties and methods
             function name and property name must be different
@@ -574,8 +589,10 @@ let range = {
 /*
     Generators 
         function* keyword used to define 
-        yeild operator passes the generator function
-        returns generator object
+        calling generator function returns generator object
+        yeild operator 
+            returns the value and 
+            passes the generator function
         next()
             starts execution till the yeild operator
         can use for__of loop or spread operator instead  of next()
@@ -607,6 +624,7 @@ console.log([...rangeGen]);
     Closure
         function along with surrounding state (lexical environment) 
         gives access to another function's scope from an inner function
+        used to create private variables
 */
 // Closure
 function x() {
@@ -653,7 +671,7 @@ function p() {
 6
 6
 */
-// every time loop runs, i is a new variable and function forms a Closure with it since i is block scoped
+// every time loop runs, i is a new variable and setTimeout function forms a Closure with it since i is block scoped
 function p1() {
   for (let i = 1; i <= 5; i++) {
     setTimeout(() => {
@@ -690,7 +708,17 @@ function p2() {
 4
 5
 */
-
+// Closure in event listeners, here count is private variable
+document.getElementById("button")?.addEventListener(
+  "click",
+  (function () {
+    let count = 0;
+    return function () {
+      count += 1;
+      console.log(`button clicked ${count} times`);
+    };
+  })()
+);
 // function statement aka function declaration
 function f1() {
   console.log("function");
@@ -1300,32 +1328,35 @@ const printStudent2 = printStudent.mybind(student, "atp");
         functional programming technique that involves breaking down a function that takes
         multiple arguments into a series of functions that take one argument each.
         used for passing partial parameters and avoid unwanted repetitions
-              
+        f(a,b,c) => f(a)(b)(c)              
 */
-const add_C = function (a) {
+const add_two = function (a) {
   return function (b) {
     return a + b;
   };
 };
 
-console.log(add_C(1)(2)); // 3
-const addTo5 = add_C(5);
+console.log(add_two(1)(2)); // 3
+const addTo5 = add_two(5);
 console.log(addTo5(1)); // 6
-
-// using Closure - nested function have access to surrounding state (the lexical environment).
-function multiply2(x) {
-  return function (y) {
-    console.log(x * y);
+// Curry factory function
+function curryFac(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    } else {
+      return function (...args2) {
+        return curried.apply(this, args.concat(args2));
+      };
+    }
   };
 }
-let multiplyByTwo2 = multiply2(2);
-// multiplyByTwo2(2)
-// output: 4
-
 /*
     Pure Functions
         functions that produce the same output for a particular input every time they are called
         they have no side effects and do not rely on external state or mutable data.
+        does not depend on any mutable state 
+        does not modify a mutable object, reassigning the variable etc
         side effects 
             Mutating your input
             console.log
@@ -1591,18 +1622,28 @@ document.getElementById("form").addEventListener("keyup", (e) => {
 getSearchData = () => {
   console.log("calling search data");
 };
-// this function will return debounced function
-const debounce = function (func, delay) {
-  let timer;
-  return function () {
-    // this function forms a Closure with debounce function lexical environment
-    let context = this,
-      args = arguments; // store context and arguments
-    clearTimeout(timer); // clears timer if another event comes before delay, first time timer is undefined
 
-    timer = setTimeout(() => {
+// simple debounce function
+let debounceId;
+let searchInput;
+searchInput?.addEventListener("input", () => {
+  clearTimeout(debounceId);
+  debounceId = setTimeout(() => {
+    getSearchData();
+  }, 300);
+});
+
+// this function will return debounced function
+const debounce = function (callback, delay) {
+  let timeoutId;
+  return function (...args) {
+    // this function forms a Closure with debounce function lexical environment
+    let context = this; // store context
+    clearTimeout(timeoutId); // clears timer if another event comes before delay, first time timer is undefined
+
+    timeoutId = setTimeout(() => {
       // creates timer on every event
-      getSearchData.call(context, ...args); // if no event comes before 300ms, this will run
+      callback.call(context, ...args); // if no event comes before 300ms, this will run
     }, delay);
   };
 };
@@ -1624,15 +1665,28 @@ useEffect(()=>{
 const Fire = () => {
   console.log("Shotgun Fired");
 };
-const throttle = function (func, limit) {
+// simple throttle
+let isThrottled = false;
+let fire_btn;
+fire_btn?.addEventListener("click", () => {
+  if (!isThrottled) {
+    Fire();
+    isThrottled = true;
+    setTimeout(() => {
+      isThrottled = false;
+    }, 300);
+  }
+});
+
+// throttle factory function
+const throttle = function (callback, limit) {
   let enabled = true;
-  return function () {
+  return function (...args) {
     // this function forms a Closure with debounce function lexical environment
-    let context = this,
-      args = arguments; // store context and arguments
+    let context = this; // store context
     if (enabled) {
       // call the function if enabled
-      func.call(context, ...args);
+      callback.call(context, ...args);
       enabled = false; // disable the function
       setTimeout(() => {
         enabled = true; // enable it after the time limit
@@ -1643,6 +1697,16 @@ const throttle = function (func, limit) {
 
 const throttleFire = throttle(Fire, 1000);
 
+/*
+    window.requestAnimationFrame()
+        tells the browser you wish to perform an animation
+        requests the browser to invoke callback before the next repaint
+        frequency of calls to the callback will generally match the display refresh rate
+        it only runs once, u need to call it again to recursively to animate again 
+        useful when you are animating using js
+    window.cancelAnimationFrame()
+        to cancel the request 
+*/
 // add(1)(2)(3)(4)...() return sum of all
 // return a function and check if next call have number or not
 const add = function (a) {
@@ -1962,49 +2026,6 @@ function slider(data) {
   });
 }
 slider(slider_data);
-/*  Intersection Observer API 
-        asynchronously observe changes in the intersection of a target element 
-        with an ancestor element or with a top-level document's viewport(screen).
-        root
-            The element that is used as the viewport for checking visibility of the target. 
-            Must be the ancestor of the target. Defaults to the browser viewport if not specified or if null.
-            container in which we observe target element visibility
-        rootMargin
-            Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" 
-            used to increase/decrease the size of the root(container)
-        threshold
-            Either a single number or an array of numbers which indicate at what percentage of the target's visibility 
-            the observer's callback should be executed.
-        use cases
-            revealing sections as we scroll 
-            infinite scrolling 
-            lazy loading images etc 
-*/
-/* 
-const intersect_ele = document.querySelector(".intersect");
-const observer_callback = function(entries,observer){
-    // Each entry describes an intersection change for each element u r observing
-    // currently we are only observing for single element (intersect_ele)
-    // observer argument is used to unobserver target element
-    // single entry because we only observing 1 element
-    if(entries[0].isIntersecting){
-        console.log("Element is visible on the screen")
-    }else{
-        console.log("Element is not visible on the screen")
-    }
-    // observer.unobserve(entries[0].target);
-}
-const observer_options = {
-    // null for checking intersection with viewport(screen)
-    root:null,
-    // min percentage the element should intersect(visible) inside root
-    // callback will called for each threshold in the array
-    // 0 means, as soon as element visible inside root even a single pixel
-    threshold:[0,0.5]
-}
-const observer = new IntersectionObserver(observer_callback,observer_options);
-observer.observe(intersect_ele) 
-*/
 
 /*  ES6 class 
         class is added in javascript 2015 version
@@ -2133,6 +2154,166 @@ Student.bye() */
         Array.prototype.at()
             pass index to get value, supports negative index 
             [1,2,3].at(-1) // 3
+        func.length 
+            returns no of parameters expected by the function 
+*/
+/*
+    Browser APIs 
+        fetch()
+            use to make network requests
+            replaced old XMLHttpRequest 
+            retrives data as readable stream 
+            ex: res = await fetch(URL)
+                data = await res.json()
+            rejects the promise only when network or cors errors occurs
+            to upload file, u pass formData object in body 
+        localStorage 
+            store key/value pairs in browser
+            only supports strings, to store objects stringify them
+            persistent across the sessions 
+            ex: localStorage.setItem("hi","hello")
+            localStorage.getItem("hi")
+            removeItem() 
+                to remove the item
+            clear()
+                to clear the localStorage
+            storage event on window 
+                triggers when there is change in storage
+        sessionStorage 
+            similar to localStorage but for single session 
+            has same methods as localStorage
+            won't persist in different tab or window 
+            after closing tab, it is cleared 
+            usecase: form data persist on refresh 
+        IndexedDB 
+            low level API for storing structured data, including large datasets
+            similar to a database
+        Geolocation API 
+            allows users to share their location with web apps 
+            navigator.geolocation property is used to check if browser supports 
+            if permission is not given, these methods will automatically ask for permission
+            getCurrentPosition()
+                returns current location 
+                takes success & failure callbacks 
+            watchPosition()
+                invoked everytime location changes
+        getUserMedia API 
+            used to access microphone, webcam etc 
+            ex: navigator.mediaDevices.getUserMedia({video:true})
+        Performance API 
+            measure performance of web pages and apps 
+            mark()
+                marks currents point of time 
+            measure()
+                difference btw two marks 
+                ex: measure("diff m1 and m2", 'mark1','mark2')
+            getEntries()
+                returns Performance object with all the entries it took 
+        Web Audio API 
+            processing and synthesizing the audio in webapps 
+        Canvas API 
+            drawing graphics via javascript and canvas element
+        WebSocket API 
+            real-time communication with client and server 
+            connection is persistent and bi-directional 
+            socket.onmessage
+                runs everytime it receives data
+            socket.send()
+                to send a message
+        Notifications API 
+            send notifications to users          
+*/
+/*  Intersection Observer API 
+        asynchronously observe changes in intersection of a target element with it's parent/viewport
+        entries
+            each entry describes an intersection change for each target element you are observing
+            target 
+                element that intersection is observed on 
+                useful when observing multiple targets 
+            isInterecting 
+                true if target is intersecting with root 
+            intersectionRatio 
+                percentage of target intersecting with root 
+                ex: 0.256773  
+        observer arg
+            used to unobserver target element
+        root
+            parent element to check the intersection of target element
+            null for checking intersection with viewport(screen)
+            Must be the ancestor of the target. Defaults to the browser viewport if not specified or if null.
+        rootMargin
+            Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" 
+            used to increase/decrease the size of the root(container)
+        threshold
+            Either a single number or an array of numbers (multiple thresholds)
+            callback is fired for each if multiple thresholds given
+            who much percentage of target should intersect before the callback is fired
+            0 means, as soon as element intersect with root even a single pixel
+            1 is total element
+        use cases:
+            revealing sections as we scroll 
+            infinite scrolling 
+            lazy loading images 
+            ad visible time on screen etc 
+*/
+/* 
+const target_ele = document.querySelector(".intersect");
+const observer_callback = function(entries,observer){
+
+    if(entries[0].isIntersecting){
+        console.log("Element is visible on the screen")
+    }else{
+        console.log("Element is not visible on the screen")
+    }
+    // observer.unobserve(entries[0].target);
+}
+const observer_options = {
+    root:null,
+    threshold:[0,0.5]
+}
+const observer = new IntersectionObserver(observer_callback,observer_options);
+observer.observe(target_ele) 
+*/
+
+/*
+    SOLID Object-Oriented Principles
+        Single Responsibility Principle (SRP)
+            class should only have one responsibility 
+        Open/Closed Principle
+            behaviour of module can be extended without modifying it's source code 
+        Liskov Substitution Principle (LSP)
+            objects of superclass should be able to be replaced wth objects of subclass 
+            without affecting the correctness of program 
+        Interface Segregation Principle (ISP)
+            A class should not be forced to implement interfaces it does not  use 
+        Dependency Inversion Principle (DIP)
+            High level modules (main app logic) should not depend directly on 
+            low-level modules (like specific tools or libraries)
+            both should depend on Abstraction (interfaces or general ideas)
+    Design Patterns 
+        Module Pattern 
+            ensure private and public encapsulation protecting global namespace 
+            and diminishing naming conflicts
+            ex: IIFEs, private variables, higher order functions etc 
+        Singleton Pattern 
+            assures only one instance of class/object exists
+            ex: db connection object etc 
+        Observer Pattern
+            subscription model where objects (observers) listen to events 
+            and get notified when event occurs
+            ex: DOM event listeners etc 
+        Registry Pattern 
+            store and retrieve instances of object/class
+        Mixin Pattern 
+            object that we can use in order to add reusable functionality to another
+            object or class, without using inheritance. 
+            make an object with useful methods, so that we can easily merge them into
+            object or class using Object.assign() to add methods from that object
+        Proxy Pattern 
+            With a Proxy object, we get more control over the interactions with certain objects
+            ex: instead of interacting with the target object directly, 
+            we’ll interact with the Proxy object.
+        
 
         
 
