@@ -154,6 +154,13 @@
             console.log('Uncaught Exception! Shuting down...');
         
         });
+    EventEmitter 
+        core class in node.js that facilitates the emission and 
+        handling of events. it allows u to create and listen to events.
+        methods 
+            on - add listener 
+            off - remove listener 
+            emit - triggers the event 
     JSON WEB TOKEN (JWT) Authentication
         after login 
             server

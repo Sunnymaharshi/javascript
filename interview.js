@@ -284,3 +284,187 @@ Function.prototype.myBind = function (context, ...boundArgs) {
   };
 };
 // console.log(person.fullName.myBind(person1)("Ola"));
+
+// Array.flat() polyfill
+const n_arr = [1, 2, [3, 4, [5, 6]]];
+// flatten recursive without depth
+
+const flattenRec = (arr) => {
+  if (!Array.isArray(arr)) {
+    throw new Error("input must be an array");
+  }
+  const result = [];
+  for (const ele of arr) {
+    if (Array.isArray(ele)) {
+      result.push(...flattenRec(ele));
+    } else {
+      result.push(ele);
+    }
+  }
+  return result;
+};
+// console.log(flattenRec(n_arr));
+
+// flatten iterative without depth
+
+const flattenIter = (arr) => {
+  if (!Array.isArray(arr)) {
+    throw new Error("input must be an array");
+  }
+
+  let result = [];
+  const stack = [...arr];
+  while (stack.length > 0) {
+    // take last element
+    const ele = stack.pop();
+    if (Array.isArray(ele)) {
+      stack.push(...ele);
+    } else {
+      result.push(ele);
+    }
+  }
+  // since we traversed from right left
+  result = result.reverse();
+  return result;
+};
+// console.log(flattenIter(n_arr));
+
+// flatten recursive with depth
+
+const flattenRecDep = (arr, depth) => {
+  if (!Array.isArray(arr)) {
+    throw new Error("input must be an array");
+  }
+  if (depth === 0) {
+    return arr;
+  }
+  const result = [];
+  for (const ele of arr) {
+    if (Array.isArray(ele)) {
+      result.push(...flattenRecDep(ele, depth - 1));
+    } else {
+      result.push(ele);
+    }
+  }
+  return result;
+};
+// console.log(flattenRecDep(n_arr, 1));
+// output: [ 1, 2, 3, 4, [ 5, 6 ] ]
+
+// debounce a function
+const debounce = function (func, delay) {
+  let timeoutId;
+  return function (...args) {
+    let context = this; // store context
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func.call(context, ...args);
+    }, delay);
+  };
+};
+
+// throttle a function
+const throttle = function (func, limit) {
+  let inThrottle = false;
+  return function (...args) {
+    const context = this; // store context
+    if (!inThrottle) {
+      func.call(context, ...args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
+};
+
+// EventEmitter class implementation
+class EventEmitter {
+  constructor() {
+    this.events = {};
+  }
+
+  // addEventListener or subscribe the event
+  on(eventName, callback) {
+    if (typeof callback !== "function") {
+      throw new TypeError("callback must be a function");
+    }
+    if (!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(callback);
+
+    // return a function to unsubscribe the event
+    return () => {
+      this.events[eventName] = this.events[eventName].filter(
+        (cb) => cb !== callback
+      );
+    };
+  }
+
+  // run all listeners which are listening to the event
+  emit(eventName, ...args) {
+    if (this.events[eventName]) {
+      const listeners = [...this.events[eventName]];
+      listeners.forEach((callback) => callback(...args));
+    }
+  }
+  off(eventName, callback) {
+    if (this.events[eventName]) {
+      this.events[eventName] = this.events[eventName].filter(
+        (cb) => cb !== callback
+      );
+    }
+  }
+  removeAllListeners(eventName) {
+    if (eventName) {
+      delete this.events[eventName];
+    } else {
+      this.events = {};
+    }
+  }
+}
+
+// Array.sort() polyfill
+
+Array.prototype.mySort = function (compare) {
+  if (typeof compare !== "function") {
+    compare = (a, b) => a - b;
+  }
+  const mergeSort = function (arr) {
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    const mid = Math.floor(arr.length / 2);
+    const left = arr.slice(0, mid);
+    const right = arr.slice(mid);
+    return merge(mergeSort(left), mergeSort(right));
+  };
+
+  const merge = (left, right) => {
+    const result = [];
+    let l = 0;
+    let r = 0;
+    while (l < left.length && r < right.length) {
+      if (compare(left[l], right[r]) <= 0) {
+        result.push(left[l]);
+        l++;
+      } else {
+        result.push(right[r]);
+        r++;
+      }
+    }
+    return result.concat(left.slice(l)).concat(right.slice(r));
+  };
+
+  // copy sorted array back to this
+  const sorted = mergeSort(this.slice());
+  for (let i = 0; i < this.length; i++) {
+    this[i] = sorted[i];
+  }
+  return this;
+};
+
+console.log([2, 3, 1, 8, 6].mySort());
