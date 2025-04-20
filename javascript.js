@@ -129,6 +129,7 @@
             fulfilled: meaning that the operation was completed successfully.
             rejected: meaning that the operation failed.
         Promise objects are immutable
+        Promise.resolve() and Promise.reject() is to wrap a value into a resolved or rejected promise value.
 */
 
 // 1.
@@ -1240,6 +1241,7 @@ const john = new Human("John", "London");
             constructor functions and classes will have prototype property 
             it has all properties and methods which are shared with instances
             by using this you can add properties and methods to any object
+        * never change __proto__ for variables, use prototype on it's class 
         whenever we are access any property/method
             first loopup happens inside the instance if not found, then inside it's __proto__ and so on upto it goes to Object class
             Object is parent of all variables/functions in JavaScript
@@ -2053,7 +2055,7 @@ slider(slider_data);
             if a constructor is defined in child class 
             we must call super with parent argument inside child constructor
             before initializing child arguments
-    public fields in class 
+    public fields in class (Field declarations)
         normal properties
         can also declare them above constructor
         Class Acc{
