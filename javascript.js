@@ -451,10 +451,13 @@ var c3 = 1;
         hold keys weakly
         keys must be objects, not primitive like number or string
         if keys are garbage collected so do the values
+        if there are no other references to an object used as a key, 
+        the object can be garbage collected, and its entry will be automatically
+        removed from the WeakMap
         obj = {...}
         m.set(obj,1);
         if obj = null after garbage collection
-        then obj inside m also will be null
+        then obj inside m also will be removed
     Set 
         collection of unique values.
         values can be of any type, primitive values or objects.
@@ -501,6 +504,7 @@ var c3 = 1;
         Object.assign()
             copies properties from one or more source objects to a target object.
             can be used to clone the object
+            does a shallow clone
             Object.assign(target, source(s))
         Object.keys()
             returns an array of object's own enumerable string-keyed property names.
@@ -516,6 +520,21 @@ var c3 = 1;
             get and set keywords are used to create methods which acts as properties
             useful for doing things behind-the-scenes
             can be used in classes also
+        shallow clone 
+            only copies first level of properties, if any properties have objects
+            or arrays, clone will reference same objects or arrays 
+            ex: Object.assign(), {...obj}, Array.slice()
+        deep clone 
+            create a completely independent copy of object
+            JSON.parse(JSON.stringify(obj))
+                can't handle functions,undefined, Symbols and circular reference 
+                loses Date objects (converts to string)
+                can't preserve Map, Set, RegExp etc
+            structuredClone() - modern browsers
+                handles circular references 
+                preserves most built-in types (Date,Set,Map etc)
+                can't handle functions 
+            cloneDeep() - lodash
 
 */
 const languageObj = {
