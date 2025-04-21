@@ -1410,9 +1410,33 @@ function curryFac(fn) {
     event.currentTarget
         element that the event listener is attached to
     some events don't propagate like focus event
-
-    Event object 
-        parent object of all event objects like click event object
+    Event class 
+        Events can be created with the Event constructor
+        ex: const event = new Event("build");
+    CustomEvent Interface 
+        To add more data to the event object
+        detail property can be used to pass custom data
+        ex: const event = new CustomEvent("build", { detail: data });
+    EventTarget Interface 
+        implemented by objects that can receive events and may have listeners for them.
+        addEventListener() method
+            sets up a function that will be called whenever the specified 
+            event is delivered to the target.
+        dispatchEvent() method 
+            invokes event handlers synchronously. 
+            All applicable event handlers are called and return before dispatchEvent() returns.
+            ex: dispatchEvent(event)
+        removeEventListener() method 
+            removes an event listener
+            ex: removeEventListener(type, listener)
+                removeEventListener(type, listener, options)
+                removeEventListener(type, listener, useCapture)
+    AbortController Interface
+        represents a controller object that allows you to abort one or more Web requests as and when desired.
+        ex: controller = new AbortController();
+            signal = controller.signal;
+            response = await fetch(url, { signal });
+            controller.abort()
 */
 
 // Event Bubbling: default (useCapture=false)
