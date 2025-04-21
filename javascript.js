@@ -496,10 +496,18 @@ var c3 = 1;
                 [user_name]:{...}
             } 
             here value of user_name will be taken as key
+        Object.create(object)
+            Creates an object from an existing object
         Object.assign()
             copies properties from one or more source objects to a target object.
             can be used to clone the object
             Object.assign(target, source(s))
+        Object.keys()
+            returns an array of object's own enumerable string-keyed property names.
+        obj.hasOwnProperty()
+            returns a boolean indicating whether this object has the specified
+            property as its own property (as opposed to inheriting it).
+            ex: {}.hasOwnProperty("toString") // false
         Object.freeze()
             takes an object, and makes it immutable
         Accessors (Getters and Setters)
