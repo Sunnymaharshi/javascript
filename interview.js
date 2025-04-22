@@ -658,3 +658,159 @@ original.circularRef = original;
 // console.log(cloned.birthDate !== original.birthDate); // true
 // console.log(cloned.regexTest !== original.regexTest); // true
 // console.log(cloned.address.city === original.address.city); // true
+
+// JSON.stringify() polyfill
+
+const jsonStringify = (value, seen = new WeakSet()) => {
+  // handle primitives
+  if (value === null) return "null";
+  if (typeof value === "string") return `"${value.replace(/"/g, '\\"')}"`;
+  if (typeof value === "number" || typeof value === "boolean")
+    return String(value);
+  if (typeof value === "undefined") return undefined;
+
+  // handle arrays, if item is undefined return 'null'
+  if (Array.isArray(value)) {
+    const items = value.map((item) => jsonStringify(item, seen) ?? "null");
+    return `[${items.join(",")}]`;
+  }
+
+  // handle plain objects
+  if (typeof value === "object") {
+    if (seen.has(value)) {
+      throw new Error("Circular reference found!");
+    }
+    seen.add(value);
+    const properties = [];
+    for (const key in value) {
+      if (value.hasOwnProperty(key)) {
+        const stringified = jsonStringify(value[key], seen);
+        if (stringified !== undefined) {
+          properties.push(`"${key}":${stringified}`);
+        }
+      }
+    }
+    return `'{${properties.join(",")}}'`;
+  }
+
+  // functions, symbols
+  return undefined;
+};
+
+const s_obj = {
+  name: "John",
+  age: 10,
+  city: "New York",
+  addr: ["chandpol", "avv"],
+  myUndefined: undefined,
+  myNull: null,
+  circularRef: null,
+  nested: {
+    name: "Nested",
+    valid: true,
+  },
+  fn: () => {},
+};
+// console.log(jsonStringify(s_obj));
+
+// How does the renderDom function create and append DOM elements based on the dom object structure
+const renderDOM = (domStructure, container = null) => {
+  // handle text nodes
+  if (typeof domStructure === "string" || typeof domStructure === "number") {
+    const textNode = document.createTextNode(domStructure);
+    if (container) {
+      container.appendChild(textNode);
+    }
+    return textNode;
+  }
+
+  // handle null and undefined
+  if (!domStructure) return null;
+
+  const { type, props = {}, children = [] } = domStructure;
+
+  // create DOM element
+  const element = document.createElement(type);
+
+  // handle props
+  Object.entries(props).forEach(([key, val]) => {
+    if (key === "style") {
+      element.style.cssText = val;
+    } else if (key !== "children") {
+      element.setAttribute(key, val);
+    }
+  });
+
+  // handle children
+  const childrenArray = Array.isArray(children) ? children : [children];
+  childrenArray.forEach((child) => element.appendChild(renderDOM(child)));
+
+  if (container) {
+    container.appendChild(textNode);
+  }
+  return element;
+};
+const dom = {
+  type: "section",
+  props: {
+    id: "section-1",
+    class: "main-section",
+    style: "background-color: lightblue; padding: 20px; border-radius: 5px;",
+  },
+  children: [
+    {
+      type: "header",
+      children: "Welcome to Soni Frontend Doc",
+      props: {
+        style: "font-size: 24px; color: darkblue; text-align: center;",
+      },
+    },
+    {
+      type: "article",
+      children: [
+        {
+          type: "h2",
+          children: "Render DOM",
+          props: { style: "color: darkgreen;" },
+        },
+        {
+          type: "p",
+          children: "Try youself first then look for solution",
+          props: { style: "font-size: 16px; color: grey;" },
+        },
+      ],
+    },
+    {
+      type: "footer",
+      children: "Thanks you :)",
+      props: {
+        style: "text-align: center; font-size: 14px; color: black;",
+      },
+    },
+  ],
+};
+// console.log(renderDOM(dom));
+
+// Retry promises N times
+const retryPromise = (promiseFn, maxAttempts = 3, delay = 1000) => {
+  return new Promise((resolve, reject) => {
+    const attempt = (n) => {
+      promiseFn()
+        .then(resolve)
+        .catch((e) => {
+          if (n > 1) {
+            // retry promise after delay
+            setTimeout(() => {
+              console.log("retrying");
+              attempt(n - 1);
+            }, delay);
+          } else {
+            console.log(`all ${maxAttempts} attempts failed`, e);
+            reject(e);
+          }
+        });
+    };
+    attempt(maxAttempts);
+  });
+};
+// retryPromise(() => Promise.resolve(), 2, 1000);
