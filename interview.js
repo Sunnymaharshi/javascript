@@ -386,7 +386,7 @@ class EventEmitter {
   }
 
   // addEventListener or subscribe the event
-  on(eventName, callback) {
+  subscribe(eventName, callback) {
     if (typeof callback !== "function") {
       throw new TypeError("callback must be a function");
     }
@@ -403,14 +403,23 @@ class EventEmitter {
     };
   }
 
+  // subscribeOnce
+  subscribeOnce(eventName, callback) {
+    const unsubscribe = this.subscribe(eventName, (payload) => {
+      callback(payload);
+      // this function forms a closure with outer function, can access unsubscribe
+      unsubscribe();
+    });
+  }
+
   // run all listeners which are listening to the event
-  emit(eventName, ...args) {
+  publish(eventName, ...args) {
     if (this.events[eventName]) {
       const listeners = [...this.events[eventName]];
       listeners.forEach((callback) => callback(...args));
     }
   }
-  off(eventName, callback) {
+  unsubscribe(eventName, callback) {
     if (this.events[eventName]) {
       this.events[eventName] = this.events[eventName].filter(
         (cb) => cb !== callback
