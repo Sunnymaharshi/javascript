@@ -546,9 +546,9 @@ const languageObj = {
     this.language = lang;
   },
 };
-console.log(person.lang); // en
-person.lang = "te";
-console.log(person.lang); // te
+// console.log(languageObj.lang); // en
+languageObj.lang = "te";
+// console.log(languageObj.lang); // te
 
 /*
     Spread operator (...variable)
@@ -647,7 +647,7 @@ let rangeGen = {
     }
   },
 };
-console.log([...rangeGen]);
+// console.log([...rangeGen]);
 /*
     Closure
         function along with surrounding state (lexical environment) 
@@ -800,7 +800,7 @@ const d2_arr = [
   [3, 4],
 ];
 const flaten = d2_arr.reduce((total, cur) => total.concat(cur), []);
-console.log(flaten); // [ 1, 2, 3, 4 ]
+// console.log(flaten); // [ 1, 2, 3, 4 ]
 
 // Callback Hell and Invertion of Control
 // calling APIs through functions
@@ -1365,9 +1365,9 @@ const add_two = function (a) {
   };
 };
 
-console.log(add_two(1)(2)); // 3
+// console.log(add_two(1)(2)); // 3
 const addTo5 = add_two(5);
-console.log(addTo5(1)); // 6
+// console.log(addTo5(1)); // 6
 // Curry factory function
 function curryFac(fn) {
   return function curried(...args) {
@@ -1672,7 +1672,7 @@ document.getElementById("form").addEventListener("keyup", (e) => {
 */
 
 // Debouncing on search bar
-getSearchData = () => {
+const getSearchData = () => {
   console.log("calling search data");
 };
 

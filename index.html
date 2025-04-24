@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Javascript Notes</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <h1>Javascript Notes</h1>
     <!-- Event Bubbling and Event Capturing/Trickling -->
+    <h2>Progress bar manager</h2>
+    <button id="add-p-btn">Add progress bar</button>
+    <button id="reset-p-btn">Reset progress</button>
+    <div id="progress-bars-container"></div>
     <h3>Event Bubbling and Event Capturing/Trickling</h3>
     <div id="grand-parent">
         Grand Parent
@@ -29,17 +35,17 @@
     <br>
     <form id="form">
         <label>First name</label>
-        <input type="text" data-uppercase/>
+        <input type="text" data-uppercase />
         <br>
         <label>Last name</label>
-        <input type="text" data-uppercase/>
+        <input type="text" data-uppercase />
     </form>
     <br>
     <br>
     <br>
     <!-- Debouncing -->
     <h3>Debouncing</h3>
-    <input type="text" placeholder="Search here" onkeyup="debounceSearchData()"/>
+    <input type="text" placeholder="Search here" onkeyup="debounceSearchData()" />
     <br>
     <br>
     <!-- Throttling -->
@@ -50,7 +56,10 @@
         <button class="slider_btn slider_btn--right">&rarr;</button>
         <div class="dots"></div>
     </div>
-    <h3 class="intersect" style="margin-bottom: 300%;margin-top: 30px; padding: 30px; background-color: aquamarine;">Intersection Observer Element (scroll to get visiblity in the screen callback)</h3>
-    <script src="javascript.js"></script>
+    <h3 class="intersect" style="margin-bottom: 300%;margin-top: 30px; padding: 30px; background-color: aquamarine;">
+        Intersection Observer Element (scroll to get visiblity in the screen callback)</h3>
+    <script src="javascript.js" type="module"></script>
+    <script src="interview.js" type="module"></script>
 </body>
+
 </html>
