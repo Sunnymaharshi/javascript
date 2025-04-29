@@ -973,94 +973,95 @@ const memoize = (func) => {
 };
 
 // Async progress bar - multiple progress bar with a limit on active at a time.
-const progress_container = document.getElementById("progress-bars-container");
-const add_progress = document.getElementById("add-p-btn");
-const reset_progress = document.getElementById("reset-p-btn");
-class ProgressManager {
-  constructor(maxConcurrent = 3, container_element) {
-    this.maxConcurrent = maxConcurrent;
-    this.activeCount = 0;
-    this.queue = [];
-    // to cleanup on reset, otherwise activeCount will go negative
-    // because of unremoved intervals after clicking reset
-    this.tracked_interval_ids = new Set();
-    this.container = container_element;
-  }
-  createProgressBar() {
-    const progress_wrapper = document.createElement("div");
-    Object.assign(progress_wrapper.style, {
-      height: "20px",
-      border: "1px black solid",
-      width: "300px",
-      marginBottom: "5px",
-    });
-    const progress = document.createElement("div");
-    Object.assign(progress.style, {
-      height: "100%",
-      width: "0%",
-      background: "green",
-    });
-    progress_wrapper.appendChild(progress);
-    this.container.appendChild(progress_wrapper);
-    return progress;
-  }
-  animateProgress(element) {
-    this.activeCount++;
-    let progress = 0;
-    const intervalId = setInterval(() => {
-      // avoid decreasing activeCount by removed progresses through reset
-      if (!element.isConnected) {
-        clearInterval(intervalId);
-        this.tracked_interval_ids.delete(intervalId);
-        // end execution here
-        return;
-      }
-      progress++;
-      element.style.width = `${progress}%`;
-      if (progress >= 100) {
-        clearInterval(intervalId);
-        // only decrement activeCount if interval is tracked
-        if (this.tracked_interval_ids.has(intervalId)) {
-          this.activeCount--;
+if (typeof document !== "undefined") {
+  const progress_container = document.getElementById("progress-bars-container");
+  const add_progress = document.getElementById("add-p-btn");
+  const reset_progress = document.getElementById("reset-p-btn");
+  class ProgressManager {
+    constructor(maxConcurrent = 3, container_element) {
+      this.maxConcurrent = maxConcurrent;
+      this.activeCount = 0;
+      this.queue = [];
+      // to cleanup on reset, otherwise activeCount will go negative
+      // because of unremoved intervals after clicking reset
+      this.tracked_interval_ids = new Set();
+      this.container = container_element;
+    }
+    createProgressBar() {
+      const progress_wrapper = document.createElement("div");
+      Object.assign(progress_wrapper.style, {
+        height: "20px",
+        border: "1px black solid",
+        width: "300px",
+        marginBottom: "5px",
+      });
+      const progress = document.createElement("div");
+      Object.assign(progress.style, {
+        height: "100%",
+        width: "0%",
+        background: "green",
+      });
+      progress_wrapper.appendChild(progress);
+      this.container.appendChild(progress_wrapper);
+      return progress;
+    }
+    animateProgress(element) {
+      this.activeCount++;
+      let progress = 0;
+      const intervalId = setInterval(() => {
+        // avoid decreasing activeCount by removed progresses through reset
+        if (!element.isConnected) {
+          clearInterval(intervalId);
           this.tracked_interval_ids.delete(intervalId);
-          this.runNextProgressBar();
+          // end execution here
+          return;
         }
+        progress++;
+        element.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(intervalId);
+          // only decrement activeCount if interval is tracked
+          if (this.tracked_interval_ids.has(intervalId)) {
+            this.activeCount--;
+            this.tracked_interval_ids.delete(intervalId);
+            this.runNextProgressBar();
+          }
+        }
+      }, 30);
+      this.tracked_interval_ids.add(intervalId);
+    }
+    runNextProgressBar() {
+      if (this.queue.length > 0 && this.activeCount < this.maxConcurrent) {
+        const next_progress = this.queue.shift();
+        this.animateProgress(next_progress);
       }
-    }, 30);
-    this.tracked_interval_ids.add(intervalId);
-  }
-  runNextProgressBar() {
-    if (this.queue.length > 0 && this.activeCount < this.maxConcurrent) {
-      const next_progress = this.queue.shift();
-      this.animateProgress(next_progress);
+    }
+
+    addProgressBar() {
+      const progressBar = this.createProgressBar();
+      this.queue.push(progressBar);
+      this.runNextProgressBar();
+    }
+    resetProgressBars() {
+      // remove all active intervals
+      this.tracked_interval_ids.forEach((id) => clearInterval(id));
+
+      this.tracked_interval_ids.clear();
+      this.queue.length = 0;
+      this.currentIndex = 0;
+      this.activeCount = 0;
+      this.container.innerHTML = "";
     }
   }
 
-  addProgressBar() {
-    const progressBar = this.createProgressBar();
-    this.queue.push(progressBar);
-    this.runNextProgressBar();
-  }
-  resetProgressBars() {
-    // remove all active intervals
-    this.tracked_interval_ids.forEach((id) => clearInterval(id));
-
-    this.tracked_interval_ids.clear();
-    this.queue.length = 0;
-    this.currentIndex = 0;
-    this.activeCount = 0;
-    this.container.innerHTML = "";
-  }
+  const progressManager = new ProgressManager(3, progress_container);
+  add_progress.addEventListener("click", () => {
+    progressManager.addProgressBar();
+  });
+  reset_progress.addEventListener("click", () => {
+    progressManager.resetProgressBars();
+  });
 }
-
-const progressManager = new ProgressManager(3, progress_container);
-add_progress.addEventListener("click", () => {
-  progressManager.addProgressBar();
-});
-reset_progress.addEventListener("click", () => {
-  progressManager.resetProgressBars();
-});
-
 // Group by polyfill
 const groupBy = (collection, keyFnOrPath) => {
   if (typeof keyFnOrPath !== "function" && typeof keyFnOrPath !== "string") {
@@ -1296,6 +1297,8 @@ async function executeParallel(
   const remainingDeps = new Map(outDegree);
   const readyTasks = [];
   // Add initially ready tasks (0 dependencies)
+  // here, we don't actually need topological order as we mainly depending on
+  // out degree and reverseAdjList to run parallel tasks and their dependants
   topologicalOrder.forEach((task) => {
     if (remainingDeps.get(task) === 0) {
       readyTasks.push(task);
@@ -1392,3 +1395,124 @@ async function executeParallel(
 // executeParallel(adjList, topologicalOrder, outDegree, 2).then((result) =>
 //   console.log(result)
 // );
+
+/*
+    debounce with leading and trailing edge
+        these options control when debounced fn is executed relative to delay period.
+        trailing edge (default)
+            function will only execute after specified delay period since last call 
+            usecase: search after typing.
+        leading edge 
+            function will execute at beginning of the delay period 
+            aka on leading edge of event
+            usecase: execute fn immediately after event, avoid excessive calls 
+        both leading & trailing edge 
+            function is executed at both beginning and end of delay period
+            leading execution happens on the first call, and trailing execution
+            happens only if there are calls within delay period             
+*/
+
+const debounceAdv = function (func, delay, options = {}) {
+  const { leading = false, trailing = true } = options;
+  let timeoutId = null;
+  let isLeadingInvoked = false;
+
+  // if both trailing & leading are disabled, do nothing
+  if (!trailing && !leading) {
+    return function () {
+      return null;
+    };
+  }
+
+  return function (...args) {
+    let context = this; // store context
+    // timeoutId not exists means first call or timeout period is completed
+    // (func is executed in trailing edge if trailing is enabled )
+    // and leading is true, execute func in leading edge again
+    const callNow = !timeoutId && leading;
+
+    // if not leading edge
+    if (!callNow) {
+      isLeadingInvoked = false;
+    }
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      // if trailing enabled and not a leading edge, execute func in trailing edge
+      // if leading is executed, no need to run trailing for same args
+      if (trailing && !isLeadingInvoked) {
+        func.call(context, ...args);
+      }
+      // make timeoutId null, marking timeout period is completed
+      timeoutId = null;
+    }, delay);
+
+    // if leading enabled, execute func in leading edge
+    // without tracking leading invocations, a debounce function with both leading and
+    // trailing true might execute twice for single user action
+    // once immediately (leading) & once after timeout (trailing)
+    if (callNow) {
+      isLeadingInvoked = true;
+      func.call(context, ...args);
+    }
+  };
+};
+
+/*
+    Map limit 
+        inputs 
+            array of inputs to be processed
+        max_limit 
+            max no of concurrent operations that can be executed
+        iterateeFn 
+            async function that need to be called on each input 
+            args: input, callback that is invoked with result 
+            as arg after processing the input 
+        callback
+            invoked with all the results when all inputs are processed 
+
+            
+*/
+function asyncIterFn(input, cb) {
+  const delay = Math.round(Math.random() * 10) * 1000 + 100;
+  console.log(`Starting processing: ${input} (will take ${delay}ms)`);
+  setTimeout(() => {
+    cb(`Processed ${input}`);
+  }, delay);
+}
+function finalCallback(allResults) {
+  console.log("Results:", allResults);
+}
+function myMapList(inputs, max_limit, iterateeFn, callback) {
+  if (!inputs || !inputs.length) {
+    return callback([]);
+  }
+  const results = new Array(inputs.length);
+  let running = 0;
+  let index = 0;
+  let completed = 0;
+
+  function processNext() {
+    if (completed === inputs.length) {
+      return callback(results);
+    }
+    // here while loop quickly starts async iterateeFn until the limit or all inputs, and exits loop
+    // main thread will be free so event loop runs those async iterateeFn's
+    // while loop does not wait for iterateeFn to complete, so it won't block the main thread
+    while (index < inputs.length && running < max_limit) {
+      const currentIndex = index++;
+      running++;
+      // callback passed here forms a closure with processNext() as it is defined inside it
+      iterateeFn(inputs[currentIndex], (res) => {
+        console.log(`Completed ${inputs[currentIndex]}`);
+        results[currentIndex] = res;
+        completed++;
+        running--;
+        // once input is processed, start processing next input
+        processNext();
+      });
+    }
+  }
+  processNext();
+}
+// myMapList([1, 2, 3, 4, 5], 2, asyncIterFn, finalCallback);
