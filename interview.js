@@ -1561,8 +1561,11 @@ const cPromise = Promise.cancelable(
         Doubly linked list to track least recently used and most recently used 
         least recently used at end, removed when needed 
         most recently used or new one at the front 
-        
-
+        Map 
+            stores keys in order of insertion 
+            so you can use keys() to remove at begining (lru) 
+            adding will always be at end (mru)
+            if less time is given, use keys() instead of doubly linked list 
 */
 class Node {
   constructor(key, val) {
@@ -1574,11 +1577,12 @@ class Node {
 }
 
 class LRU {
-  constructor(capacity) {
+  constructor(capacity, debug = false) {
     if (capacity <= 0) {
       throw new Error("Invalid capacity");
     }
     this.capacity = capacity;
+    this.debug = debug;
     // stores key -> node
     this.cache = new Map();
     // dummy head, head.next -> MRU item
@@ -1604,7 +1608,9 @@ class LRU {
   // remove node at the end (least recently used)
   removeLRU() {
     const lruNode = this.tail.prev;
-    console.log("Removing least recently used:", lruNode.key);
+    if (this.debug) {
+      console.log("Removing least recently used:", lruNode.key);
+    }
     this.removeNode(lruNode);
     return lruNode;
   }
@@ -1613,7 +1619,9 @@ class LRU {
       return -1;
     }
     const node = this.cache.get(key);
-    console.log(`Retrieving ${key}: ${node.value}`);
+    if (this.debug) {
+      console.log(`Retrieving ${key}: ${node.value}`);
+    }
     this.removeNode(node);
     this.addToFront(node);
     this.printDoublyListandCache();
@@ -1626,7 +1634,9 @@ class LRU {
       // get node and update it's value
       const node = this.cache.get(key);
       node.value = val;
-      console.log(`Updating ${key}: ${val}`);
+      if (this.debug) {
+        console.log(`Updating ${key}: ${val}`);
+      }
       // remove node from it's current position
       this.removeNode(node);
       // move node to the front since it is most recently used
@@ -1639,7 +1649,9 @@ class LRU {
       // remove lru from cache
       this.cache.delete(lruNode.key);
     }
-    console.log(`Adding key:${key}: ${val}`);
+    if (this.debug) {
+      console.log(`Adding ${key}: ${val}`);
+    }
     const newNode = new Node(key, val);
     this.addToFront(newNode);
     this.cache.set(key, newNode);
@@ -1647,6 +1659,9 @@ class LRU {
   }
 
   printDoublyListandCache() {
+    if (!this.debug) {
+      return;
+    }
     let current = this.head.next;
     const items = [];
     while (current !== this.tail) {
@@ -1669,3 +1684,40 @@ class LRU {
 // lruCache.put(4, "four");
 // lruCache.put(3, "THREE");
 // lruCache.get(4);
+
+class TypeAheadCache {
+  constructor(capacity) {
+    this.cache = new LRU(capacity);
+  }
+  async search(query, fetchResults) {
+    if (!query || query.trim() === "") {
+      return [];
+    }
+    const cachedResults = this.cache.get(query);
+    if (cachedResults !== -1) {
+      console.log("Cache hit for", query);
+      return cachedResults;
+    }
+    const results = await fetchResults(query);
+    this.cache.put(query, results);
+    return results;
+  }
+  clearCache() {
+    this.cache = new LRU(this.cache.capacity);
+  }
+}
+function fetchResults(query) {
+  console.log(`Fetching for ${query}`);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([`Result for ${query}`]);
+    }, 500);
+  });
+}
+
+// (async () => {
+//   const typeAhead = new TypeAheadCache(2);
+//   console.log("fetch result:", await typeAhead.search("apple", fetchResults));
+//   console.log("fetch result:", await typeAhead.search("banana", fetchResults));
+//   console.log("fetch result:", await typeAhead.search("apple", fetchResults));
+// })();
