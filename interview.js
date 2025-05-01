@@ -1555,3 +1555,117 @@ const cPromise = Promise.cancelable(
   new Promise((resolve) => setTimeout(() => resolve("data"), 1000))
 );
 // cPromise.cancel();
+
+/*
+    Least Recently Used (LRU) Cache 
+        Doubly linked list to track least recently used and most recently used 
+        least recently used at end, removed when needed 
+        most recently used or new one at the front 
+        
+
+*/
+class Node {
+  constructor(key, val) {
+    this.key = key;
+    this.value = val;
+    this.prev = null;
+    this.next = null;
+  }
+}
+
+class LRU {
+  constructor(capacity) {
+    if (capacity <= 0) {
+      throw new Error("Invalid capacity");
+    }
+    this.capacity = capacity;
+    // stores key -> node
+    this.cache = new Map();
+    // dummy head, head.next -> MRU item
+    this.head = new Node(null, null);
+    // dummy tail, tail.prev -> LRU item
+    this.tail = new Node(null, null);
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+  }
+
+  // remove node from the Doubly list
+  removeNode(node) {
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+  }
+  // add right after head (most recently used)
+  addToFront(node) {
+    node.next = this.head.next;
+    node.prev = this.head;
+    this.head.next.prev = node;
+    this.head.next = node;
+  }
+  // remove node at the end (least recently used)
+  removeLRU() {
+    const lruNode = this.tail.prev;
+    console.log("Removing least recently used:", lruNode.key);
+    this.removeNode(lruNode);
+    return lruNode;
+  }
+  get(key) {
+    if (!this.cache.has(key)) {
+      return -1;
+    }
+    const node = this.cache.get(key);
+    console.log(`Retrieving ${key}: ${node.value}`);
+    this.removeNode(node);
+    this.addToFront(node);
+    this.printDoublyListandCache();
+    return node.value;
+  }
+
+  // most recently used item
+  put(key, val) {
+    if (this.cache.has(key)) {
+      // get node and update it's value
+      const node = this.cache.get(key);
+      node.value = val;
+      console.log(`Updating ${key}: ${val}`);
+      // remove node from it's current position
+      this.removeNode(node);
+      // move node to the front since it is most recently used
+      this.addToFront(node);
+      this.printDoublyListandCache();
+      return;
+    }
+    if (this.cache.size >= this.capacity) {
+      const lruNode = this.removeLRU();
+      // remove lru from cache
+      this.cache.delete(lruNode.key);
+    }
+    console.log(`Adding key:${key}: ${val}`);
+    const newNode = new Node(key, val);
+    this.addToFront(newNode);
+    this.cache.set(key, newNode);
+    this.printDoublyListandCache();
+  }
+
+  printDoublyListandCache() {
+    let current = this.head.next;
+    const items = [];
+    while (current !== this.tail) {
+      items.push(`${current.key}=${current.value}`);
+      current = current.next;
+    }
+    console.log(`Doubly list (MRU to LRU): \n${items.join(" -> ")}`);
+    console.log("Cache: {");
+    for (const [key, val] of this.cache) {
+      console.log(`   ${key}:${JSON.stringify(val.value)}`);
+    }
+    console.log("}");
+  }
+}
+
+// const lruCache = new LRU(3);
+// lruCache.put(1, "one");
+// lruCache.put(2, "two");
+// lruCache.put(3, "three");
+// lruCache.put(4, "four");
+// lruCache.put(3, "THREE");
+// lruCache.get(4);
