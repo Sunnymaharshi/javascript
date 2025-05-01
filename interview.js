@@ -1575,7 +1575,6 @@ class Node {
     this.next = null;
   }
 }
-
 class LRU {
   constructor(capacity, debug = false) {
     if (capacity <= 0) {
@@ -1592,7 +1591,6 @@ class LRU {
     this.head.next = this.tail;
     this.tail.prev = this.head;
   }
-
   // remove node from the Doubly list
   removeNode(node) {
     node.prev.next = node.next;
@@ -1627,7 +1625,6 @@ class LRU {
     this.printDoublyListandCache();
     return node.value;
   }
-
   // most recently used item
   put(key, val) {
     if (this.cache.has(key)) {
@@ -1657,7 +1654,6 @@ class LRU {
     this.cache.set(key, newNode);
     this.printDoublyListandCache();
   }
-
   printDoublyListandCache() {
     if (!this.debug) {
       return;
@@ -1676,7 +1672,6 @@ class LRU {
     console.log("}");
   }
 }
-
 // const lruCache = new LRU(3);
 // lruCache.put(1, "one");
 // lruCache.put(2, "two");
@@ -1684,7 +1679,6 @@ class LRU {
 // lruCache.put(4, "four");
 // lruCache.put(3, "THREE");
 // lruCache.get(4);
-
 class TypeAheadCache {
   constructor(capacity) {
     this.cache = new LRU(capacity);
@@ -1714,7 +1708,6 @@ function fetchResults(query) {
     }, 500);
   });
 }
-
 // (async () => {
 //   const typeAhead = new TypeAheadCache(2);
 //   console.log("fetch result:", await typeAhead.search("apple", fetchResults));
