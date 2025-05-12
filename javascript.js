@@ -839,12 +839,12 @@ createOrder(cart)
     .then((paymentStatus)=> confirmation(paymentStatus));
 */
 const GITHUB_USER_API = "https://api.github.com/users/Sunnymaharshi";
-const user = fetch(GITHUB_USER_API);
+// const user = fetch(GITHUB_USER_API);
 
 // console.log(user)          // output: Promise {<pending>}
-user.then(function (data) {
-  // console.log(data);
-});
+// user.then(function (data) {
+//   // console.log(data);
+// });
 
 /*  Promise Chain and Promise creation
         We need to return data coming from 1 promise to pass it to next Promise in Promise Chain
@@ -1672,8 +1672,8 @@ document.getElementById("form").addEventListener("keyup", (e) => {
 */
 
 // Debouncing on search bar
-const getSearchData = () => {
-  console.log("calling search data");
+const getSearchData = (query) => {
+  console.log("calling search data:", query);
 };
 
 // simple debounce function
