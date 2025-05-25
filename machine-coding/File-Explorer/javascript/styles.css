@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Courier New", Courier, monospace;
+  padding: 20px;
+}
+.folder-content {
+  display: none;
+  margin-left: 15px;
+  width: 150px;
+}
+
+.folder {
+  color: black;
+  background-color: grey;
+  width: 200px;
+  user-select: none;
+}
+.folder-header {
+  padding: 0 7px;
+  height: 20px;
+}
+.folder.open > .folder-header {
+  background-color: skyblue;
+  color: white;
+}
+.folder.open > .folder-header .folder-icon svg {
+  transform: rotate(90deg);
+}
+.folder.open > .folder-content {
+  display: block;
+}
+.folder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 10px;
+}
+.folder-header i {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+}
+.folder-name-container {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 10px;
+}
+.folder-name {
+  height: 100%;
+}
+.folder-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.delete-btn,
+.add-sub-btn {
+  padding: 0;
+  border: 0;
+  height: 15px;
+  width: 15px;
+  background-color: transparent;
+  cursor: pointer;
+}
+svg {
+  width: 15px;
+  height: 15px;
+}
+.input-container {
+  width: 100%;
+  display: flex;
+  flex: 1 1;
+}
+.folder-input {
+  width: 153px;
+}
+.save-btn {
+  width: 50px;
+}
