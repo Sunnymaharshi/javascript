@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "isFolder": true,
+    "name": "public",
+    "children": [
+      {
+        "id": "2",
+        "isFolder": false,
+        "name": "favicon.ico",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "src",
+    "isFolder": true,
+    "children": []
+  }
+]

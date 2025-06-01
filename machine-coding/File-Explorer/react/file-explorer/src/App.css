@@ -3,12 +3,11 @@
   margin: 0 auto;
   padding: 2rem;
 }
-
 .folder {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
+  width: 300px;
   background-color: grey;
   cursor: pointer;
   user-select: none;
@@ -19,6 +18,45 @@
   align-items: center;
 }
 .folder > div > button {
+  font-size: 14px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+.folder > span {
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+}
+.folder > span > svg.rotate-icon {
+  transform: rotate(90deg);
+  transition: transform 200ms;
+}
+.folder > span > svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+  stroke-width: 30px;
+  stroke: black;
+  transform: rotate(0);
+  transition: transform 200ms;
+}
+.file > span {
+  line-height: 24px;
+}
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  background-color: grey;
+  cursor: pointer;
+  user-select: none;
+  margin: 3px 0;
+}
+.file > button {
   font-size: 14px;
   background-color: white;
   color: black;

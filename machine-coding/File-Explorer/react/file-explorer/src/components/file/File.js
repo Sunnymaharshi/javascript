@@ -1,7 +1,9 @@
-const File = ({ file }) => {
+const File = ({ name, id, deleteNodeFromList }) => {
   return (
-    <div>
-      <span>📄{file.name}</span>
+    <div className="file">
+      <span>📄{name}</span>
+
+      <button onClick={() => deleteNodeFromList(id)}>Delete</button>
     </div>
   );
 };
