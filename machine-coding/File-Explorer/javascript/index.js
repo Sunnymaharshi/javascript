@@ -1,61 +1,57 @@
-const folderStructure =
-  JSON.parse(localStorage.getItem("folderStructure")) ?? [];
-let nextId = localStorage.getItem("nextId") ?? 1;
-nextId = +nextId;
-console.log(nextId);
-const foldersContainer = document.getElementById("folder-structure");
-foldersContainer.addEventListener("click", (e) => {
-  const folderClasses = [
-    "folder",
-    "folder-header",
-    "folder-name",
-    "folder-icon",
-    "folder-actions",
-    "svg-icon",
-  ];
-  if (
-    Array.from(e.target.classList).some((cls) => folderClasses.includes(cls))
-  ) {
-    let temp = e.target;
-    while (!Array.from(temp.classList).includes("folder")) {
-      temp = temp.parentElement;
-    }
-    temp.classList.toggle("open");
-  }
-});
-function renderFolderStructure() {
-  const container = document.getElementById("folder-structure");
+let explorer = JSON.parse(localStorage.getItem("explorer")) ?? [];
+const foldersContainer = document.getElementById("container");
+function renderExplorer() {
+  const container = document.getElementById("container");
   container.innerHTML = "";
-  folderStructure.forEach((folder) => {
+  explorer.forEach((folder) => {
     container.appendChild(createFolder(folder));
   });
 }
 function createFolder(folder) {
   const folderDiv = document.createElement("div");
   folderDiv.className = "folder";
-  folderDiv.id = `folder-${folder.id}`;
+  folderDiv.id = "id-" + folder.id;
   const folderHeader = document.createElement("div");
   folderHeader.className = "folder-header";
   const folderNameCon = document.createElement("div");
   folderNameCon.className = "folder-name-container";
   const folderName = document.createElement("span");
   folderName.className = "folder-name";
-  folderName.innerText = `📁 ${folder.name}`;
-  const collapseIcon = document.createElement("i");
-  collapseIcon.className = "folder-icon";
-  collapseIcon.innerHTML = `
-    <svg class="svg-icon" width="10" height="10" viewBox="0 0 10 10">
-        <polygon class="svg-icon" points="2,1 8,5 2,9" fill="#000" />    
-    </svg>
+  folderName.innerText = `${folder.isFolder ? "📁" : "📄"} ${folder.name}`;
+  if (folder.isFolder) {
+    const collapseIcon = document.createElement("i");
+    collapseIcon.className = "folder-icon";
+    collapseIcon.innerHTML = `
+    <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={isOpen ? "rotate-icon" : ""}
+          viewBox="0 0 1024 1024"
+          version="1.1"
+        >
+          <path
+            d="M682.666667 533.333333a21.333333 21.333333 0 0 1-15.146667-6.186666l-298.666667-298.666667a21.333333 21.333333 0 0 1 30.293334-30.293333l298.666666 298.666666a21.333333 21.333333 0 0 1 0 30.293334A21.333333 21.333333 0 0 1 682.666667 533.333333z"
+            fill="#333333"
+          />
+          <path
+            d="M384 832a21.333333 21.333333 0 0 1-15.146667-6.186667 21.333333 21.333333 0 0 1 0-30.293333l298.666667-298.666667a21.333333 21.333333 0 0 1 30.293333 30.293334l-298.666666 298.666666A21.333333 21.333333 0 0 1 384 832z"
+            fill="#333333"
+          />
+        </svg>
     `;
-  folderNameCon.appendChild(collapseIcon);
+    folderNameCon.appendChild(collapseIcon);
+    folderHeader.addEventListener("click", (e) => {
+      e.currentTarget.parentElement.classList.toggle("open");
+    });
+  }
   folderNameCon.appendChild(folderName);
   folderHeader.appendChild(folderNameCon);
   folderDiv.appendChild(folderHeader);
   const folderActions = document.createElement("div");
   folderActions.className = "folder-actions";
-  const addButton = document.createElement("button");
-  addButton.innerHTML = `
+  if (folder.isFolder) {
+    const addFolderBtn = document.createElement("button");
+    const addFileBtn = document.createElement("button");
+    addFolderBtn.innerHTML = `
   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" version="1.1" id="Ebene_1" width="800px" height="800px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
 <g>
 	<path d="M62,14H30.829l-7.415-7.414C23.039,6.211,22.53,6,22,6H2C0.896,6,0,6.896,0,8v44c0,1.104,0.896,2,2,2h60   c1.104,0,2-0.896,2-2V16C64,14.896,63.104,14,62,14z M60,50H4V10h17.171l7.415,7.414C28.961,17.789,29.47,18,30,18h30V50z"/>
@@ -63,10 +59,23 @@ function createFolder(folder) {
 </g>
 </svg>
   `;
-  addButton.className = "add-sub-btn";
-  addButton.addEventListener("click", (e) => {
-    addNewFolder(folder.id);
-  });
+    addFileBtn.innerHTML = `
+  <svg width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none"><polyline points="34.48 54.28 11.06 54.28 11.06 18.61 23.02 5.75 48.67 5.75 48.67 39.42"></polyline><polyline points="23.04 5.75 23.02 18.61 11.06 18.61"></polyline><line x1="16.21" y1="45.68" x2="28.22" y2="45.68"></line><line x1="16.21" y1="39.15" x2="31.22" y2="39.15"></line><line x1="16.21" y1="33.05" x2="43.22" y2="33.05"></line><line x1="16.21" y1="26.95" x2="43.22" y2="26.95"></line><circle cx="42.92" cy="48.24" r="10.01" stroke-linecap="round"></circle><line x1="42.92" y1="42.76" x2="42.92" y2="53.72"></line><line x1="37.45" y1="48.24" x2="48.4" y2="48.24"></line></svg>
+  `;
+    addFolderBtn.className = "add-folder-btn";
+    addFileBtn.className = "add-file-btn";
+    addFolderBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addNewFolder(true, folder.id);
+    });
+    addFileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addNewFolder(false, folder.id);
+    });
+    folderActions.appendChild(addFolderBtn);
+    folderActions.appendChild(addFileBtn);
+  }
+
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
@@ -78,11 +87,8 @@ function createFolder(folder) {
     e.stopPropagation();
     deleteFolder(folder.id);
   });
-
-  folderActions.appendChild(addButton);
   folderActions.appendChild(deleteButton);
   folderHeader.appendChild(folderActions);
-
   const folderContent = document.createElement("div");
   folderContent.className = "folder-content";
   if (folder.children && folder.children.length > 0) {
@@ -91,129 +97,110 @@ function createFolder(folder) {
     });
   }
   folderDiv.appendChild(folderContent);
-
   return folderDiv;
 }
-function addNewFolder(parentId = null) {
+function addNewFolder(isFolder, parentId = null) {
   const inputContainer = document.createElement("div");
-  inputContainer.className = "input-container";
+  inputContainer.id = "input-container";
   const input = document.createElement("input");
-  input.className = "folder-input";
-  const save = document.createElement("button");
-  save.className = "save-btn";
-  save.textContent = "save";
+  input.className = "input";
   inputContainer.appendChild(input);
-  inputContainer.appendChild(save);
   if (parentId === null) {
-    const foldersContainer = document.getElementById("folder-structure");
+    const foldersContainer = document.getElementById("container");
     foldersContainer.appendChild(inputContainer);
   } else {
     const parentFolderContent = document.querySelector(
-      `#folder-${parentId} > .folder-content`
+      `#id-${parentId} > .folder-content`
     );
-
     parentFolderContent.appendChild(inputContainer);
     parentFolderContent.parentElement.classList.add("open");
   }
   input.addEventListener("blur", (e) => {
-    setTimeout(() => {
-      inputContainer.remove();
-    }, 100);
+    inputContainer.remove();
   });
   input.addEventListener("keyup", function (event) {
+    const folderName = event.target.value.trim();
     if (event.key === "Enter") {
-      save.click();
-    }
-  });
-  input.focus();
-  save.addEventListener("click", (e) => {
-    const folderName = input.value.trim();
-    if (folderName) {
-      const newFolder = {
-        id: nextId++,
-        name: folderName,
-        children: [],
-      };
-      if (parentId === null) {
-        folderStructure.push(newFolder);
-        saveFolderStructure();
-        const foldersContainer = document.getElementById("folder-structure");
-        foldersContainer.appendChild(createFolder(newFolder));
-      } else {
-        const parent = findFolder(folderStructure, parentId);
-        if (parent) {
-          parent.children.push(newFolder);
-          saveFolderStructure();
+      if (folderName) {
+        const newFolder = {
+          id: new Date().getTime(),
+          name: folderName,
+          isFolder,
+          children: [],
+        };
+        if (parentId === null) {
+          explorer = [...explorer, newFolder];
+          saveExplorer();
+          const foldersContainer = document.getElementById("container");
+          foldersContainer.appendChild(createFolder(newFolder));
+        } else {
+          addNodeToList(explorer, parentId, newFolder);
+          saveExplorer();
           const parentFolderContent = document.querySelector(
-            `#folder-${parentId} > .folder-content`
+            `#id-${parentId} > .folder-content`
           );
 
           parentFolderContent.appendChild(createFolder(newFolder));
           parentFolderContent.parentElement.classList.add("open");
         }
       }
+      input.blur();
     }
-    inputContainer.remove();
   });
+  input.focus();
 }
-function saveFolderStructure() {
-  localStorage.setItem("folderStructure", JSON.stringify(folderStructure));
-  localStorage.setItem("nextId", nextId.toString());
+function saveExplorer() {
+  localStorage.setItem("explorer", JSON.stringify(explorer));
 }
-function deleteFolder(folderId) {
-  if (
-    confirm("Are you sure you want to delete this folder & all it's contents")
-  ) {
-    // check root folders
-    for (let i = 0; i < folderStructure.length; i++) {
-      if (folderStructure[i].id === folderId) {
-        folderStructure.splice(i, 1);
-        saveFolderStructure();
-        renderFolderStructure();
-        return;
-      }
-    }
-    // if it is nested folder
-    const result = deleteNestedFolder(folderStructure, folderId);
-    if (result) {
-      saveFolderStructure();
-      renderFolderStructure();
-    }
-  }
+function deleteFolder(id) {
+  const updateTree = (list) => {
+    // filter list
+    return (
+      list
+        .filter((node) => node.id !== id)
+        // for each sub list call recursive function to update children
+        .map((node) => {
+          if (node.children) {
+            return { ...node, children: updateTree(node.children) };
+          }
+          return node;
+        })
+    );
+  };
+  explorer = updateTree(explorer);
+  document.getElementById(`id-${id}`).remove();
+  saveExplorer();
 }
-function deleteNestedFolder(folders, folderId) {
-  for (let i = 0; i < folders.length; i++) {
-    const folder = folders[i];
-    if (folder.children) {
-      for (let j = 0; j < folder.children.length; j++) {
-        if (folder.children[j].id === folderId) {
-          folder.children.splice(j, 1);
-          return true;
-        }
+
+function addNodeToList(explorer, parentId, newFolder) {
+  const updateTree = (list) => {
+    return list.map((node) => {
+      if (node.id === parentId) {
+        // update node, with added node
+        const nodeCopy = { ...node };
+        nodeCopy.children.unshift(newFolder);
+        return nodeCopy;
       }
-      if (deleteNestedFolder(folder.children, folderId)) {
-        return true;
+      // call recursive function for children
+      if (node.children) {
+        return {
+          ...node,
+          children: updateTree(node.children),
+        };
       }
-    }
-  }
-}
-function findFolder(folders, folderId) {
-  for (let i = 0; i < folders.length; i++) {
-    if (folders[i].id === folderId) {
-      return folders[i];
-    }
-    if (folders[i].children) {
-      const found = findFolder(folders[i].children, folderId);
-      if (found) {
-        return found;
-      }
-    }
-  }
+      return node;
+    });
+  };
+
+  explorer = updateTree(explorer);
 }
 document
   .getElementById("add-root-folder-btn")
   .addEventListener("click", (e) => {
-    addNewFolder();
+    addNewFolder(true);
   });
+document.getElementById("add-root-file-btn").addEventListener("click", (e) => {
+  addNewFolder(false);
+});
 // Initial render
-renderFolderStructure();
+renderExplorer();

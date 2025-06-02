@@ -4,8 +4,11 @@
   box-sizing: border-box;
 }
 body {
-  font-family: "Courier New", Courier, monospace;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   padding: 20px;
+}
+#container {
+  margin-top: 10px;
 }
 .folder-content {
   display: none;
@@ -15,20 +18,24 @@ body {
 
 .folder {
   color: black;
-  background-color: grey;
-  width: 200px;
+
   user-select: none;
 }
 .folder-header {
   padding: 0 7px;
   height: 20px;
+  background-color: whitesmoke;
+  cursor: pointer;
+  font-weight: 500;
+  width: 250px;
 }
 .folder.open > .folder-header {
-  background-color: skyblue;
+  background-color: #3297fd;
   color: white;
 }
 .folder.open > .folder-header .folder-icon svg {
   transform: rotate(90deg);
+  transition: transform 200ms;
 }
 .folder.open > .folder-content {
   display: block;
@@ -60,7 +67,8 @@ body {
   gap: 10px;
 }
 .delete-btn,
-.add-sub-btn {
+.add-file-btn,
+.add-folder-btn {
   padding: 0;
   border: 0;
   height: 15px;
@@ -72,14 +80,24 @@ svg {
   width: 15px;
   height: 15px;
 }
-.input-container {
-  width: 100%;
-  display: flex;
-  flex: 1 1;
+
+.folder-icon {
+  display: flex !important;
+  align-items: center;
 }
-.folder-input {
-  width: 153px;
+.folder-icon svg {
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+  stroke-width: 30px;
+  stroke: black;
+  transform: rotate(0);
+  transition: transform 200ms;
 }
+.input {
+  width: 250px;
+}
+
 .save-btn {
   width: 50px;
 }
