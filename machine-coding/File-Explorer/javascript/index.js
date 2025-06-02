@@ -1,4 +1,77 @@
-let explorer = JSON.parse(localStorage.getItem("explorer")) ?? [];
+let explorer = [];
+const local = JSON.parse(localStorage.getItem("explorer"));
+const defaultExplorer = [
+  {
+    id: 1748856823963,
+    name: "src",
+    isFolder: true,
+    children: [
+      {
+        id: 1748856903825,
+        name: "assets",
+        isFolder: true,
+        children: [
+          {
+            id: 1748856944687,
+            name: "svg",
+            isFolder: true,
+            children: [],
+          },
+          {
+            id: 1748856907668,
+            name: "img",
+            isFolder: true,
+            children: [
+              {
+                id: 1748856915301,
+                name: "image.png",
+                isFolder: false,
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 1748856850091,
+        name: "components",
+        isFolder: true,
+        children: [
+          {
+            id: 1748856874120,
+            name: "home",
+            isFolder: true,
+            children: [
+              {
+                id: 1748856893828,
+                name: "Home.js",
+                isFolder: false,
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 1748856859541,
+    name: "public",
+    isFolder: true,
+    children: [],
+  },
+  {
+    id: 1748856964537,
+    name: "pack.json",
+    isFolder: false,
+    children: [],
+  },
+];
+if (local?.length) {
+  explorer = local;
+} else {
+  explorer = defaultExplorer;
+}
 const foldersContainer = document.getElementById("container");
 function renderExplorer() {
   const container = document.getElementById("container");
@@ -17,6 +90,9 @@ function createFolder(folder) {
   folderNameCon.className = "folder-name-container";
   const folderName = document.createElement("span");
   folderName.className = "folder-name";
+  if (!folder.isFolder) {
+    folderName.classList.add("file");
+  }
   folderName.innerText = `${folder.isFolder ? "📁" : "📄"} ${folder.name}`;
   if (folder.isFolder) {
     const collapseIcon = document.createElement("i");

@@ -1,21 +1,67 @@
 [
   {
-    "id": "1",
+    "id": 1748856823963,
+    "name": "src",
     "isFolder": true,
-    "name": "public",
     "children": [
       {
-        "id": "2",
-        "isFolder": false,
-        "name": "favicon.ico",
-        "children": []
+        "id": 1748856903825,
+        "name": "assets",
+        "isFolder": true,
+        "children": [
+          {
+            "id": 1748856944687,
+            "name": "svg",
+            "isFolder": true,
+            "children": []
+          },
+          {
+            "id": 1748856907668,
+            "name": "img",
+            "isFolder": true,
+            "children": [
+              {
+                "id": 1748856915301,
+                "name": "image.png",
+                "isFolder": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 1748856850091,
+        "name": "components",
+        "isFolder": true,
+        "children": [
+          {
+            "id": 1748856874120,
+            "name": "home",
+            "isFolder": true,
+            "children": [
+              {
+                "id": 1748856893828,
+                "name": "Home.js",
+                "isFolder": false,
+                "children": []
+              }
+            ]
+          }
+        ]
       }
     ]
   },
   {
-    "id": "3",
-    "name": "src",
+    "id": 1748856859541,
+    "name": "public",
     "isFolder": true,
+    "children": []
+  },
+  {
+    "id": 1748856964537,
+    "name": "pack.json",
+    "isFolder": false,
     "children": []
   }
 ]

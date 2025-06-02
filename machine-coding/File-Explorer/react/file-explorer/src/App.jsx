@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import explorer from "../data/folderData.json";
 import "./App.css";
 import Explorer from "./components/explorer/FolderList";
-
 function App() {
   const [explorerData, setExplorerData] = useState(
     "explorer" in localStorage
-      ? JSON.parse(localStorage.getItem("explorer"))
+      ? JSON.parse(localStorage.getItem("explorer"))?.length
+        ? JSON.parse(localStorage.getItem("explorer"))
+        : explorer
       : explorer
   );
   const [showInput, setShowInput] = useState({
@@ -19,7 +20,7 @@ function App() {
   const addRootNode = (e) => {
     if (e.key === "Enter" && e.target.value) {
       const explorerCopy = [...explorerData];
-      explorerCopy.unshift({
+      explorerCopy.push({
         id: new Date().getTime(),
         name: e.target.value,
         isFolder: showInput.isFolder,
@@ -101,6 +102,12 @@ function App() {
         >
           Add root file
         </button>
+
+        <Explorer
+          list={explorerData}
+          addNodeToList={addNodeToList}
+          deleteNodeFromList={deleteNodeFromList}
+        />
         {showInput.visible && (
           <div className="inputContainer">
             <span>{showInput.isFolder ? "📁" : "📄"}</span>
@@ -118,11 +125,6 @@ function App() {
             />
           </div>
         )}
-        <Explorer
-          list={explorerData}
-          addNodeToList={addNodeToList}
-          deleteNodeFromList={deleteNodeFromList}
-        />
       </div>
     </div>
   );

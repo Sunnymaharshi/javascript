@@ -61,6 +61,9 @@ body {
 .folder-name {
   height: 100%;
 }
+.file {
+  padding-left: 24px;
+}
 .folder-actions {
   display: flex;
   align-items: center;
