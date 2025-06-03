@@ -2220,10 +2220,18 @@ Student.bye() */
                 data = await res.json()
             rejects the promise only when network or cors errors occurs
             to upload file, u pass formData object in body 
+        cookies 
+            sent to server on every request
+            can store upto 4kb per domain
         localStorage 
             store key/value pairs in browser
             only supports strings, to store objects stringify them
             persistent across the sessions 
+            can store upto 5-10 MB
+            associated with the website origin 
+                protocol + domain/host + port
+                any page within same origin can access it 
+                sub domains can't access it
             ex: localStorage.setItem("hi","hello")
             localStorage.getItem("hi")
             removeItem() 
