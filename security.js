@@ -134,10 +134,26 @@
         JSON.parse("__proto__:malicious_js_code")
         this will add or remove methods to prototype
         which will cause app to crash
-    
-
-
-
-
+    CORS (cross-origin resource sharing)
+        when origin A is requesting a resource in origin B 
+        it is handled by CORS
+        1. preflight request (options request) is made to origin B 
+            preflight request below tells the server that we want to 
+            send a CORS GET request 
+            OPTIONS /resource/foo
+            Access-Control-Request-Method: GET
+            Access-Control-Request-Headers: content-type,x-requested-with
+            Origin: https://foo.bar.org
+        2. origin B verifies if that call is valid or not 
+        3. origin B sends additional headers which will be used in actual call 
+            Access-Control-Allow-Origin:* 
+                star(*) means any origin can access it 
+            Access-Control-Allow-Origin: https://foo.bar.org
+            Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE
+            Access-Control-Allow-Headers: Content-Type, x-requested-with
+            Access-Control-Max-Age: 86400
+        4. actual request call is made 
+        Fixing CORS error 
+            we need to set headers in server 
+            allow requests from that origin 
 */
-    
