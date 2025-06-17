@@ -1888,6 +1888,89 @@ console.log(Boolean({}));           // output:true
             interface represents a Node containing a doctype.
 */
 /*
+    Date object 
+        creating date objects 
+            new Date()
+            new Date(milliseconds)
+                number of milliseconds since January 1, 1970, 00:00:00 UTC (Unix epoch)
+            new Date(dateString)
+            new Date(year, month, day, hours, minutes, seconds, milliseconds)   
+                month is 0-indexed
+            Time Zones
+                objects internally represent time in UTC
+                UTC
+                    synonymous with Greenwich Mean Time (GMT).
+                Local time 
+                    refers to the timezone your computer is in.
+                toString() and toLocaleString() 
+                    will output the date and time in the user's local time zone.
+        object methods 
+            getTime()
+                number of milliseconds since the Unix epoc
+            Date.now()
+                number of milliseconds since the Unix epoc
+                static method of Date class 
+                more faster than getTime since it won't create an object
+            getDay()
+                day of the week (0-6)
+                0 for Sunday, 1 for Monday so on
+            getFullYear()
+            getMonth()
+                months are 0 indexed 
+                0 for jan, so on 
+            getDate()
+                date in current month (1-31)
+                ex: 17 
+            getHours()
+                hours in 24hr (0 - 23)
+                ex: 18
+            getMinutes()
+            getSeconds()
+            getMilliseconds()
+            getTimezoneOffset()
+                time zone offset in minutes from UTC
+            setFullYear()
+                year in YYYY format 
+                ex: 2025
+            setMonth()
+            setDate() 
+            setHours()                
+            setMinutes()
+            setSeconds()
+            setMilliseconds()
+        formating methods 
+            toDateString()
+                date portion of a date object as a string 
+                in a human-readable format 
+                ex: Tue Jun 17 2025
+            toISOString()
+                date and time as a string in ISO 8601 format
+                ex: 17T17:50:00.000Z
+            toLocaleDateString()
+                date portion as a string formatted according to the 
+                user's locale settings
+                ex: 6/17/2025
+            toLocaleTimeString()
+                time portion as a string formatted according to the 
+                user's locale settings
+                ex: 6:11:19 PM
+            toLocaleString()
+                date and time as a string formatted according to the 
+                user's locale settings
+                ex: '6/17/2025, 6:11:19 PM'
+        comparing dates 
+            getTime()
+                we can compare two date objects by their milliseconds
+                two dates fall exactly at the same time
+                ex: a.getTime() === b.getTime()
+            >,<,>= and <=
+                these can be used directly on date objects
+                only used to check if date comes before or after another date
+                can't be used to check if both are same
+            check same day 
+                getFullYear, getMonth & getDay must be equal
+*/
+/*
     AJAX - Asynchronous JavaScript & XML 
         XML refers to XMLHttpRequest(XHR) class
         XMLHttpRequest class 
