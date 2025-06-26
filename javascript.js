@@ -1934,7 +1934,9 @@ console.log(Boolean({}));           // output:true
                 ex: 2025
             setMonth()
             setDate() 
-            setHours()                
+            setHours()  
+                hours,min,sec,msec
+                date.setHours(0,0,0,0)          
             setMinutes()
             setSeconds()
             setMilliseconds()

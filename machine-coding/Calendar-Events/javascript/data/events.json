@@ -1,0 +1,51 @@
+[
+  {
+    "title": "OOO",
+    "type": "HOLIDAY",
+    "start": 1750962600000,
+    "end": 1751048940000,
+    "id": "1750935535003"
+  },
+  {
+    "title": "Standup",
+    "type": "TASK",
+    "start": 1750739400000,
+    "end": 1750741200000,
+    "id": "1750935568819"
+  },
+  {
+    "title": "Architect discussion",
+    "type": "TASK",
+    "start": 1750743000000,
+    "end": 1750746600000,
+    "id": "1750935594811"
+  },
+  {
+    "title": "Client meeting",
+    "type": "TASK",
+    "start": 1750941000000,
+    "end": 1750942800000,
+    "id": "1750935633755"
+  },
+  {
+    "title": "Standup",
+    "type": "TASK",
+    "start": 1750912200000,
+    "end": 1750914000000,
+    "id": "1750935656955"
+  },
+  {
+    "title": "Learn & Share",
+    "type": "TASK",
+    "start": 1750912200000,
+    "end": 1750915800000,
+    "id": "1750935699699"
+  },
+  {
+    "title": "Internal meeting",
+    "type": "TASK",
+    "start": 1750831200000,
+    "end": 1750834800000,
+    "id": "1750936080507"
+  }
+]

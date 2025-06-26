@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="calendar-container">
+
+        <div class="calendar-header">
+            <h1>Calendar</h1>
+            <h1 id="week-range"></h1>
+
+            <div class="week-navigation">
+                <button id="prev-btn" class="calendar-nav-btn"><svg xmlns="http://www.w3.org/2000/svg" width="800px"
+                        height="800px" viewBox="0 0 24 24" fill="none">
+
+                        <path d="M14.5 17L9.5 12L14.5 7" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg></button>
+                <button id="today-btn" class="calendar-nav-btn">Today</button>
+                <button id="next-btn" class="calendar-nav-btn"><svg xmlns="http://www.w3.org/2000/svg" width="800px"
+                        height="800px" viewBox="0 0 24 24" fill="none">
+
+                        <path d="M9.5 7L14.5 12L9.5 17" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg></button>
+            </div>
+        </div>
+        <div id="sticky-grid">
+
+        </div>
+        <div id="scroll-grid">
+
+        </div>
+    </div>
+    <div id="event-modal">
+        <div class="event-modal-content">
+            <div class="modal-header">
+                <h1>Create Event</h1> <button id="modal-close-btn" class="close">&times;</span>
+            </div>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-name">Event Name</label>
+                    <input type="text" id="event-name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="event-type">Event Type</label>
+                    <select name="type" id="event-type">
+                        <option value=""> Select option</option>
+                        <option value="TASK"> TASK</option>
+                        <option value="HOLIDAY"> HOLIDAY</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-start">Start time</label>
+                    <input type="datetime-local" name="start" id="event-start">
+                </div>
+                <div class="form-group">
+                    <label for="event-end">End time</label>
+                    <input type="datetime-local" name="end" id="event-end">
+                </div>
+                <div class="form-actions">
+                    <button id="modal-cancel-btn" class="cancel-btn" type="button">
+                        Cancel
+                    </button>
+                    <button id="event-submit" class="save-btn" type="submit" disabled>
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="sundayMessage" class="sunday-message" style="display: none;">
+        <p>Events cannot be created on Sundays</p>
+    </div>
+    <script src="src/index.js" type="module"></script>
+</body>
+
+</html>
