@@ -82,7 +82,7 @@ function renderCalendar(startDate = null) {
 }
 function addTimeIndicator() {
   const currentWeekStart = getCurrentWeekStartDate();
-  const existingIndicator = document.querySelector("current-time-indicator");
+  const existingIndicator = document.querySelector(".current-time-indicator");
   if (existingIndicator) {
     existingIndicator.remove();
   }

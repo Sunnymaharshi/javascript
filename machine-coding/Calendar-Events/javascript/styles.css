@@ -10,6 +10,7 @@ body {
 }
 .calendar-container {
   max-width: 900px;
+  min-width: 650px;
   margin: 0 auto;
   background: white;
   border-radius: 8px;
@@ -49,7 +50,7 @@ body {
 #sticky-grid,
 #scroll-grid {
   display: grid;
-  grid-template-columns: 80px repeat(7, minmax(0, 1fr));
+  grid-template-columns: 60px repeat(7, minmax(0, 1fr));
   border-left: 1px solid #e0e0e0;
 }
 #scroll-grid {
