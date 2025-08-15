@@ -1,0 +1,34 @@
+#app {
+  padding: 10px;
+  box-sizing: border-box;
+}
+h1 {
+  text-align: center;
+}
+#search {
+  padding: 10px;
+  width: 600px;
+  font-size: large;
+  margin: 0 auto;
+  display: block;
+}
+.results {
+  width: 600px;
+  margin: 0 auto;
+  border: 1px solid whitesmoke;
+  padding: 0 10px;
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.result {
+  font-size: large;
+  width: 600px;
+  padding: 10px;
+}
+.result:hover {
+  background-color: whitesmoke;
+}
+.result:not(:last-child) {
+  border-bottom: 1px solid whitesmoke;
+}
