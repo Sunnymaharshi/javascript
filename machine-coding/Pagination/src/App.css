@@ -1,0 +1,36 @@
+h1 {
+  margin: 0;
+  text-align: center;
+}
+.product-list {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  column-gap: 10px;
+}
+.product-card {
+  width: 235px;
+  text-align: center;
+  border: 1px solid whitesmoke;
+  border-radius: 3%;
+}
+.product-card img {
+  width: 100%;
+  object-fit: fill;
+}
+.page-numbers {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 5px;
+}
+.page-number {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+.page-number.active {
+  background-color: blue;
+  color: white;
+}
