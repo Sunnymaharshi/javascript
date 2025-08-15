@@ -1,0 +1,19 @@
+body {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+h1 {
+  transform: translate(-14%, 0);
+}
+.otp-container {
+  display: flex;
+  gap: 6px;
+}
+.otp-input {
+  width: 13px;
+  height: 13px;
+  padding: 10px;
+  font-size: x-large;
+  text-align: center;
+}
