@@ -20,41 +20,124 @@
             Hot swap the previous implementation of the code.
             Just in time compiler is nothing but a combination of an interpreter and a compiler.   
 
-    Everything in Javascript happens inside an Execution Context
-
-    Execution Context
-        Memory component 
-            aka variable environment 
-            stores all variables and functions 
-        Code component
-            aka Thread of Execution
-            code is executed one line at a time 
     Garbage collection 
         Garbage collection is automatic in JS 
         it tries to release the memory if the location is not reachable
+        non-primitive variables (objects) are automatically garbage collected
+        not the primitive variables
         Mark and Sweep Algorithm used for garbage collection
-        Mark and Sweep Algorithm
             starts from root object, marks referenced values
             if it finds unreadable locations, those will be removed
+        Memory Leaks
+            memory leak occurs when objects are no longer needed by the application 
+            but remain referenced in such a way that the garbage collector cannot 
+            identify them as unused, preventing their memory from being reclaimed.
+            preventing Memory Leaks 
+                Accidental global variables
+                    window.foo = "foo";
+                    not needed it is only used inside a function 
+                    Declare variables with let or const (for proper scope)
+                Forgotten timers or callbacks
+                    remove Event Listeners, setTimeout, setInterval etc when 
+                    they no longer needed 
+                Out of DOM references
+                    keeping reference of DOM element even after they removed from DOM 
+                    references to null after removing DOM elements.
+                Closures
+                    functions returned from another function
+                    avoid unnecessary closures
     Javascript is synchronous single-threaded language
-    When we run the code, A Global Execution Context is created in 2 phases 
-        1. Memory creation phase
-            allocates memory to variables and functions
-            stores undefined in variables
-            and function code for the functions
-        2. Code Execution phase 
-            runs the code 1 at a time 
-    
-    For every function invocation, new Execution Context is created for the function to run.
-    this execution context is again created in 2 phases, same as above
+        it can only run single task at a time.
+    JavaScript Runtime:
+        complete environment that enables the execution of JavaScript code beyond just the core language features.
+        Types: 
+            Browser Runtimes
+                JavaScript engine (like V8 in Chrome) along with Web APIs and the event loop.
+            Node.js Runtime
+                server-side JavaScript runtime built on the V8 engine.
+                APIs for interacting with the file system, handling HTTP requests, and other server-side operations, 
+                which are not available in a browser environment.
+        JavaScript Engine
+            it has Memory Heap & Call Stack
+            creates and manages execution contexts. 
+            V8 by Google in Chrome, SpiderMonkey in Firefox, JavaScriptCore in Safari, 
+            and Chakra in Microsoft Edge.
+            Execution Context:
+                it is the environment in which JavaScript code is executed.
+                Types:
+                    Global Execution Context (GEC)
+                        This is the default execution context created when the JavaScript file first 
+                        loads in the browser or Node.js environment. 
+                        All global variables and functions are part of the GEC. 
+                        There can only be one GEC.
+                    Function Execution Context (FEC)
+                        A new FEC is created every time a function is called. 
+                        Each function call generates its own distinct execution context, 
+                        allowing for isolated scopes and managing local variables and parameters.
+                1. Creation Phase
+                    Memory Allocation phase
+                        allocates memory to variables and functions declared within context 
+                        Variables are initially assigned the value undefined (hoisting)
+                        stores function code for the functions
+                    Scope Chain Establishment
+                        determining how the current context can access variables and functions in parent scopes.
+                    The value of the this keyword is determined for the current context.
+                2. Execution phase 
+                    the code within the execution context is executed line by line,
+                    variables are assigned their actual values.
+                Components
+                    Memory component
+                        memory space allocated for the code 
+                        responsible for maintaining the scope chain
+                    Code component
+                        actual code that is being executed within the context
+                        runs code line by line
+        Call Stack 
+            used by JS Engine to manage order of execution contexts (LIFO).
+            at bottom of the stack, we have Global Execution context
+            Call Stack executes whatever there in the stack, it won't wait for anything.
+        Web APIs (not part of javascript, these are part of browser)
+            offload long running tasks to browser (async tasks)
+            async tasks are run by browser in background
+            registers callbacks, to invoke(push to Callback/microtask queue) when task is completed
+            types 
+                callback based
+                    ex: geolocation
+                promise based
+            setTimeout
+            DOM APIs
+            fetch
+            local storage
+            console
+            location etc 
+            we can access these through global object 'window', since it is global scope, we can access these without 'window.' 
+        Why not push callbacks to Call Stack directly?
+            synchronous code to pushed to call stack in the order 
+            if async code is pushed to call stack, it could disrupt already running tasks 
+            & creates unpredictable behaviour 
+        Task Queue / Callback Queue / Macrotask Queue
+            all callback functions(ex:setTimeout) are pushed to callback queue.
+            holds Web API callbacks & event handlers
+        Microtask Queue
+            it has higher priority than callback queue when event loop checks 
+            handles 
+                promises (then, catch, finally & await)
+                queueMircotask(callback)
+                new MutationObserver(callback) 
+            microtask can also create a microtask
+                could cause infinite loop in microtask queue      
+        Event loop
+            it continuously monitors Call Stack, Microtask queue and Callback queue
+            checks if Call Stack is Empty.
+            if empty, checks the Microtask queue
+                pushes all tasks to Call Stack until it is empty.
+            if empty, checks Callback queue 
+                pushes all tasks to Call Stack until it is empty.
+                after each task, it again checks Microtask queue            
+            functions in Microtask queue is prioritized over functions in Callback queue
+            event loop goes to callback queue once all the functions in Microtask queue are completed
+            if function in callback queue won't get a chance to execute due to more Microtask queue function, it is called Starvation of callback queue
 
-    Call Stack 
-        everytime Javascript is executed, it is created
-        to manage execution contexts
-        at bottom of the stack, we have Global Execution context
-        maintains the order of execution of execution contexts
-        Call Stack executes whatever there in the stack, it won't wait for anything.
-    
     Hoisting
         variables can use used before it has been declared
         since variable are stored with undefined in memory allocation phase
@@ -80,29 +163,6 @@
     Event Listeners 
         when we create a event listener, callback function forms a Closure with outer scope
         this consumes a lot of memory, so we remove event listeners whenever possible
-
-    Web APIs (not part of javascript, these are part of browser)
-        setTimeout
-        DOM APIs
-        fetch
-        local storage
-        console
-        location etc 
-        we can access these through global object 'window', since it is global scope, we can access these without 'window.'
-
-    Callback Queue
-        aka Task Queue
-        all callback functions(ex:setTimeout) are pushed to callback queue before coming to Call Stack.
-    Microtask Queue
-        it has higher priority than callback queue
-        fetch callback function(Promise) will be pushed to Microtask queue
-        all the callback functions which comes through 'Promises' and 'MutationObserver' goes into it.
-    Event loop
-        checks the Microtask queue and Callback queue and pushes function to Call Stack when 'Call stack is empty'
-        it continuously monitors Call Stack, Microtask queue and Callback queue
-        functions in Microtask queue is prioritized over functions in Callback queue
-        event loop goes to callback queue once all the functions in Microtask queue are completed
-        if function in callback queue won't get a chance to execute due to more Microtask queue function, it is called Starvation of callback queue
 
     setTimeout
         it does not always execute exactly after timeout given.
