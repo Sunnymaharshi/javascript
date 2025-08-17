@@ -1,0 +1,22 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+* {
+  box-sizing: border-box;
+}
+.list-container {
+  text-align: center;
+  overflow-y: auto;
+}
+.list-item {
+  background-color: whitesmoke;
+  line-height: 40px;
+  font-size: larger;
+}
+.list-item:hover {
+  background-color: white;
+}
+button {
+  cursor: pointer;
+}
