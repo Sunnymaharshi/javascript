@@ -3,3 +3,4 @@ fetch-client
 *.env
 .parcel-cache
 tempCodeRunnerFile.js
+test-project
