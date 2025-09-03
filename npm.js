@@ -6,6 +6,7 @@
         npm init -y
             executes the command with yes to all the prompts
         package versions
+            uses Semantic versioning or SemVer 
             version format: major.minor.patch
             ex: 8.9.23
             patch version
@@ -19,7 +20,7 @@
                 1.13.23
             Greater than 
                 >1.13.23
-            Compatible changes
+            Backward Compatible changes
                 ^1.'13.23'
             Minor changes 
                 ~1.13.'23'

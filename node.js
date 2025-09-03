@@ -1,6 +1,78 @@
 /*
     node.js
         Javascript runtime built on google opensource V8 engine
+        not for CPU intensive tasks
+    node runtime 
+        V8 Engine
+            converts js to machine code
+            Memory heap
+            call stack 
+                keeps track of function invocations 
+        libuv 
+            cross platform opensource library written in C language
+            handles asynchronous operations in node.js
+            it uses Thread pool & event loop 
+            Thread Pool 
+                has pool threads that node uses to offload time consuming task
+                by default, it has 4 threads 
+                so it can run 4 different tasks
+                set threadpool size 
+                    process.env.UV_THREADPOOL_SIZE = 5  
+                    if given more than CPU cores, task execution time increases               
+                ex: fs.readFile uses thread pool to offload file reading task
+            Network IO
+                https.request is Network I/O operation
+                does not use Thread Pool 
+                libuv deligates work to OS kernel 
+            event loop
+                asynchronous tasks
+                picks events from event queue and pushes their callbacks to call stack
+                when nothing is pending, event loop exits & program ends
+                microtask queue 
+                    nextTick queue 
+                        process.nextTick callbacks
+                        all nextTick callbacks are executed before callbacks in promise queue
+                        nextTick can create nextTick recursively
+                    promise queue 
+                        promise callbacks 
+                    executed first in every cycle 
+                timer queue 
+                    setTimeout & setInterval
+                    micro task queue callbacks are executed in between the execution of 
+                    timer queue callbacks
+                I/O queue                    
+                    fs.read/write etc callbacks
+                    when running setTimeout(fn,0) and I/O async method, order of execution 
+                    is never guaranteed 
+                        it depends on CPU busy or not, as 0ms is taken as 1ms internally
+                    I/O pooling 
+                        if this queue is empty it checks if I/O operation is completed
+                        then adds callback to the queue, runs that in next cycle
+                        I/O events are polled and callbacks are added to I/O queue only after 
+                        I/O is completed
+                    microtask queue cbs executed after I/O queue & before check queue
+                check queue
+                    setImmediate callbacks
+                    microtask query cbs executed in between check queue callbacks
+                    when running setTimeout(fn,0) and setImmediate, order of execution 
+                    can never be guaranteed
+                close queue 
+                    close event listeners 
+                    ex: Socket.close(), stream.close() etc 
+            Event Loop cycle
+                microtask queue (nextTick,promise)
+                timer queue (setTimeout,setInterval)
+                    microtask queue in between each callback execution
+                I/O queue (fs.readFile)
+                    I/O pooling if queue is empty
+                check queue (setImmediate)
+                    microtask queue in between each callback execution
+                close queue (close event listeners)
+                event loop continues/exits 
+    every node.js code file wrapped in it's own IFEE (function)
+        wrapper: function (exports,require,module,__filename,__dirname){}
+    debugging in chrome dev tools 
+        node --inspect
     Event Loop
         allows Node.js to perform non-blocking I/O operations
         despite the fact that a single JavaScript thread is used by default
@@ -37,10 +109,15 @@
         function has arguments: exports,require,module,__filename,__dirname
         that's why are able to access these variables inside a module
         modules are cached after execution, means they only executed once
+        __filename & __dirname
+            absolute path in file system
+    Module Caching 
+        modules only runs once and cached 
+        when imported again it gives cached module 
     exporting 
         for single variable 
             module.exports = something;
-            can you any name for importing
+            can use any name for importing
             ex:const anything = require('module-name')
         for multiple variables
             exports.something1 = 1;
@@ -54,15 +131,99 @@
         ./ points to root folder 
         not the folder in which file presents
         ex: require('path')
+        require.resolve()
+            to check if module exists without running it 
+    path module 
+        basename()
+            returns last portion of path (filename/foldername)
+        extname()
+            return extension of the path (.js, "" for folder)
+        parse()
+            returns obj with root, dir, base, ext, name of path 
+        format()
+            returns original path from parse() value 
+        isAbsolute()
+            returns true if path is absolute
+        join()
+            joins multiple paths to single path 
+            join("f1","f2","index.j") => f1/f2/index.js 
+        resolve()
+            if / not given
+                "f1","f2","index.js"
+                adds absolute path of __dirname at beginning
+                {__dirname}/f1/f2/index.js
+            if / given, 
+                "/f1","f2","index.js" => /f1/f2/index.js
+            last argument with / is considered as root 
+                "f1","/f2","index.js" => /f2/index.js 
+                "f1","/f2","../index.js" => /index.js 
+    events module 
+        return EventEmitter class
+        emit()
+            to emit an event
+            emitter.emit("something")
+        on()
+            listen on event 
+            emitter.on("something", callback, ...args)
+        custom EventEmitter class by extending it 
+    Buffer 
+        stores data in hexadecimal 
+        limited space 
+        toString()
+            returns actual value 
+        toJSON()
+            obj with type: 'Buffer' & data: array of decimals (string representation in UTF-8)
+        console.log()
+            prints class with hexadecimal values of passed value
+        write()
+            to write new data to buffer 
+            ignore data beyond buffer size
     fs module
+        by default returns a buffer, pass "utf-8" to get actual content 
         readFileSync
             reads file Synchronously
+            readFileSync("./file.txt", "utf-8")
         readFile
             reads file Asynchronously
-        relative path always takes folder in which file is running at root folder 
-        not the folder in which file is running
-        __dirname is usefull for giving relative path
+            takes callback with error & data args 
+            readFile("./file.txt", "utf-8", (err,data)=>{})
+        writeFileSync
+            writes to file Synchronously
+            writeFileSync("./file.txt", "Hello")
+        writeFile 
+            writes to file 
+            to append, add third argument {flag: "a"}
+            writeFile("./file.txt", "hello",{flag: "a"}, (err)=>{}) 
+    fs/promises module 
+        promise version of fs module
+    streams
+        process (read or write) data in chunks as they arrive
+        without waiting for entire data to be available before processinng
+        default Buffer size 64KB
+        highWatterMark 
+            to set buffer size 
+            2 for 2Bytes
+        all streams are event emitters
+        data event when reading data from readable stream
+        readable streams
+            fs.createReadStream
+        writable streams
+            fs.createWriteStream
+        duplex streams
+            both readable and writable
+            net.Socket
+        transform streams
+            duplex streams that transform data as it is written or read 
+            zlib.createGzip
+        implement streams
+            streams library
+        consume streams 
+            piping/events
+    pipe
+        connects streams, can chain multiple streams
+        ex: readableStream.pipe(writableStream) 
     http module
+        creates web servers to transfer data over http
         createServer
             to create a server 
         listen
@@ -73,9 +234,67 @@
     util module 
         promisify
             makes asynchronous function return promise
+    cluster module 
+        enables creation of child processes (workers) that run simultaneously 
+        can run multiple instances of node.js that can distribute workloads
+        Master & child workers 
+        isMaster 
+            to check if it is master process
+        fork()
+            to create worker threads 
+            create only workers as many as CPU cores 
+        pm2 package can be used to run a file in cluster mode 
+    worker_threads module
+        enables use of threads that execute JavaScript in parallel 
+        code runs in separate separate child process, preventing blocking your main app 
+        can run multiple application threads within single node.js instance 
+        if process isolation is not required we can use worker threads instead of cluster module
+    Memory Leak 
+        when program incorrectly manages memory allocations in such a way that memory that is 
+        no longer needed is not released 
+        happens when expected short lived objects are attached to long lived ones 
+        ex: const requests = new Map()
+        const client = redis.createClient();
+        app.get('/', (req,res)=>{
+            requests.set(req.id, req);
+            client.on("message",()=>{})
+            res.status(200).send('hello')
+        })
+        here requests obj holds all the requests coming, which keeps increases
+        and added message event listener inside request handle, keeps on adding listeners 
+        which consumes memory fast it should be at top level
+        memory leaks can happen in system level also 
+        Debugging leaks 
+            process.memoryUsage()
+                gives following 
+                rss 
+                    Resident Set Size, amount of RAM node process is consuming 
+                    entire app consumption
+                heapTotal
+                    Total space available for js objects presently
+                external 
+                    amount of memory consumed by off-heap data (buffers) used by node 
+                heapUsed 
+                    total space occupied by JavaScript objects presently
+            Heap Snapshots
+                node --inspect index.js
+                chrome devtools -> memory
+                can compare 2 snapshots to identify memory leak easily
+            production 
+                heapdump module 
+                    generate dumps on demand 
+                    great for post mortem debugging 
+                    may contain sensitive data 
+                Allocation timeline 
+                    takes sequence of snapshots & shows chart 
+                    can inspect in detail
+                Sampling heap profiler 
+                    heap-profile module
+                    low overhead, designed for production
+                    bar chat for each function that alocating memory                    
     npm 
         software/package registry
-        node package manager 
+        package manager for JavaScript language
         regular dependencies
             packages that are needed to run the app
         dev dependencies
@@ -83,26 +302,7 @@
         npm outdated
             lists outdated packages
         package-lock.json
-            contains exact versions of packages
-    events module
-        we can emit our custom events and listen
-        emit()
-            to emit an event
-        on()
-            to listen to an event and run a callback back
-    streams
-        process (read or write) data piece by piece 
-        without completing whole read or write operation
-        means without keeping all the data in memory
-        readable streams
-        writable streams
-        duplex streams
-            both readable and writable
-            ex: net web socket
-        transform streams
-            duplex streams that transform data as it is written or read 
-            ex: Gzip creation
-        
+            contains exact versions of packages    
     CommonJS module system
         each JS file is treated as a separate module
         Node.js uses CommonJS module system

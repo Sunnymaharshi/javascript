@@ -5,6 +5,8 @@
         for our classes     
             return this inside methods 
             don't return this for get methods
+    print only level 1 of nested object 
+        console.dir(global, {depth:0})
 */
 
 class Student {
