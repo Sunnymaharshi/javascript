@@ -31,7 +31,7 @@ const renderDOM = (domStructure, container = null) => {
   childrenArray.forEach((child) => element.appendChild(renderDOM(child)));
 
   if (container) {
-    container.appendChild(textNode);
+    container.appendChild(element);
   }
   return element;
 };
@@ -40,14 +40,14 @@ const dom = {
   props: {
     id: "section-1",
     class: "main-section",
-    style: "background-color: lightblue; padding: 20px; border-radius: 5px;",
+    style: "background-color: whitesmoke; padding: 20px; border-radius: 5px;",
   },
   children: [
     {
       type: "header",
-      children: "Welcome to Soni Frontend Doc",
+      children: "React component",
       props: {
-        style: "font-size: 24px; color: darkblue; text-align: center;",
+        style: "font-size: 24px; color: black; text-align: center;",
       },
     },
     {
@@ -55,8 +55,8 @@ const dom = {
       children: [
         {
           type: "h2",
-          children: "Render DOM",
-          props: { style: "color: darkgreen;" },
+          children: "React DOM render",
+          props: { style: "color: black;" },
         },
         {
           type: "p",
@@ -67,11 +67,11 @@ const dom = {
     },
     {
       type: "footer",
-      children: "Thanks you :)",
+      children: "footer",
       props: {
         style: "text-align: center; font-size: 14px; color: black;",
       },
     },
   ],
 };
-// console.log(renderDOM(dom));
+renderDOM(dom, document.getElementById("root"));
