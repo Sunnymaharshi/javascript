@@ -2060,33 +2060,99 @@ console.log(Boolean({}));           // output:true
 */
 /*
     Web Components
+        set of browser APIs that let you create reusable, encapsulated custom HTML elements 
+        with their own functionality.
+        framework-agnostic components that work everywhere.
         HTML, CSS and JavaScript combination which u can encapsulate inside a container 
         which can function independently
         reusable custom HTML elements
         provides strong encapsulation
-        web component creation 
-            create class that extends HTMLElement class 
-                will instantiated everytime we use the custom element tag
-            define required html in constructor
-            define custom html element using window.customElements.define
-        if we have styles in our html, it will apply outside of component also 
-        to solve this we have shadow DOM 
-        shadow DOM 
-            provides encapsulation to Web Components
-            gives separate scope to the web component
-            it is components own DOM 
-            'open' mode 
-                current page can access shadow DOM via JS 
-                element.shadowRoot() return shadow DOM 
-            'closed' mode 
-                current page can't access shadow DOM via JS 
-                element.shadowRoot() return null
-        light DOM 
-            when shadow DOM is there, we refer actual DOM as light DOM 
-            to avoid confusion
-        template tag 
-            hold some html that will be hidden when the page loads
-            JavaScript is used to clone and display it
+        Three Core Technologies
+            Custom Elements
+                Define your own HTML tags
+                Two types:
+                    Autonomous elements
+                        Inherit from HTMLElement (new tags)
+                    Customized built-ins
+                        Extend existing elements (enhanced <button>)
+                Key rules
+                    Must contain a hyphen
+                        <my-button>
+                    Can't be self-closing
+                        <my-button></my-button> ✓
+                    Case insensitive
+            Shadow DOM
+                creates a separate DOM tree attached to an element
+                completely isolated from the main document.
+                Encapsulation Boundary
+                    Styles inside shadow DOM don't leak out                    
+                    Global styles don't leak in (by default)
+                    JavaScript queries from outside can't reach inside
+                    Events appear to come from host element
+                    CSS Custom Properties pierce boundary
+                        Controlled theming mechanism
+                Shadow Host
+                    The element that has shadow DOM attached
+                Shadow Root
+                    The root node of the shadow DOM tree
+                Shadow Tree
+                    The DOM tree inside shadow DOM
+                Open mode 
+                    Shadow root accessible via element.shadowRoot
+                    Debuggable, inspectable
+                    Most common choice
+                Closed mode 
+                    element.shadowRoot returns null
+                    Can only access via saved reference
+                    Makes debugging harder
+                    Rarely used in practice
+            HTML Templates & Slots
+                Reusable markup with <template> and <slot>
+                Default slot
+                    Catches unslotted content
+                Named slots
+                    Specific insertion points
+                Multiple elements Can go to same slot
+                Fallback content
+                    Shown if slot empty
+                slotchange event
+                    Fires when slotted content changes
+                Shadow DOM template:
+                    <div class="wrapper">
+                        <slot name="header"></slot>  ← Named slot
+                        <slot></slot>                ← Default/unnamed slot
+                        <slot name="footer"></slot>
+                    </div>
+                Light DOM usage:
+                    <my-component>
+                        <h1 slot="header">Title</h1>     → Goes to header slot
+                        <p>Default content</p>            → Goes to default slot
+                        <p>More content</p>               → Also default slot
+                        <footer slot="footer">End</footer> → Goes to footer slot
+                    </my-component>
+        Benefits
+            Framework agnostic
+                Works in React, Vue, Angular, vanilla JS
+            True encapsulation
+                Styles and DOM isolated
+            Browser native
+                No framework overhead
+            Future-proof
+                Web standard, won't be deprecated
+            Interoperable
+                Share components across projects/teams
+            
+        Light DOM vs Shadow DOM
+            Light DOM (User's content)
+                Regular DOM, accessible everywhere
+                Content provided by component user
+                Can be styled by global CSS
+                Visible to document.querySelector()
+            Shadow DOM (Component's internals)
+                Hidden implementation details
+                Encapsulated styles and structure
+                Not accessible from outside (in open mode, technically accessible but semantically private)
+                Component author controls this
         Dynamic data with custom attributes
             we can pass attributes to custom html element to use them in template
         connectedCallback()
@@ -2102,8 +2168,6 @@ console.log(Boolean({}));           // output:true
         disconnectedCallback()
             invoked after component is removed from DOM 
             here we can remove event listeners
-        slot element
-            used to dynamically add html content inside component from custom element
 
 */
 const template = document.createElement("template");
