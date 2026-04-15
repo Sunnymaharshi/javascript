@@ -1811,14 +1811,48 @@ const throttle = function (callback, limit) {
 const throttleFire = throttle(Fire, 1000);
 
 /*
-    window.requestAnimationFrame()
+    Browser scheduling APIs
+        browser has a frame loop running ~60 times/second (every ~16.67ms). 
+        Within each frame, work happens in a fixed order:
+            JS Timers → User Events → rAF → Layout/Paint → rIC
+    window.requestAnimationFrame (rAF)
         tells the browser you wish to perform an animation
         requests the browser to invoke callback before the next repaint
-        frequency of calls to the callback will generally match the display refresh rate
+        Synced to the display refresh rate
         it only runs once, u need to call it again to recursively to animate again 
         useful when you are animating using js
-    window.cancelAnimationFrame()
-        to cancel the request 
+        window.cancelAnimationFrame()
+            to cancel the request 
+        Features 
+            Pauses automatically when the tab is hidden (saves battery/CPU)
+            Runs at display refresh rate — 60Hz, 90Hz, 120Hz
+            Callback receives a timestamp
+                ms since page load
+                use it for delta-time calculations, not Date.now()
+        Use for:
+            Animations (anything involving CSS transforms, opacity, position)
+            Canvas / WebGL rendering loops
+            Scroll-linked effects
+            Any visual update that must be smooth and in sync with paint
+        Never use setInterval for animations — it's not synced to paint, causes jank, 
+        and doesn't pause when the tab is hidden.
+    window.requestIdleCallback (rIC)
+        Schedules a callback to run during browser idle time
+        the leftover time in a frame after layout and paint are done
+        Callback receives deadline  
+            deadline.timeRemaining() 
+                caps at 50ms — browser's safety limit to stay responsive
+        timeout option 
+            guarantees eventual execution — without it, starvation is possible on busy pages
+        Use for:
+            Analytics / logging that isn't time-critical
+            Prefetching data or components
+            Pre-computing expensive values (search indexes, sorting)
+            Saving draft state to localStorage
+            Any non-urgent background work
+        window.cancelIdleCallback
+            to cancel the request
+
 */
 // add(1)(2)(3)(4)...() return sum of all
 // return a function and check if next call have number or not
