@@ -805,7 +805,7 @@ document.getElementById("button")?.addEventListener(
       count += 1;
       console.log(`button clicked ${count} times`);
     };
-  })()
+  })(),
 );
 // function statement aka function declaration
 function f1() {
@@ -1640,7 +1640,7 @@ document.querySelector("#grand-parent").addEventListener(
   () => {
     console.log("Grand Parent Clicked");
   },
-  true
+  true,
 );
 document.querySelector("#parent").addEventListener(
   "click",
@@ -1648,14 +1648,14 @@ document.querySelector("#parent").addEventListener(
     console.log("Parent Clicked");
     // e.stopPropagation();
   },
-  true
+  true,
 );
 document.querySelector("#child").addEventListener(
   "click",
   () => {
     console.log("Child Clicked");
   },
-  true
+  true,
 );
 /*
 output:
@@ -2217,7 +2217,7 @@ function slider(data) {
     data.forEach(function (_, i) {
       dotContainer.insertAdjacentHTML(
         "beforeend",
-        `<button class="dots_dot" data-slide="${i}"></button>`
+        `<button class="dots_dot" data-slide="${i}"></button>`,
       );
     });
   };
@@ -2225,7 +2225,7 @@ function slider(data) {
     data.forEach(function (s, i) {
       slider.insertAdjacentHTML(
         "beforeend",
-        `<div class="slide" style="background-color:${s.color};">${s.text}</div>`
+        `<div class="slide" style="background-color:${s.color};">${s.text}</div>`,
       );
     });
   };
@@ -2243,7 +2243,7 @@ function slider(data) {
   const goToSlide = function (slide) {
     // make translateX 0% for the slide, left slides have -% and right slides +% in 100's
     slides.forEach(
-      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`),
     );
   };
   const nextSlide = function () {
@@ -2429,15 +2429,12 @@ Student.bye() */
                 data = await res.json()
             rejects the promise only when network or cors errors occurs
             to upload file, u pass formData object in body 
-        cookies 
-            sent to server on every request
-            can store upto 4kb per domain
         localStorage 
             store key/value pairs in browser
             only supports strings, to store objects stringify them
-            persistent across the sessions 
+            persistent across the sessions, unitl explicitly cleared
             can store upto 5-10 MB
-            associated with the website origin 
+            Scoped to website origin 
                 protocol + domain/host + port
                 any page within same origin can access it 
                 sub domains can't access it
@@ -2449,12 +2446,37 @@ Student.bye() */
                 to clear the localStorage
             storage event on window 
                 triggers when there is change in storage
+            Security
+                Accessible via JS 
+                XSS vulnerable
+                Not CSRF vulnerable
         sessionStorage 
             similar to localStorage but for single session 
             has same methods as localStorage
             won't persist in different tab or window 
             after closing tab, it is cleared 
+            Scoped to Tab
             usecase: form data persist on refresh 
+            Security
+                Accessible via JS 
+                XSS vulnerable
+                Not CSRF vulnerable
+        cookies 
+            sent to server on every request automatically
+            can store upto 4kb per domain
+            persit until expiry or cleared
+            Scoped to Domain/path configurable
+            Accessible via JS (document.cookie)
+            with HttpOnly flag
+                Use for: Session tokens, auth tokens, refresh tokens                
+                Not Accessible via JS 
+                not XSS vulnerable
+                CSRF vulnerable
+                    Mitigated with:
+                        SameSite=Strict — never sent cross-site
+                        SameSite=Lax — sent on top-level navigations only
+                        CSRF tokens (double-submit pattern)
+            
         IndexedDB 
             low level API for storing structured data, including large datasets
             similar to a database
