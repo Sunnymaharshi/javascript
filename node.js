@@ -409,7 +409,53 @@
     Server side rendering (SSR)
         website building is done on server
         inject data into html templates 
-        
-
+    
+    API Paradigms
+        REST, RPC, and gRPC are about request-response — the client always initiates.
+        REST (Representational State Transfer)
+            The URL identifies a thing, the HTTP method describes the action.
+            methods
+                GET    /users/42          ← read user
+                POST   /users             ← create user
+                PUT    /users/42          ← replace user
+                PATCH  /users/42          ← partial update
+                DELETE /users/42          ← delete user
+            Stateless
+                every request contains all info needed
+                server holds no session state
+            Universal, human-readable, cacheable, works everywhere
+        RPC (Remote Procedure Call)
+            You call a function on the server as if it were local.
+            actions and verbs
+            POST /getUserById
+            POST /sendEmailToUser
+            POST /createOrderAndNotify
+            ex: const user = await api.call('getUserById', { id: 42 });
+            When an operation doesn't map cleanly to a resource 
+            like POST /checkout, POST /mergeAccounts, POST /generateReport
+        gRPC (Google Remote Procedure Call)
+            RPC with a strict contract, binary encoding, and HTTP/2. 
+            You define your API in a .proto file
+            file generates type-safe client and server code in any language.
+            Why it's fast
+                Uses Protocol Buffers (binary) instead of JSON (text) — 3–10x smaller payloads
+                Runs over HTTP/2 — multiplexed streams, header compression, no head-of-line blocking
+            Supports 4 communication patterns
+                Unary:              client sends 1, server responds 1        (like REST)
+                Server streaming:   client sends 1, server responds many     (like SSE)
+                Client streaming:   client sends many, server responds 1     (file upload)
+                Bidirectional:      both send many simultaneously            (like WebSockets)
+    Real-Time Patterns
+        Long Polling
+            fake real-time pattern
+            works over plain HTTP with no special protocol.
+            High server connection overhead, latency
+        Server-Sent Events (SSE)
+            One-directional persistent stream from server to client over HTTP.
+            browser handles reconnection automatically.
+        WebSockets
+            Full-duplex persistent connection
+        Webhooks
+            server calls your client when something happens.
             
 */
