@@ -1,4 +1,3 @@
-
 /*
     Typescript 
         JavaScript Superset 
@@ -130,12 +129,12 @@
     Adding type to function arguments
         we add : and type after the arguments
 */
-function Add(num1:number,num2:number){
-    return num1+num2;
+function Add(num1: number, num2: number) {
+  return num1 + num2;
 }
-// here adding type is redundant and bad practice 
+// here adding type is redundant and bad practice
 // as TypeScript automatically determines type when value is assigned immediately
-let n:number = 1;
+let n: number = 1;
 
 // here typescript automatically assigns type to variable
 let firstName = "Joe";
@@ -143,33 +142,37 @@ let firstName = "Joe";
 // firstName = 1;
 // Compile Error: Type 'number' is not assignable to type 'string'.
 
-// when value is not assigned immediately u can specify type 
-let days:number;
+// when value is not assigned immediately u can specify type
+let days: number;
 
-// Tuple 
-const admin : {
-    name:string;
-    role:[number,string]
+// Tuple
+const admin: {
+  name: string;
+  role: [number, string];
 } = {
-    name:"John",
-    role: [2,"admin"]
-}
+  name: "John",
+  role: [2, "admin"],
+};
 
 // ***Allowed***
-admin.role.push("hi")
+admin.role.push("hi");
 
 // ***Not allowed***
 // admin.role[1] = 3;
 // admin.role = []
 // admin.role = [3,"dev","software"]
 
-// Enum 
-enum Role {ADMIN,READ_ONLY,AUTHOR}
-console.log(Role.ADMIN,Role.READ_ONLY,Role.AUTHOR)
-// Output: 0,  1,  2 
+// Enum
+enum Role {
+  ADMIN,
+  READ_ONLY,
+  AUTHOR,
+}
+console.log(Role.ADMIN, Role.READ_ONLY, Role.AUTHOR);
+// Output: 0,  1,  2
 
-// Literal Types 
-let a : 1 | "Hi";
+// Literal Types
+let a: 1 | "Hi";
 
 // a= 10;
 // Compile Error: Type '10' is not assignable to type '1 | "Hi"'
@@ -178,40 +181,40 @@ let a : 1 | "Hi";
 type Input = number | string;
 type User = { name: string; age: number };
 
-// function as a type 
-let addition :(a:number,b:number)=>number;
+// function as a type
+let addition: (a: number, b: number) => number;
 
 // never type - function never returns anything
-function generateError(msg:string):never{
-    throw {error:msg,code:500}
+function generateError(msg: string): never {
+  throw { error: msg, code: 500 };
 }
 // generateError("error")
 
 // Interface
 
 interface Student {
-    name:string;
-    age:number;
-    greet(phrase:string):void;
-    surname?:string;
+  name: string;
+  age: number;
+  greet(phrase: string): void;
+  surname?: string;
 }
 
-let akash:Student;
+let akash: Student;
 
 akash = {
-    name:"akash",
-    age:14,
-    greet(phrase:string){
-        console.log(phrase + ' ' + this.name)
-    }
-}
+  name: "akash",
+  age: 14,
+  greet(phrase: string) {
+    console.log(phrase + " " + this.name);
+  },
+};
 
 // akash.greet("Hi there! I'm")
 // Output:Hi there! I'm akash
 
 // Interface for function type
 interface AddFn {
-    (n1:number,n2:number):number;
+  (n1: number, n2: number): number;
 }
 
 /*
@@ -251,28 +254,28 @@ interface AddFn {
 */
 
 // Type casting
-const input1 = <HTMLInputElement>document.getElementById("input1")!
+const input1 = <HTMLInputElement>document.getElementById("input1")!;
 const input2 = document.getElementById("input2")! as HTMLInputElement;
 // console.log(input.value)
 
 // Index properties
 interface ErrorTemplate {
-    [prop:string]: string;
+  [prop: string]: string;
 }
 const obj: ErrorTemplate = {
-    msg: "err",
-    time: "5:00AM",
-    //code: 500,
-}
+  msg: "err",
+  time: "5:00AM",
+  //code: 500,
+};
 
 // Generic functions
 
-function merge<T extends object,U extends object>(obj1: T, obj2: U){
-    // merges both objects
-    return Object.assign(obj1,obj2);
+function merge<T extends object, U extends object>(obj1: T, obj2: U) {
+  // merges both objects
+  return Object.assign(obj1, obj2);
 }
 
-const mergerdObj = merge({name:"xyz"},{age:20})
+const mergerdObj = merge({ name: "xyz" }, { age: 20 });
 
 /*
     3rd party libraries (built in Vanila JavaScript)
@@ -281,4 +284,60 @@ const mergerdObj = merge({name:"xyz"},{age:20})
         to remove these errors because types are not there (in Vanila JS)
         we can install "types library" for that 3rd party library
         ex: @types/lodash for lodash library
+*/
+
+/*
+    Flow Typing 
+        designing types that flow correctly through your entire application
+        designing type systems that catch real bugs at boundaries.
+        Boundaries Where Types Matter Most
+            API Response → Transform → State → Component Props → UI
+            Each arrow is a boundary where types can lie, drift, or break.
+        Typing API Responses
+            TypeScript can't verify what the network returns. 
+            This is the most common source of runtime errors in typed codebases.
+            Runtime Validation with Zod:
+            Zod is a TypeScript-first schema validation library.
+            Schema is the source of truth — type is derived from it
+            Your TypeScript types and your actual API contract are now in sync.
+            you get a clear runtime error at the boundary, not a silent undefined deep in a component.
+        Narrowing (The Core of Flow Typing)
+            TypeScript's type system is a flow analysis engine 
+            it narrows types as it sees conditions. This is what "flow typing" literally means.
+            Union Narrowing
+                ex: type Shape =
+                        | { kind: 'circle'; radius: number }
+                        | { kind: 'square'; side: number }
+            Exhaustiveness Checking
+                ex: function assertNever(x: never): never {
+                        throw new Error(`Unhandled case: ${JSON.stringify(x)}`);
+                    }
+                    default: return assertNever(shape);
+                if new shape is added in union type, compiler will show error in assertNever
+                so we must handle the new shape in switch case 
+        Discriminated Unions for State Machines
+            making impossible states unrepresentable
+            ex: type RequestState<T> =
+                    | { status: 'idle' }
+                    | { status: 'loading' }
+                    | { status: 'success'; data: T }
+                    | { status: 'error'; error: Error };
+            prevents you from rendering a loading spinner with data or an error message without data.
+        Generic Types for Reusable Patterns
+            ex: type ApiResponse<T> =
+                    | { status: 'success'; data: T }
+                    | { status: 'error'; error: string; code: number };
+        Utility Types You Must Know
+            Partial<User>
+            Required<UserDraft>
+            Pick<User, 'id' | 'name'>
+            Omit<User, 'password'>
+            Readonly<User>
+        Typing Component Props Patterns
+            ex: type TooltipProps =
+                    | { icon: React.ReactNode; label?: never }
+                    | { label: string; icon?: never };
+        Template Literal Types
+            ex: type Direction = 'top' | 'right' | 'bottom' | 'left';
+                type MarginProp = `margin-${Direction}`;      
 */
