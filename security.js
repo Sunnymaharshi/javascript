@@ -81,9 +81,18 @@
         who signed the message 
         RSA is public-key cryptosystem.
     XSS 
-        when malicious attacker manages to run arbitrary JavaScript code in given web browser
-        through a webpage
-        attacker impersonate the user on the web app
+        Attacker injects malicious scripts executed in victim's browser.
+        Three variants
+            Stored (persisted in DB)
+            Reflected (URL-based)
+            DOM-based (client-side JS manipulations).
+        Stored XSS
+            Malicious script saved to DB (comments, profiles).
+            Executes for every user who views it. 
+            requires backend sanitization at both input and output.
+            Stored XSS are persistent
+            ex:
+                storing js code into database via form 
         Reflected XSS 
             when XSS payload is present in an HTTP request to which response is issued 
             containing exploited webpage
@@ -98,34 +107,76 @@
             fix 
                 use libraries that escapes html code
                 like < to &lt 
-        Stored XSS
-            when XSS payload is injected into storage of web server and sent in HTTP response 
-            Stored XSS are persistent
-            examples
-                storing js code into database via form 
         DOM based XSS 
             when XSS payload is made executable through a DOM change 
             can be persistent or not, may also stored in browser memory
             adding js code in html like onerror event
+            Dangerous sinks are JavaScript functions or DOM objects that can execute or render untrusted input as active content (like HTML or scripts)
+                ex: innerHTML, eval, document.write(), setAttribute() etc 
+            Use trusted types API to block dangerous sinks usage at runtime.
+                ex: if (window.trustedTypes) {
+                        const policy = trustedTypes.createPolicy('myApp', {
+                            createHTML: (dirty) => DOMPurify.sanitize(dirty),
+                            createScriptURL: (url) => validateUrl(url),
+                        });
+                        el.innerHTML = policy.createHTML(userInput); // enforced at runtime
+                    }
+            vulnerable code
+                el.innerHTML = userInput;
+                document.write(data);
+                eval(userCode);
+            safe code 
+                el.textContent = userInput;
+                el.setAttribute('data', v);
         Self XSS 
             when victim is tricked into running the XSS payload 
             only happens through social engineering
 
     Content Security Policy
-        prevents resource loading in webpage in browser
-        to allow resources from a domain
-            specify domain Content-Security-Policy header
-    Trusted Types 
+        HTTP header that restricts what resources the browser can load.
+        Primary mitigation layer against XSS
+        even if injection occurs, scripts can't execute without a valid source.
+        ex: Content-Security-Policy:
+                default-src 'none';
+                script-src 'nonce-{RANDOM}' 'strict-dynamic';
+                style-src 'nonce-{RANDOM}' 'self';
+                img-src 'self' data: https://cdn.example.com;
+                font-src 'self' https://fonts.gstatic.com;
+                connect-src 'self' https://api.example.com;
+    Trusted Types
+        A browser security mechanism that locks down dangerous sinks to prevent DOM-based XSS.
         policies can be created to do something or throw error before certain things run
         like creating htmlElement, running eval, changing source in script tag etc 
         so we can escape html code before they run 
         Trusted Type policies can't be modified after they've been defined 
     Cross-Site Request Forgery (CSRF)
-        web security vulnerability that allows an attacker to induce users to perform actions 
-        that they do not intend to perform.
+        Attacker tricks a user's browser into making authenticated requests 
+        to your site from a malicious origin. 
+        Exploits trust the server has in the browser's cookies
+        Common methods of attack include:
+            Hidden Forms
+                An attacker hosts a webpage with a <form> that auto-submits via JavaScript, 
+                pointing to the target site (e.g., <form action="https://bank.com/transfer" ...>).
+            Malicious link
+               If the target action is a GET request, attackers use tags like 
+               <img src="https://bank.com/transfer?amount=1000..."> 
+               to trigger the request when the page loads.
+            iFrame
+                A malicious website can contain a hidden <iframe> pointing to the target application
+                forcing the user's browser to send requests without the user knowing
+        browsers automatically send cookies cross-origin, 
+        but Same-Origin Policy blocks cross-origin reads of page content.
+        The CSRF token exploits this asymmetry — it lives in the page (HTML or JS-readable cookie), 
+        not in a cookie, so the attacker can never obtain it.
         prevent by 
             Synchronizer Token Pattern (CSRF Tokens)
+                Server generates token, stores in session
+                Embed token in every form or meta tag
+                JS reads meta, attaches to every state-mutating request
+                Server validates token matches session
             SameSite Cookies
+                SameSite=Strict refuses to send the cookie cross-site at all
+                which is why modern apps often don't need explicit CSRF tokens anymore.
             Double Submit Cookie
     regular expressions
         bad regular expression will take so much time 
@@ -135,6 +186,8 @@
         this will add or remove methods to prototype
         which will cause app to crash
     CORS (cross-origin resource sharing)
+        Browser mechanism controlling cross-origin HTTP requests.
+        it can expose sensitive APIs to unauthorized origins.
         when origin A is requesting a resource in origin B 
         it is handled by CORS
         1. preflight request (options request) is made to origin B 
