@@ -1821,6 +1821,9 @@ const throttleFire = throttle(Fire, 1000);
         Synced to the display refresh rate
         it only runs once, u need to call it again to recursively to animate again 
         useful when you are animating using js
+        ex: requestAnimationFrame((timestamp) => {
+                el.style.transform = `translateX(${x}px)`;
+            });
         window.cancelAnimationFrame()
             to cancel the request 
         Features 
@@ -1839,6 +1842,11 @@ const throttleFire = throttle(Fire, 1000);
     window.requestIdleCallback (rIC)
         Schedules a callback to run during browser idle time
         the leftover time in a frame after layout and paint are done
+        ex: requestIdleCallback((deadline) => {
+                while (deadline.timeRemaining() > 0 && tasks.length) {
+                    tasks.shift()();
+                }
+            }, { timeout: 2000 }); // timeout forces run even if never idle
         Callback receives deadline  
             deadline.timeRemaining() 
                 caps at 50ms — browser's safety limit to stay responsive
